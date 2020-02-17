@@ -1,0 +1,26 @@
+{
+  "name": "the-perfect-garage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "command": "node --experimental-modules",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --exec babel-node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/node": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "apollo-server": "^2.10.0",
+    "apollo-server-express": "^2.10.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "graphql": "^14.6.0",
+    "mongoose": "^5.8.11",
+    "nodemon": "^2.0.2"
+  }
+}

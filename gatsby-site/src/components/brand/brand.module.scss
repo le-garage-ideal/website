@@ -1,0 +1,26 @@
+@import '../../styles/theme.scss';
+
+.logoLink {
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0);
+  text-align: center;
+  width: 11em;
+  overflow: hidden;
+}
+
+.logoLink button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.logoLink:hover, .selected {
+  box-sizing: border-box;
+  border: 1px solid var(--text-bright);
+}
+
+
+

@@ -20,5 +20,8 @@
             collection: ['cars', 'models', 'brands']
           },
         },
+        {
+          resolve: `gatsby-plugin-sass`
+        },
       ],
     }

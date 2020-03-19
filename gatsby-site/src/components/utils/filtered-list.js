@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import filteredListStyles from  './filtered-list.module.scss';
 
-export function FilteredList({render, filter}) {
+export function FilteredList({title, render, filter}) {
 
     const [previousFilterValue, setPreviousFilterValue] = useState(null);
     const [filterInputTimeout, setFilterInputTimeout] = useState(null);
@@ -24,7 +24,8 @@ export function FilteredList({render, filter}) {
 
     return (
         <ul className={filteredListStyles.list}>
-            <div className="field" style={ {width: '100%', display: 'flex', justifyContent: 'center'} }>
+            <div className="field is-size-4" style={ {width: '100%', display: 'flex', justifyContent: 'space-between'} }>
+                <h1 className="has-text-light">{ title }</h1>
                 <p className="control has-text-dark has-icons-right">
                     <input className="input" type="text" onKeyUp={search} style={ {width: 'auto'} } />
                     <span className="icon is-right">

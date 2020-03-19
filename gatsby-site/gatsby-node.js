@@ -5,7 +5,7 @@ exports.onPostBuild = ({ reporter }) => {
   reporter.info(`xxxxx FIN DU BUILD GATSBY-NODE.JS xxxxx`)
 }
 exports.createPages = async function({ actions, graphql, reporter }) {
-    const { data } = await graphql(`query {
+    const { data: brands } = await graphql(`query {
         allMongodbBmbu7Ynqra11RqiBrands {
             edges {
                 node {
@@ -15,12 +15,32 @@ exports.createPages = async function({ actions, graphql, reporter }) {
             }
         }
     }`);
-    reporter.info(JSON.stringify(data[schema + 'Brands'].edges.map(obj => Object.keys(obj).join(';'))));
-    data[schema + 'Brands'].edges.forEach(({ node }) => {
+    brands[schema + 'Brands'].edges.forEach(({ node: brand }) => {
       actions.createPage({
-        path: `/models/${node.id}`,
+        path: `/models/${brand.name}`,
         component: path.resolve(`./src/templates/models.js`),
-        context: { brand: node.id },
+        context: { brand: brand.name },
       })
     });
+
+    const { data: models } = await graphql(`query {
+      allMongodbBmbu7Ynqra11RqiModels {
+          edges {
+              node {
+                  id,
+                  name,
+                  brand {
+                      name
+                  }
+              }
+          }
+      }
+  }`);
+  models[schema + 'Models'].edges.forEach(({ node: model }) => {
+    actions.createPage({
+      path: `/cars/${model.brand.name}/${model.name}`,
+      component: path.resolve(`./src/templates/cars.js`),
+      context: { brand: model.brand.name, model: model.name },
+    })
+  });
   }

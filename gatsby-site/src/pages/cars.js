@@ -2,13 +2,13 @@ import React from "react";
 import { graphql } from 'gatsby';
 import Car from "../components/car/car";
 import { schema } from '../constants';
+import Layout from "../components/layout";
 
 
 export default (data) => {
 
     const carNodes = data.pageResources.json.data[schema + 'Cars'].edges;
     const carComponents = carNodes.map(({ node }) => {
-        console.log(node);
         return (
             <Car key={node.id}
                 id={node.id}
@@ -24,15 +24,17 @@ export default (data) => {
         )
     });
     return (
-        <main className="app-container">
-            <section>{ }</section>
-            <section className="car-content">{ carComponents } </section>
-        </main>
+        <Layout>
+            <main className="app-container">
+                <section className="car-content">{ carComponents } </section>
+            </main>
+        </Layout>
     );
 };
 
-export const query = graphql`query {
-    allMongodbBmbu7Ynqra11RqiCars(limit: 10) {
+export const query = graphql`
+    query {
+        allMongodbBmbu7Ynqra11RqiCars(limit: 10) {
         edges {
           node {
               variant,

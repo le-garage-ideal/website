@@ -33,16 +33,6 @@ img {
   max-height: 100%;
 }
 
-.carDetails {
-  padding-bottom: 10px;
-}
-.carSummary:hover {
-  background-color: var(--element-hover);
-}
-
-.carDetails[open] {
-  background-color: var(--element-selected);
-}
 
 .carSummary {
   display: flex;

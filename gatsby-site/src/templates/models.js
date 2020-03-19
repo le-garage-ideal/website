@@ -4,12 +4,13 @@ import ListItem from "../components/utils/list-item";
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { schema } from '../constants';
+import Layout from "../components/layout";
 
 
-const Models = ({data}) => {
+const Models = ({data, pageContext}) => {
 
-    const [selectedModel, setSelectedModel] = useState(null);
-    const [filteredModels, setFilteredModels] = useState(data[schema + 'Models'].edges.map(({node}) => node));
+    const listName = data[schema + 'Models'].edges;
+    const [filteredModels, setFilteredModels] = useState(listName.map(({node}) => node));
 
     const modelComponents = filteredModels.map(model => {
         return (
@@ -17,8 +18,7 @@ const Models = ({data}) => {
                 id={model.id}
                 name={model.name}
                 image={null}
-                onClick={() => setSelectedModel(model)}
-                selected={selectedModel && selectedModel.id === model.id}>
+                onClick={() => window.location.href = `/cars/${model.brand.name}/${model.name}`}>
             </ListItem>
         )
     });
@@ -28,8 +28,13 @@ const Models = ({data}) => {
         setFilteredModels(filtered);
     };
 
+    const title = pageContext.brand;
+
     return (
-        <FilteredList render={() => modelComponents} filter={search} />
+        <Layout>
+            <h1>{ pageContext.brand }</h1>
+            <FilteredList title={title} render={() => modelComponents} filter={search} />
+        </Layout>
     );
 }
 
@@ -40,12 +45,15 @@ Models.propTypes = {
 export default Models;
 
 export const query = graphql`
-  query ModelByBrandId($brand: String) {
+  query ModelByBrand($brand: String) {
     allMongodbBmbu7Ynqra11RqiModels(filter: {brand: {name: {eq: $brand}}}) {
         edges {
             node {
                 id,
-                name
+                name,
+                brand {
+                    name
+                }
             }
         }
     }

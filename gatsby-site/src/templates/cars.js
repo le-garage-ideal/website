@@ -26,7 +26,7 @@ export default ({data, pageContext}) => {
         setFilteredCars(filtered);
     };
 
-    const title = `${pageContext.brand} - ${pageContext.model}`;
+    const title = `Variantes ${pageContext.brand} ${pageContext.model}`;
 
     return (
         <Layout>

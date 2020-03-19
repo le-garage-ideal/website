@@ -25,6 +25,6 @@ export default function Brands({data, selectedBrand, onBrandSelect}) {
     };
 
     return (
-        <FilteredList render={() => brandComponents} filter={search} />
+        <FilteredList title="Marques" render={() => brandComponents} filter={search} />
     );
 }

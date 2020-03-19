@@ -28,11 +28,11 @@ const Models = ({data, pageContext}) => {
         setFilteredModels(filtered);
     };
 
-    const title = pageContext.brand;
+    const title = `Modèles ${pageContext.brand}`;
 
     return (
         <Layout>
-            <h1>{ pageContext.brand }</h1>
+            <h1>{ title }</h1>
             <FilteredList title={title} render={() => modelComponents} filter={search} />
         </Layout>
     );

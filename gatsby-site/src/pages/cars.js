@@ -1,8 +1,8 @@
 import React from "react";
 import { graphql } from 'gatsby';
 import Car from "../components/car/car";
+import { schema } from '../constants';
 
-export const schema = 'allMongodbBmbu7Ynqra11Rqi';
 
 export default (data) => {
 

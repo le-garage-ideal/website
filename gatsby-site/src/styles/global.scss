@@ -27,18 +27,6 @@ body {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-.brand-content {
-  display: flex;
-  flex-wrap: wrap;
-  list-style-type: none;
-  z-index: 1;
-  max-width: 100%;
-  max-height: 100%;
-  overflow: auto;
-}
-.brand-content li {
-  margin-right: 15px;
-}
 
 .car-content {
   z-index: 1;

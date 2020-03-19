@@ -5,21 +5,24 @@
   border: 1px solid rgba(0, 0, 0, 0);
   text-align: center;
   width: 11em;
+  height: 6em;
   overflow: hidden;
-}
-
-.logoLink button {
   background: none!important;
-  border: none;
-  padding: 0!important;
+  padding: 5px;
   color: var(--text-bright);
   text-transform: uppercase;
   cursor: pointer;
+
+  img {
+    width: 50px;
+    max-height: 3.5em;
+  }
 }
 
 .logoLink:hover, .selected {
   box-sizing: border-box;
-  border: 1px solid var(--text-bright);
+  background: initial;
+  background-color: rgba(255, 255, 255, 0.6)!important;
 }
 
 

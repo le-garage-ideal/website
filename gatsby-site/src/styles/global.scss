@@ -13,6 +13,7 @@ body {
   font-family: "Gill Sans", sans-serif;
   min-height: 100vh;
   position: relative;
+  z-index: -2;
 }
 
 .app-container,
@@ -25,6 +26,7 @@ body {
   position: absolute;
   top: 0px;
   background-color: rgba(0, 0, 0, 0.6);
+  z-index: -1;
 }
 
 
@@ -36,4 +38,11 @@ body {
   flex-wrap: wrap;
   width: 90%;
   height: 90%;
+}
+
+.car {
+  flex: 1;
+}
+.car2 {
+  margin-top: 10%;
 }

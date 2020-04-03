@@ -2,11 +2,7 @@
 
 .card {
   margin: 15px;
-  color: var(--text-bright);
-  padding: 15px;
-  background-color: rgba(55, 55, 70, 0.8);
   display: flex;
-  width: 350px;
   flex-direction: column;
 }
 
@@ -18,32 +14,28 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
-  border-width: 3px;
-  border-color: var(--text-medium);
-  border-style: solid;
   box-sizing: border-box;
   width: 100%;
-  height: 240px;
+  min-height: 240px;
+  height: 50vh;
   background-color: white;
 }
 
-img {
-  max-width: 100%;
-  max-height: 100%;
+.carSummary, .bars {  
+  color: var(--text-bright);
+  background-color: rgba(55, 55, 70, 0.8);
 }
-
 
 .carSummary {
   display: flex;
   align-items: center;
+  justify-content: center;
   outline: none; /* remove border on select */
   cursor: pointer;
   font-weight: normal;
-  margin-top: 8px;
+  margin-top: 15px;
   margin-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 10px;
+  padding: 20px;
 }
 
 

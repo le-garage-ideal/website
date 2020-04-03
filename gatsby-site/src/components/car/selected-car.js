@@ -25,22 +25,22 @@ export function SelectedCar({id, variant, power, weight, startYear, endYear, bra
 
   return (
     <article className={ carStyles.card }>
+
+      <div href={imageUrl} className={ carStyles.imageLink } style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover' }}>
+      </div>
       <h3 className={ carStyles.carSummary }>
         <span>{brand}</span>&nbsp;
         <span className={ carStyles.name }>{ variant }</span>&nbsp;
         <span className={ carStyles.startYear }>{ years }</span>
-      </h3>
-      <a href={imageUrl} className={ carStyles.imageLink }>
-        <img alt="car" src={imageUrl} />
-      </a>
-      <section className={ carStyles.bars }>
+      </h3> 
+      {/* <section className={ carStyles.bars }>
         <div className={ carStyles.barTitle }><legend>Weight</legend><span><span className={ carStyles.weight }>{ weight }</span>kg</span></div>
         <div className={ [carStyles.bar, carStyles.barWeight].join(' ') } style={barWeightStyle}></div>
         <div className={ carStyles.barTitle }><legend>Power</legend><span><span className={ carStyles.power }>{ power }</span>hp</span></div>
         <div className={ [carStyles.bar, carStyles.barPower].join(' ') } style={barPowerStyle}></div>
         <div className={ carStyles.barTitle }><legend>Ratio</legend><span><span className={ carStyles.ratio }>{ ratio }</span>kg/hp</span></div>
         <div className={ [carStyles.bar, carStyles.barRatio].join(' ') } style={barRatioStyle}></div>
-      </section>
+      </section> */}
     </article>
   );
 }

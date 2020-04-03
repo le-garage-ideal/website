@@ -7,30 +7,35 @@ import { SelectedCar } from '../components/car/selected-car';
 
 export default (data) => {
 
+    const transform = (car, className) => 
+        <div className={className}><SelectedCar key={car.id}
+            id={car.id}
+            variant={car.variant}
+            power={car.power}
+            weight={car.weight}
+            startYear={car.startYear}
+            endYear={car.endYear}
+            brand={car.model.brand.name}
+            model={car.model.name}
+            imageUrl={car.imageUrl}
+            /></div>;
+
     const cars = data.pageResources.json.data[schema + 'Cars'].edges;
-    const car1 = cars[3].node;
-    console.log(car1);
-    const car2 = cars[6];
-    const car3 = cars[9];
+    const car1 = transform(cars[3].node, 'car car1');
+    const car2 = transform(cars[60].node, 'car car2');
+    const car3 = transform(cars[90].node, 'car car3');
+
     return (
         <Layout>
-            <SelectedCar key={car1.id}
-                id={car1.id}
-                variant={car1.variant}
-                power={car1.power}
-                weight={car1.weight}
-                startYear={car1.startYear}
-                endYear={car1.endYear}
-                brand={car1.model.brand.name}
-                model={car1.model.name}
-                imageUrl={car1.imageUrl}>
-            </SelectedCar>
+            <article style={{display: 'flex', height: '90vh', alignItems: 'center'}}>
+                { car1 } { car2 } { car3 }
+            </article>
         </Layout>
     );
 };
 
 export const query = graphql`query {
-    allMongodbBmbu7Ynqra11RqiCars(limit: 10) {
+    allMongodbBmbu7Ynqra11RqiCars(limit: 100) {
         edges {
             node {
                 variant,
@@ -40,6 +45,7 @@ export const query = graphql`query {
                 options,
                 startYear,
                 endYear,
+                imageUrl,
                 model {
                     brand {
                         name

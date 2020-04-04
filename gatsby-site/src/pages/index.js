@@ -7,7 +7,7 @@ import { SelectedCar } from '../components/car/selected-car';
 
 export default (data) => {
 
-    const transform = (car, className) => 
+    const transform = (car, className) =>
         <div className={className}><SelectedCar key={car.id}
             id={car.id}
             variant={car.variant}
@@ -18,7 +18,7 @@ export default (data) => {
             brand={car.model.brand.name}
             model={car.model.name}
             imageUrl={car.imageUrl}
-            /></div>;
+        /></div>;
 
     const cars = data.pageResources.json.data[schema + 'Cars'].edges;
     const car1 = transform(cars[3].node, 'car car1');
@@ -27,8 +27,9 @@ export default (data) => {
 
     return (
         <Layout>
-            <article style={{display: 'flex', height: '90vh', alignItems: 'center'}}>
-                { car1 } { car2 } { car3 }
+            <h1 className="title is-2">Mon Garage Idéal</h1>
+            <article className="car-content">
+                {car1} {car2} {car3}
             </article>
         </Layout>
     );

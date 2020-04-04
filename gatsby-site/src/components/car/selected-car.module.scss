@@ -24,6 +24,7 @@ h3 {
 .carSummary, .bars {  
   color: var(--text-bright);
   background-color: rgba(55, 55, 70, 0.8);
+  width: 100%;
 }
 
 .carSummary {
@@ -45,11 +46,6 @@ h3 {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.bars {
-  margin-left: 15px;
-  margin-right: 10px;
 }
 
 .bars legend {

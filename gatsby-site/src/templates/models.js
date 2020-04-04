@@ -7,7 +7,7 @@ import { schema } from '../constants';
 import Layout from "../components/layout";
 
 
-const Models = ({data, pageContext}) => {
+const Models = ({data, pageContext, location}) => {
 
     const listName = data[schema + 'Models'].edges;
     const [filteredModels, setFilteredModels] = useState(listName.map(({node}) => node));
@@ -18,7 +18,7 @@ const Models = ({data, pageContext}) => {
                 id={model.id}
                 name={model.name}
                 image={null}
-                onClick={() => window.location.href = `/cars/${model.brand.name}/${model.name}`}>
+                onClick={() => window.location.href = `/cars/${model.brand.name}/${model.name}${location.search}`}>
             </ListItem>
         )
     });

@@ -5,10 +5,12 @@ import './bulma-theme.scss';
 import { schema } from '../constants';
 import { SelectedCar } from '../components/car/selected-car';
 
-export default (data) => {
+export default ({data, location}) => {
 
-    const transform = (car, className) =>
-        <div className={className}><SelectedCar key={car.id}
+    const editCar = index => window.location.href = `/browse/?edit=${index}`;
+
+    const transform = (car, index) =>
+        <div className={'car car' + index}><SelectedCar key={car.id}
             id={car.id}
             variant={car.variant}
             power={car.power}
@@ -18,12 +20,14 @@ export default (data) => {
             brand={car.model.brand.name}
             model={car.model.name}
             imageUrl={car.imageUrl}
+            onClick={() => editCar(index)}
         /></div>;
 
-    const cars = data.pageResources.json.data[schema + 'Cars'].edges;
-    const car1 = transform(cars[3].node, 'car car1');
-    const car2 = transform(cars[60].node, 'car car2');
-    const car3 = transform(cars[90].node, 'car car3');
+    const cars = data[schema + 'Cars'].edges;
+
+    const car1 = transform(cars[3].node, 1);
+    const car2 = transform(cars[60].node, 2);
+    const car3 = transform(cars[90].node, 3);
 
     return (
         <Layout>

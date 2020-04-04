@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import carStyles from './selected-car.module.scss';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const POWER_MAX = 1000; // max 1000hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 1; // max 1kg/hp else overflow
 
-export function SelectedCar({ id, variant, power, weight, startYear, endYear, brand, model, imageUrl }) {
-
-  const [display, setDisplay] = useState(false);
+export function SelectedCar({ id, variant, power, weight, startYear, endYear, brand, model, imageUrl, onClick }) {
 
   const ratio = Math.round(RATIO_MAX * power * 100 / weight);
 
@@ -29,6 +28,9 @@ export function SelectedCar({ id, variant, power, weight, startYear, endYear, br
     <article className={carStyles.card}>
 
       <div href={imageUrl} className={carStyles.imageLink} style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover' }}>
+        <button className={carStyles.searchIcon + ' icon'} onClick={onClick}>
+          <FontAwesomeIcon icon="edit" />
+        </button>
       </div>
 
       <div className={carStyles.carSummary + ' dropdown is-hoverable'}>

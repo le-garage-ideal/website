@@ -5,12 +5,11 @@ import Layout from "../components/layout";
 import './bulma-theme.scss';
 import { schema } from '../constants';
 
-export default (data) => {
-
+export default ({pageResources, location}) => {
     return (
         <Layout>
-            <Brands data={data.pageResources.json.data[schema + 'Brands'].edges}
-                onBrandSelect={brandName => window.location = '/models/' + brandName} />
+            <Brands data={pageResources.json.data[schema + 'Brands'].edges}
+                onBrandSelect={brandName => window.location = `/models/${brandName}${location.search}`} />
         </Layout>
     );
 };

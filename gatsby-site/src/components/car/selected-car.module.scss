@@ -18,7 +18,29 @@ h3 {
   width: 100%;
   min-height: 240px;
   height: 50vh;
-  background-color: white;
+
+  .searchIcon {
+    visibility: hidden;
+    font-size: 3rem;
+    background-color: var(--element-selected);
+    color: var(--element-selected-bright);
+    width: auto;
+    height: auto;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+
+    &:hover {
+      background-color: var(--element-hover);
+      color: var(--element-hover-bright);
+    }
+}
+
+  &:hover {
+    .searchIcon {
+      visibility: visible;
+    }
+  }
 }
 
 .carSummary, .bars {  

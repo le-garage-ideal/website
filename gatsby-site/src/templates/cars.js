@@ -6,7 +6,7 @@ import { schema } from '../constants';
 import Layout from "../components/layout";
 
 
-export default ({data, pageContext}) => {
+export default ({data, pageContext, location}) => {
     const listName = data[schema + 'Cars'].edges;
     const [filteredCars, setFilteredCars] = useState(listName.map(({node}) => node));
 
@@ -16,7 +16,7 @@ export default ({data, pageContext}) => {
                 id={car.id}
                 name={car.variant}
                 image={null}
-                onClick={() => window.location.href = `/cars/${car.model.brand.name}/${car.model.name}`}>
+                onClick={() => window.location.href = `/${location.search}&car=${car.id}`}>
             </ListItem>
         )
     });

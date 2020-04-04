@@ -1,8 +1,9 @@
 import React from "react";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSearch)
+library.add(faSearch);
+library.add(faEdit);
 export default function Layout({ children }) {
     return (
         <React.Fragment>

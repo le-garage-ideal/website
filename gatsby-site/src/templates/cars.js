@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Uri from 'jsuri';
 import { graphql } from 'gatsby';
 import { FilteredList } from "../components/utils/filtered-list";
 import ListItem from "../components/utils/list-item";
@@ -7,6 +8,7 @@ import Layout from "../components/layout";
 
 
 export default ({data, pageContext, location}) => {
+    const uri = new Uri(location.href);
     const listName = data[schema + 'Cars'].edges;
     const [filteredCars, setFilteredCars] = useState(listName.map(({node}) => node));
 
@@ -16,7 +18,11 @@ export default ({data, pageContext, location}) => {
                 id={car.id}
                 name={car.variant}
                 image={null}
-                onClick={() => window.location.href = `/${location.search}&car=${car.id}`}>
+                onClick={() => {
+                    uri.addQueryParam('car', car.id);
+                    uri.setPath('/');
+                    window.location.href = uri.toString();
+                }}>
             </ListItem>
         )
     });

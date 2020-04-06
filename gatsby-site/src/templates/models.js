@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Uri from 'jsuri';
 import { FilteredList } from "../components/utils/filtered-list";
 import ListItem from "../components/utils/list-item";
 import PropTypes from 'prop-types';
@@ -8,7 +9,7 @@ import Layout from "../components/layout";
 
 
 const Models = ({data, pageContext, location}) => {
-
+    const uri = new Uri(location.href);
     const listName = data[schema + 'Models'].edges;
     const [filteredModels, setFilteredModels] = useState(listName.map(({node}) => node));
 
@@ -18,7 +19,10 @@ const Models = ({data, pageContext, location}) => {
                 id={model.id}
                 name={model.name}
                 image={null}
-                onClick={() => window.location.href = `/cars/${model.brand.name}/${model.name}${location.search}`}>
+                onClick={() => {
+                    uri.setPath(`/cars/${model.brand.name}/${model.name}`);
+                    window.location.href = uri.toString();
+                }}>
             </ListItem>
         )
     });

@@ -1,63 +1,34 @@
 import React from "react";
+import Uri from 'jsuri';
 import { graphql } from 'gatsby';
 import Layout from "../components/layout";
 import './bulma-theme.scss';
 import { schema } from '../constants';
 import { SelectedCar } from '../components/car/selected-car';
 
-export default ({data, location}) => {
+export default ({location}) => {
 
-    const editCar = index => window.location.href = `/browse/?edit=${index}`;
+    const uri = new Uri(location.href);
 
-    const transform = (car, index) =>
-        <div className={'car car' + index}><SelectedCar key={car.id}
-            id={car.id}
-            variant={car.variant}
-            power={car.power}
-            weight={car.weight}
-            startYear={car.startYear}
-            endYear={car.endYear}
-            brand={car.model.brand.name}
-            model={car.model.name}
-            imageUrl={car.imageUrl}
-            onClick={() => editCar(index)}
-        /></div>;
-
-    const cars = data[schema + 'Cars'].edges;
-
-    const car1 = transform(cars[3].node, 1);
-    const car2 = transform(cars[60].node, 2);
-    const car3 = transform(cars[90].node, 3);
-
-    return (
-        <Layout>
-            <h1 className="title is-2">Mon Garage Idéal</h1>
-            <article className="car-content">
-                {car1} {car2} {car3}
-            </article>
-        </Layout>
-    );
-};
-
-export const query = graphql`query {
-    allMongodbBmbu7Ynqra11RqiCars(limit: 100) {
-        edges {
-            node {
-                variant,
-                power,
-                officialWeight, 
-                weight,
-                options,
-                startYear,
-                endYear,
-                imageUrl,
-                model {
-                    brand {
-                        name
-                    },
-                    name
-                }
-            }
-        }
+    // if edit=X parameter, save car to carX parameter
+    const editParam = uri.getQueryParamValue('edit');
+    const carParam = uri.getQueryParamValue('car');
+    if (editParam && carParam) {
+        uri.replaceQueryParam(`car${editParam}`, carParam);
     }
-}`;
+    uri.deleteQueryParam('edit');
+    uri.deleteQueryParam('car');
+
+    // take parameters as 1st choice for cars, else localStorage
+    let car1Param = uri.getQueryParamValue('car1') || localStorage.getItem('car1') || "b46d3a43-b8c3-523d-baf8-8a2cd16f37e5";
+    let car2Param = uri.getQueryParamValue('car2') || localStorage.getItem('car2') || "a852fd0d-79ee-5fab-8ea6-078751a00ae8";
+    let car3Param = uri.getQueryParamValue('car3') || localStorage.getItem('car3') || "b77be811-c52e-5e41-a1ed-0572988503ac";
+    
+    // save to localStorage
+    localStorage.setItem('car1', car1Param);
+    localStorage.setItem('car2', car2Param);
+    localStorage.setItem('car3', car3Param);
+
+    uri.setPath(`/garage/${car1Param}/${car2Param}/${car3Param}`);
+    window.location.href = uri.toString();
+}

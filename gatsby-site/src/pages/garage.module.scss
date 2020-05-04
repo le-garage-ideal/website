@@ -1,0 +1,40 @@
+$icon-size: 20px;
+$margin-iframe: -1 * $icon-size - 35px ;
+
+.car {
+    flex: 1;
+    .searchIcon {
+        visibility: hidden;
+        font-size: $icon-size;
+        background-color: var(--element-selected);
+        color: var(--element-selected-bright);
+        width: auto;
+        height: auto;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+        z-index: 1;
+        margin-right: 15px; // correspond à la marge du body dans l'iframe
+
+        &:hover {
+            background-color: var(--element-hover);
+            color: var(--element-hover-bright);
+        }
+    }
+
+    &:hover {
+        .searchIcon {
+            visibility: visible;
+        }
+    }
+}
+
+.car2 {
+    margin-top: 100px;
+}
+
+.iframe {
+    height: 60vh;
+    width: 100%;
+    margin-top: $margin-iframe;
+}

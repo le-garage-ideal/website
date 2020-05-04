@@ -16,3 +16,12 @@ export default function Layout({ children }) {
 
     );
 }
+
+export function EmptyLayout({ children }) {
+    return (
+        <React.Fragment>
+                {children}
+        </React.Fragment>
+
+    );
+}

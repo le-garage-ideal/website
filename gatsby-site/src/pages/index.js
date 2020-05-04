@@ -29,6 +29,9 @@ export default ({location}) => {
     localStorage.setItem('car2', car2Param);
     localStorage.setItem('car3', car3Param);
 
-    uri.setPath(`/garage/${car1Param}/${car2Param}/${car3Param}`);
+    uri.setPath(`/garage`);
+    uri.addQueryParam('car1', car1Param);
+    uri.addQueryParam('car2', car2Param);
+    uri.addQueryParam('car3', car3Param);
     window.location.href = uri.toString();
 }

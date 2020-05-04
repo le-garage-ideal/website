@@ -43,4 +43,35 @@ exports.createPages = async function({ actions, graphql, reporter }) {
       context: { brand: model.brand.name, model: model.name },
     })
   });
+
+  const { data: cars } = await graphql(`query query {
+    allMongodbBmbu7Ynqra11RqiCars {
+    edges {
+      node {
+          id,
+          variant,
+          power,
+          officialWeight, 
+          weight,
+          options,
+          startYear,
+          endYear,
+          imageUrl,
+          model {
+              brand {
+                  name
+              }
+             name
+          }
+      }
+    }
   }
+}`);
+cars[schema + 'Cars'].edges.forEach(({ node: car }) => {
+  actions.createPage({
+    path: `/car/${car.id}`,
+    component: path.resolve(`./src/templates/car.js`),
+    context: { car },
+  })
+});
+}

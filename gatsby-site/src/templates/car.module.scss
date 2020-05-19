@@ -20,11 +20,18 @@ h3 {
 .imageLink {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   box-sizing: border-box;
   width: 100%;
   height: 70vh;
   max-height: 65vw;
+  button {
+    border: none;
+    background-color: transparent;
+    margin: 5px;
+    padding: 0px;
+    border-radius: 50%;
+  }
 }
 
 .carSummary, .bars {  

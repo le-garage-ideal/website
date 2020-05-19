@@ -1,9 +1,12 @@
 import React from "react";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSearch, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faChevronCircleLeft, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faSearch);
 library.add(faEdit);
+library.add(faChevronCircleRight);
+library.add(faChevronCircleLeft);
+
 export default function Layout({ children }) {
     return (
         <React.Fragment>

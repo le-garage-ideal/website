@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import carStyles from './car.module.scss';
 import { EmptyLayout } from '../components/layout';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,19 +9,41 @@ export default ({ pageContext }) => {
 
     const years = `(${car.startYear}${car.endYear ? ' - ' + car.endYear : ''})`;
 
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    let urls = null;
+    if (car.favcarsVariants && car.favcarsVariants.length > 0 && car.favcarsVariants[0].urls && car.favcarsVariants[0].urls.length > 0) {
+        urls = car.favcarsVariants[0].urls;
+    }
+    const imageUrl = urls ? car.favcarsVariants[0].urls[currentImageIndex] : '/';
+
+    const clickLeft = () => {
+        if (currentImageIndex > 0) {
+            setCurrentImageIndex(currentImageIndex - 1);
+        }
+    }
+
+    const clickRight = () => {
+        if (urls && currentImageIndex < urls.length - 1) {
+            setCurrentImageIndex(currentImageIndex + 1);
+        }
+    }
+
     return (
         <EmptyLayout>
             <article className={carStyles.card}>
 
                 <div href={car.imageUrl} className={carStyles.imageLink}
-                    style={{ backgroundImage: `url(${car.imageUrl})`, backgroundSize: 'cover' }}>
+                    style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPositionY: 'center' }}>
+                        <button><FontAwesomeIcon icon="chevron-circle-left" size="2x" onClick={ clickLeft } /></button>
+                        <button><FontAwesomeIcon icon="chevron-circle-right" size="2x" onClick={ clickRight } /></button>
                 </div>
 
                 <div className={carStyles.carSummary + ' dropdown is-hoverable'}>
                     <h3 className="dropdown-trigger" aria-controls={'dropdown-' + car.id}>
-                        <span>{car.brand}</span>&nbsp;
-              <span className={carStyles.name}>{car.variant}</span>&nbsp;
-              <span className={carStyles.startYear}>{years}</span>
+                        <span>{car.model.brand.name}</span>&nbsp;
+                        <span className={carStyles.name}>{car.variant}</span>&nbsp;
+                        <span className={carStyles.startYear}>{years}</span>
                     </h3>
                 </div>
 

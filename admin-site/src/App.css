@@ -20,10 +20,22 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px;
+}
+
+.App-header section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+main {
+  padding: 20px;
 }
 
 @keyframes App-logo-spin {

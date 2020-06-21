@@ -1,10 +1,5 @@
-import React from "react";
 import Uri from 'jsuri';
-import { graphql } from 'gatsby';
-import Layout from "../components/layout";
 import './bulma-theme.scss';
-import { schema } from '../constants';
-import { SelectedCar } from '../components/car/selected-car';
 
 export default ({location}) => {
 
@@ -20,9 +15,9 @@ export default ({location}) => {
     uri.deleteQueryParam('car');
 
     // take parameters as 1st choice for cars, else localStorage
-    let car1Param = uri.getQueryParamValue('car1') || localStorage.getItem('car1') || "b46d3a43-b8c3-523d-baf8-8a2cd16f37e5";
-    let car2Param = uri.getQueryParamValue('car2') || localStorage.getItem('car2') || "a852fd0d-79ee-5fab-8ea6-078751a00ae8";
-    let car3Param = uri.getQueryParamValue('car3') || localStorage.getItem('car3') || "b77be811-c52e-5e41-a1ed-0572988503ac";
+    let car1Param = uri.getQueryParamValue('car1') || localStorage.getItem('car1') || "5e4c011c1050a45c707d9c11";
+    let car2Param = uri.getQueryParamValue('car2') || localStorage.getItem('car2') || "5e4c011c1050a45c707d9c45";
+    let car3Param = uri.getQueryParamValue('car3') || localStorage.getItem('car3') || "5e4c011c1050a45c707d9d0b";
     
     // save to localStorage
     localStorage.setItem('car1', car1Param);

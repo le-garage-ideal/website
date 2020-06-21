@@ -5,7 +5,7 @@ const POWER_MAX = 1000; // max 1000hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 1; // max 1kg/hp else overflow
 
-export default function Car({id, variant, power, weight, startYear, endYear, brand, model, imageUrl}) {
+export default function Car({id, variant, power, weight, startYear, endYear, brand, model}) {
 
   const ratio = Math.round(RATIO_MAX * power * 100 / weight);
 
@@ -20,6 +20,8 @@ export default function Car({id, variant, power, weight, startYear, endYear, bra
   const barRatioStyle = {
     width: `${ratio}%`
   };
+
+  const imageUrl = `/images/${id}.jpg`;
 
   const years = `(${startYear}${endYear ? ' - ' + endYear : ''})`;
 

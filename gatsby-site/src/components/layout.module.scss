@@ -1,0 +1,28 @@
+
+.appContainer {
+    display: flex;
+    flex-direction: column;
+    font-family: "Gill Sans", sans-serif;
+}
+
+.appContainer,
+.overlay,
+.background {
+    width: 100%;
+    height: 100vh;
+}
+  
+.background, .overlay {
+    position: absolute;
+    top: 0px;
+}
+
+.overlay {
+    background-color: var(--dark-not-opaque);
+}
+  
+.background {
+    background-image: url("/hangar.jpg");
+    background-size: cover;
+    background-position-y: bottom;
+}

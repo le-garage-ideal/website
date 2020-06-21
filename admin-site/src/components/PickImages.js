@@ -1,5 +1,4 @@
 import React from 'react';
-import { BASE_URL } from '../config';
 
 
 export const PickImages = ({ selectedBrand, selectedModel, selectedCars, select, unselect, nomatch }) => {
@@ -10,7 +9,7 @@ export const PickImages = ({ selectedBrand, selectedModel, selectedCars, select,
     }
     const carVariants = car.favcarsVariants.map(variant => {
 
-      const images = variant.urls.map(url => (
+      const imagesToSelect = variant.urls.map(url => (
         <button key={car._id + variant.name + url}
           style={{ border: car.selectedFavcarsUrl === url ? '3px solid yellow' : 'none' }}
           onClick={() => select(car._id, variant.name, url)}>
@@ -18,31 +17,42 @@ export const PickImages = ({ selectedBrand, selectedModel, selectedCars, select,
         </button>)
       );
 
-      const button = car.selectedFavcarsVariant && car.selectedFavcarsVariant === variant.name ?
-        <button onClick={() => unselect(car._id, variant.name)}>Unselect</button> : '';
-
       return (
         <div key={car._id + variant.name}>
-          <h4 style={{ textAlign: 'left' }}>{variant.name} {button}</h4>
-          <div style={{ display: 'flex' }}>{images}</div>
+          <h4 style={{ textAlign: 'left' }}>{variant.name}</h4>
+          <div style={{ display: 'flex' }}>{imagesToSelect}</div>
         </div>
       );
 
     });
 
+    let manualAddImageForm = '';
+    if (carVariants.length === 0) {
+      manualAddImageForm = (
+        <input type="text" placeholder="Add url" onChange={event => select(car._id, car.variant, event.target.value)} />
+      );
+    }
+
+    const selectedImage = car.selectedFavcarsUrl ? <img src={car.selectedFavcarsUrl} style={{ maxHeight: '100px' }} /> : '';
+
+    const unselectButton = car.selectedFavcarsUrl ? <button onClick={() => unselect(car._id, car.selectedFavcarsVariant)}>Unselect {car.selectedFavcarsVariant}</button> : '';
+
     const noMatchButton = !car.selectedFavcarsVariant ?
       <button onClick={() => nomatch(car._id)}>No match</button> : '';
 
-    if (carVariants && carVariants.length > 0 && !car.selectedFavcarsUrl) {
-      return (<div key={car._id}>
-        <h3 style={{ textAlign: 'left', color: 'blue' }}>{car.variant} ({car.startYear})
-            {noMatchButton}
-        </h3>
-        <div style={{ maxHeight: '500px', overflowY: 'scroll' }}>{carVariants}</div>
-      </div>);
-    } else {
-      return '';
-    }
+    return (
+      <div key={car._id}>
+        <div style={{ display: 'flex' }}>
+          <h3 style={{ textAlign: 'left', color: 'blue' }}>
+            {noMatchButton} {car.variant} ({car.startYear})
+          </h3>
+          {selectedImage}
+          {unselectButton}
+          {manualAddImageForm}
+        </div>
+        {!car.selectedFavcarsUrl && <div style={{ maxHeight: '500px', overflowY: 'scroll' }}>{carVariants}</div>}
+      </div>
+    );
   });
 
   const selectedBrandElement = selectedBrand ? (<div><hr />

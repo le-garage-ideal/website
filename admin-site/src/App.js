@@ -14,16 +14,52 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch(BASE_URL+'/cars').then(res => res.json()).then(cars => this.setState({ cars }));
-    fetch(BASE_URL+'/brands').then(res => res.json()).then(brands => this.setState({ brands }));
-    fetch(BASE_URL+'/models').then(res => res.json()).then(models => this.setState({ models }));
+    Promise.all([fetch(BASE_URL+'/cars').then(res => res.json()),
+      fetch(BASE_URL+'/brands').then(res => res.json()),
+      fetch(BASE_URL+'/models').then(res => res.json())])
+    .then(([cars, brands, models]) => {
+      const modelMap = {};
+      const brandMap = {};
+      for (const car of cars) {
+        
+        const brand = brands.find(brand => brand.name === car.model.brand.name);
+        if (!brand) {
+          console.log(`brand not found for car`, car);
+        } else {
+          if (!brandMap[brand._id]) brandMap[brand._id] = { totalCount: 0, okCount: 0 };
+          brandMap[brand._id].totalCount++;        
+          if (car.selectedFavcarsUrl) {
+            brandMap[brand._id].okCount++;
+          }
+        }
+
+        const model = models.find(model => model.brand.name === car.model.brand.name && model.name === car.model.name);
+        if (!model) {
+          console.log(`model not found for car`, car);
+        } else {
+          if (!modelMap[model._id]) modelMap[model._id] = { totalCount: 0, okCount: 0 };
+          modelMap[model._id].totalCount++;
+          if (car.selectedFavcarsUrl) {
+            modelMap[model._id].okCount++;
+          }
+        }
+      }
+      this.setState({ cars, models, brands, brandMap, modelMap });
+    });
   }
 
   unselect(carId) {
-    const index = this.state.cars.findIndex(car => car._id === carId);
+    const indexCars = this.state.cars.findIndex(car => car._id === carId);
     const newCars = [...this.state.cars];
-    newCars[index].selectedFavcarsVariant = null;
-    newCars[index].selectedFavcarsImage = null;
+    newCars[indexCars].selectedFavcarsVariant = null;
+    newCars[indexCars].selectedFavcarsImage = null;
+
+    const indexSelectedCars = this.state.selectedCars.findIndex(car => car._id === carId);
+    const newSelectedCars = [...this.state.selectedCars];
+    newSelectedCars[indexSelectedCars].selectedFavcarsVariant = null;
+    newSelectedCars[indexSelectedCars].selectedFavcarsImage = null;
+
+    this.setState({cars: newCars, selectedCars: newSelectedCars})
   }
 
   nomatch(carId) {
@@ -55,25 +91,67 @@ class App extends React.Component {
     this.setState({selectedCars: updatedSelectedCars, cars: updatedCars});
   }
 
+  addVariant(car) {
+    fetch(BASE_URL + '/cars', {
+      method: 'post',
+      headers: {
+        'accept': 'application/json'
+      }
+    }).then(response => response.json())
+    .then(addedCar => console.log(addedCar));
+     
+  }
+
+  removeVariant(carId) {
+    fetch(BASE_URL + '/cars/' + carId, {
+      method: 'delete',
+      headers: {
+        'accept': 'application/json'
+      }
+    }).then(response => response.json())
+    .then(deletedCar => console.log(deletedCar));
+     
+  }
+
   menuSelect(selectedMenu) {
     this.setState({selectedMenu});
   }
 
   render() {
 
-    const brandElements = this.state.brands.map(brand => (<button key={ brand._id } onClick={() => {
-      const selectedModels = this.state.models.filter(model => model.brand.name === brand.name);
-      this.setState({selectedBrand: brand, selectedModels, selectedCars: [], selectedModel: null});
-    }}>{ brand.name }</button>));
+    const brandElements = this.state.brands.map(brand => {
+      const okCount = this.state.brandMap[brand._id].okCount;
+      const totalCount = this.state.brandMap[brand._id].totalCount;
+      return (
+        <button key={ brand._id } onClick={() => {
+            const selectedModels = this.state.models.filter(model => model.brand.name === brand.name);
+            this.setState({selectedBrand: brand, selectedModels, selectedCars: [], selectedModel: null});
+          }}
+          style={{ borderColor: this.state.selectedBrand && this.state.selectedBrand._id === brand._id ? 'yellow' : 'auto',
+                   backgroundColor: okCount === 0 ? 'red' : okCount === totalCount ? 'lightgreen' : 'orange'}}>
+          { brand.name }
+        </button>
+      );
+    });
 
-    const modelElements = this.state.selectedModels.map(model => (<button key={ model._id } onClick={() => {
-      const selectedCars = this.state.cars.filter(car => car.model.brand.name === this.state.selectedBrand.name && car.model.name === model.name);
-      this.setState({selectedModel: model, selectedCars});
-    }}>{ model.name }</button>));
+    const modelElements = this.state.selectedModels.map(model => {
+      if (!this.state.modelMap[model._id]) { console.log(model._id); return <div>{model.name}</div> }
+      const okCount = this.state.modelMap[model._id].okCount;
+      const totalCount = this.state.modelMap[model._id].totalCount;
+      return (
+        <button key={ model._id } title={ model.favcarsName } onClick={() => {
+            const selectedCars = this.state.cars
+              .filter(car => car.model.brand.name === this.state.selectedBrand.name && car.model.name === model.name)
+              .sort((e1, e2) => (1 * e1.startYear) - (1 * e2.startYear) === 0 ? (e1.variant > e2.variant ? 1 : e1.variant < e2.variant ? -1 : 0) : (1 * e1.startYear) - (1 * e2.startYear));
+            this.setState({selectedModel: model, selectedCars});
+          }}
+          style={{ borderColor: this.state.selectedModel && this.state.selectedModel._id === model._id ? 'yellow' : 'auto', 
+                   backgroundColor: okCount === 0 ? 'red' : okCount === totalCount ? 'lightgreen' : 'orange'}}>
+          { model.name }
+        </button>
+      );
+    });
 
-    const selectedBrandElement = this.state.selectedBrand ? (<div><hr />
-      <h2>{this.state.selectedBrand.name} {this.state.selectedModel ? this.state.selectedModel.name : ''}</h2>
-      <hr /></div>) : '';
 
     const menuElements = <select onChange={event => this.menuSelect(event.target.value)}>
       <option value="">--select--</option>
@@ -84,13 +162,23 @@ class App extends React.Component {
     let selectedMenuElement = null;
     switch(this.state.selectedMenu) {
       case 'pickimages':
-        selectedMenuElement = <PickImages selectedBrand={this.state.selectedBrand} selectedModel={this.state.selectedModel}
-          selectedCars={this.state.selectedCars} nomatch={carId => this.nomatch(carId)} 
-          select={(carId, variantName, url) => this.select(carId, variantName, url)}
-          unselect={carId => this.unselect(carId)}></PickImages>;
+        selectedMenuElement = <PickImages
+            selectedBrand={this.state.selectedBrand}
+            selectedModel={this.state.selectedModel}
+            selectedCars={this.state.selectedCars}
+            nomatch={carId => this.nomatch(carId)} 
+            select={(carId, variantName, url) => this.select(carId, variantName, url)}
+            unselect={carId => this.unselect(carId)}>
+          </PickImages>;
         break;
       case 'correctvariants':
-        selectedMenuElement = <CorrectVariants selectedCars={this.state.selectedCars} removeVariant={carId => console.log('remove '+carId)}></CorrectVariants>;
+        if (this.state.selectedModel) {
+          selectedMenuElement = <CorrectVariants 
+            selectedModel={this.state.selectedModel}
+            selectedCars={this.state.selectedCars}
+            removeVariant={carId => this.removeVariant(carId)}>
+          </CorrectVariants>;
+        }
         break;
       default:
         selectedMenuElement = '';
@@ -101,10 +189,8 @@ class App extends React.Component {
         <header className="App-header">
           <section><div>Admin Site</div>{ menuElements }</section>
           <section>{ brandElements }</section>
-          <hr />
+          <hr style={{color: 'white'}} />
           <section>{ modelElements }</section>
-          { selectedBrandElement }
-          
         </header>
         <main>
           { selectedMenuElement }

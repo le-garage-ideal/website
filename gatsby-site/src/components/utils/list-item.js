@@ -11,7 +11,7 @@ export default function ListItem({id, name, image, onClick, selected}) {
   return (<li>
     <button className={ classNames.join(' ') } onClick={() => onClick(id)}>
       <figure>
-          <img src={image} alt={name} style={{width: '50px'}} />
+          <img src={image} alt={name} />
           <figcaption>{name}</figcaption>
       </figure>
     </button>

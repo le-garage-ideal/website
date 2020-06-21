@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import Uri from 'jsuri';
 import Layout from "../components/layout";
 import './bulma-theme.scss';
@@ -30,8 +29,6 @@ export default class Garage extends React.Component {
             uri.addQueryParam('edit', index);
             window.location.href = uri.toString();
         };
-
-        const me = this;
 
         const transform = (carUrl, index) => {
             const classCar = [garageStyles.car];

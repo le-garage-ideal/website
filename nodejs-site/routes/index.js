@@ -15,6 +15,9 @@ router.get('/brands', (req, res, next) => {
 router.get('/models', (req, res, next) => {
   selectModels({}, doc => doc).then(result => res.json(result));
 });
+router.post('/cars', (req, res, next) => {
+  console.log(req.body);
+});
 router.put('/cars', (req, res, next) => {
     if (!req.body.carId || !req.body.variantName || !req.body.url) {
       res.status(400).send('Bad parameters');
@@ -24,6 +27,13 @@ router.put('/cars', (req, res, next) => {
         doc.selectedFavcarsUrl = req.body.url;
       }).then(result => res.json(result[0]));
     }
+});
+router.delete('/cars/:carId', (req, res, next) => {
+  if (!req.params.carId) {
+    res.status(400).send('Bad parameters');
+  } else {
+    Car.deleteOne({_id: req.params.carId}, err => { if (err) res.sendStatus(500).json(err); } );
+  }
 });
 router.delete('/cars/favcars/:carId', (req, res, next) => {
   if (!req.params.carId) {

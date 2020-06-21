@@ -11,15 +11,17 @@ export default ({data, pageContext, location}) => {
     const uri = new Uri(location.href);
     const listName = data[schema + 'Cars'].edges;
     const [filteredCars, setFilteredCars] = useState(listName.map(({node}) => node));
+    
 
     const carComponents = filteredCars.map(car => {
+        const imageUrl = `/images/${car.mongodb_id}.jpg`;
         return (
-            <ListItem key={car.id}
-                id={car.id}
+            <ListItem key={car.mongodb_id}
+                id={car.mongodb_id}
                 name={car.variant}
-                image={null}
+                image={imageUrl}
                 onClick={() => {
-                    uri.addQueryParam('car', car.id);
+                    uri.addQueryParam('car', car.mongodb_id);
                     uri.setPath('/');
                     window.location.href = uri.toString();
                 }}>
@@ -48,6 +50,7 @@ export const query = graphql`
         allMongodbBmbu7Ynqra11RqiCars(filter: {model: {name: {eq: $model}, brand: { name: {eq: $brand}}}}) {
         edges {
           node {
+              mongodb_id,
               variant,
               power,
               officialWeight, 

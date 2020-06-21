@@ -23,8 +23,8 @@ export function FilteredList({title, render, filter}) {
     };
 
     return (
-        <ul className={filteredListStyles.list}>
-            <div className="field is-size-4" style={ {width: '100%', display: 'flex', justifyContent: 'space-between'} }>
+        <>
+            <header className={["field", "is-size-4", filteredListStyles.listHeader].join(' ')}>
                 <h1 className="has-text-light">{ title }</h1>
                 <p className="control has-text-dark has-icons-right">
                     <input className="input" type="text" onKeyUp={search} style={ {width: 'auto'} } />
@@ -32,8 +32,10 @@ export function FilteredList({title, render, filter}) {
                         <FontAwesomeIcon icon="search" />
                     </span>
                 </p>
-            </div>
-            {render()}
-        </ul>
+            </header>
+            <ul className={filteredListStyles.list}>
+                {render()}
+            </ul>
+        </>
     );
 }

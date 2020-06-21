@@ -1,6 +1,7 @@
 import React from "react";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faEdit, faChevronCircleLeft, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
+import layoutStyles from  './layout.module.scss';
 
 library.add(faSearch);
 library.add(faEdit);
@@ -10,9 +11,9 @@ library.add(faChevronCircleLeft);
 export default function Layout({ children }) {
     return (
         <React.Fragment>
-            <div className="overlay" style={{ zIndex: -1 }}></div>
-            <div className="background" style={{ zIndex: -2 }}></div>
-            <main className="app-container">
+            <div className={layoutStyles.overlay} style={{ zIndex: -1 }}></div>
+            <div className={layoutStyles.background} style={{ zIndex: -2 }}></div>
+            <main className={layoutStyles.appContainer}>
                 {children}
             </main>
         </React.Fragment>

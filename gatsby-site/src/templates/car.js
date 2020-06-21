@@ -11,23 +11,19 @@ export default ({ pageContext }) => {
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    let urls = null;
-    if (car.favcarsVariants && car.favcarsVariants.length > 0 && car.favcarsVariants[0].urls && car.favcarsVariants[0].urls.length > 0) {
-        urls = car.favcarsVariants[0].urls;
-    }
-    const imageUrl = urls ? car.favcarsVariants[0].urls[currentImageIndex] : '/';
+    const imageUrl = `/images/${car.mongodb_id}.jpg`;
 
-    const clickLeft = () => {
-        if (currentImageIndex > 0) {
-            setCurrentImageIndex(currentImageIndex - 1);
-        }
-    }
+    // const clickLeft = () => {
+    //     if (currentImageIndex > 0) {
+    //         setCurrentImageIndex(currentImageIndex - 1);
+    //     }
+    // }
 
-    const clickRight = () => {
-        if (urls && currentImageIndex < urls.length - 1) {
-            setCurrentImageIndex(currentImageIndex + 1);
-        }
-    }
+    // const clickRight = () => {
+    //     if (urls && currentImageIndex < urls.length - 1) {
+    //         setCurrentImageIndex(currentImageIndex + 1);
+    //     }
+    // }
 
     return (
         <EmptyLayout>
@@ -35,8 +31,8 @@ export default ({ pageContext }) => {
 
                 <div href={car.imageUrl} className={carStyles.imageLink}
                     style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPositionY: 'center' }}>
-                        <button><FontAwesomeIcon icon="chevron-circle-left" size="2x" onClick={ clickLeft } /></button>
-                        <button><FontAwesomeIcon icon="chevron-circle-right" size="2x" onClick={ clickRight } /></button>
+                        {/* <button><FontAwesomeIcon icon="chevron-circle-left" size="2x" onClick={ clickLeft } /></button>
+                        <button><FontAwesomeIcon icon="chevron-circle-right" size="2x" onClick={ clickRight } /></button> */}
                 </div>
 
                 <div className={carStyles.carSummary + ' dropdown is-hoverable'}>

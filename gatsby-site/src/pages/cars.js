@@ -10,22 +10,21 @@ export default (data) => {
     const carNodes = data.pageResources.json.data[schema + 'Cars'].edges;
     const carComponents = carNodes.map(({ node }) => {
         return (
-            <Car key={node.id}
-                id={node.id}
+            <Car key={node.mongodb_id}
+                id={node.mongodb_id}
                 variant={node.variant}
                 power={node.power}
                 weight={node.weight}
                 startYear={node.startYear}
                 endYear={node.endYear}
                 brand={node.model.brand.name}
-                model={node.model.name}
-                imageUrl={node.imageUrl}>
+                model={node.model.name}>
             </Car>
         )
     });
     return (
         <Layout>
-            <main className="app-container">
+            <main className="appContainer">
                 <section className="car-content">{ carComponents } </section>
             </main>
         </Layout>
@@ -37,6 +36,7 @@ export const query = graphql`
         allMongodbBmbu7Ynqra11RqiCars(limit: 10) {
         edges {
           node {
+              mongodb_id,
               variant,
               power,
               officialWeight, 

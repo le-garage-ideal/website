@@ -1,11 +1,13 @@
 @import '../../styles/theme.scss';
 
+$height: 15em;
+
 .logoLink {
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0);
   text-align: center;
-  width: 11em;
-  height: 6em;
+  width: 22em;
+  max-height: $height;
   overflow: hidden;
   background: none!important;
   padding: 5px;
@@ -14,8 +16,7 @@
   cursor: pointer;
 
   img {
-    width: 50px;
-    max-height: 3.5em;
+    height: calc(#{$height} - 2em); // leave space for caption
   }
 }
 

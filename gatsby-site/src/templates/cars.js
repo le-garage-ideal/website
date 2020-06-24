@@ -6,11 +6,26 @@ import ListItem from "../components/utils/list-item";
 import { schema } from '../constants';
 import Layout from "../components/layout";
 
+const sortCars = (a, b) => {
+    const sortField = (a, b, field) => {
+        if (!a[field] && !b[field]) {
+            return 0;
+        }
+        if (!a[field]) {
+            return -1;
+        }
+        if (!b[field]) {
+            return 1;
+        }
+        return a[field] < b[field] ? -1 : a[field] === b[field] ? 0 : 1;
+    }; 
+    return sortField(a, b, 'startYear') === 0 ? sortField(a, b, 'variant') : sortField(a, b, 'startYear');
+};
 
 export default ({data, pageContext, location}) => {
     const uri = new Uri(location.href);
-    const listName = data[schema + 'Cars'].edges;
-    const [filteredCars, setFilteredCars] = useState(listName.map(({node}) => node));
+    const completeCarList = data[schema + 'Cars'].edges.map(({node}) => node).sort(sortCars);
+    const [filteredCars, setFilteredCars] = useState(completeCarList);
     
 
     const carComponents = filteredCars.map(car => {
@@ -18,8 +33,9 @@ export default ({data, pageContext, location}) => {
         return (
             <ListItem key={car.mongodb_id}
                 id={car.mongodb_id}
-                name={car.variant}
+                name={car.variant + (car.startYear ? ' - ' + car.startYear : '')}
                 image={imageUrl}
+                big={true}
                 onClick={() => {
                     uri.addQueryParam('car', car.mongodb_id);
                     uri.setPath('/');

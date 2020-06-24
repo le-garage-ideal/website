@@ -4,7 +4,6 @@
   margin: 15px;
   color: var(--text-bright);
   padding: 15px;
-  background-color: rgba(55, 55, 70, 0.8);
   display: flex;
   width: 350px;
   flex-direction: column;
@@ -32,20 +31,6 @@ img {
   max-width: 100%;
   max-height: 100%;
 }
-
-
-.carSummary {
-  display: flex;
-  align-items: center;
-  outline: none; /* remove border on select */
-  cursor: pointer;
-  font-weight: normal;
-  margin-top: 8px;
-  margin-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 10px;
-}
-
 
 .name {
   /* Long labels */

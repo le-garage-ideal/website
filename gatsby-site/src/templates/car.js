@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Spec from '../components/car/spec';
 import carStyles from './car.module.scss';
 import { EmptyLayout } from '../components/layout';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,40 +8,57 @@ export default ({ pageContext }) => {
 
     const car = pageContext.car;
 
-    const years = `(${car.startYear}${car.endYear ? ' - ' + car.endYear : ''})`;
-
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
     const imageUrl = `/images/${car.mongodb_id}.jpg`;
 
-    // const clickLeft = () => {
-    //     if (currentImageIndex > 0) {
-    //         setCurrentImageIndex(currentImageIndex - 1);
-    //     }
-    // }
+    const clickLeft = () => {
+        setCurrentPageIndex(currentPageIndex - 1);
+    }
 
-    // const clickRight = () => {
-    //     if (urls && currentImageIndex < urls.length - 1) {
-    //         setCurrentImageIndex(currentImageIndex + 1);
-    //     }
-    // }
+    const clickRight = () => {
+        setCurrentPageIndex(currentPageIndex + 1);
+    }
+
+    const divStyle = currentPageIndex === 0 ? {
+        backgroundImage: `url(${imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPositionY: 'center'
+    } : {
+        backgroundColor: 'rgba(55, 55, 70, 0.8)'
+    };
+
+    const divContent = currentPageIndex === 0 ? '' : (
+        <Spec brand={car.model.brand.name} variant={car.variant} power={car.power} weight={car.weight} startYear={car.startYear} />
+    );
 
     return (
         <EmptyLayout>
             <article className={carStyles.card}>
 
-                <div href={car.imageUrl} className={carStyles.imageLink}
-                    style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPositionY: 'center' }}>
-                        {/* <button><FontAwesomeIcon icon="chevron-circle-left" size="2x" onClick={ clickLeft } /></button>
-                        <button><FontAwesomeIcon icon="chevron-circle-right" size="2x" onClick={ clickRight } /></button> */}
+                <div href={car.imageUrl} className={carStyles.imageLink} style={divStyle}>
+                        { divContent }
                 </div>
 
-                <div className={carStyles.carSummary + ' dropdown is-hoverable'}>
-                    <h3 className="dropdown-trigger" aria-controls={'dropdown-' + car.id}>
-                        <span>{car.model.brand.name}</span>&nbsp;
-                        <span className={carStyles.name}>{car.variant}</span>&nbsp;
-                        <span className={carStyles.startYear}>{years}</span>
-                    </h3>
+                <div className={carStyles.carCaption }>
+                    <div class={carStyles.switchButtons}>
+                        {
+                            currentPageIndex === 1 && 
+                            <button className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
+                                <FontAwesomeIcon icon="image" size="2x" onClick={ clickLeft } />
+                            </button> 
+                        }
+                        {
+                            currentPageIndex === 0 && 
+                            <button className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
+                                <FontAwesomeIcon icon="th-list" size="2x" onClick={ clickRight } />
+                            </button>
+                        }
+                    </div>
+                    <div className={carStyles.carTitle}>
+                        <h3 className={carStyles.carLongLabel}>{car.model.brand.name} {car.variant}</h3>
+                    </div>
+                    <div className={carStyles.carYear}>{car.startYear}</div>
                 </div>
 
             </article >

@@ -1,23 +1,5 @@
 .car {
     flex: 1;
-    .searchIcon {
-        font-size: 20px;
-        background-color: var(--element-selected);
-        color: var(--element-selected-bright);
-        width: auto;
-        height: auto;
-        padding: 10px;
-        cursor: pointer;
-        border: none;
-        z-index: 1;
-        margin-right: 25px; // correspond à la marge du body dans l'iframe
-        margin-top: -5.8vw;
-
-        &:hover {
-            background-color: var(--element-hover);
-            color: var(--element-hover-bright);
-        }
-    }
 }
 
 .car2 {
@@ -25,7 +7,18 @@
 }
 
 .iframe {
-    margin-top: 15vh;
+    //margin-top: 15vh;
     height: 80vh;
     width: 100%;
+}
+
+.iconButton {
+    padding: 2px 5px 5px 5px;
+    background-color: var(--dark-opaque);
+}
+
+.iconButtonContainer {
+    margin-right: 15px; // correspond à la marge du body dans l'iframe
+    margin-bottom: -47px;
+    z-index: 1;
 }

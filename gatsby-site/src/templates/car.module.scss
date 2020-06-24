@@ -13,50 +13,58 @@ html {
   flex-direction: column;
 }
 
-h3 {
-  font-weight: normal;
-}
-
 .imageLink {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   box-sizing: border-box;
   width: 100%;
   height: 70vh;
   max-height: 65vw;
-  button {
-    border: none;
-    background-color: transparent;
-    margin: 5px;
-    padding: 0px;
-    border-radius: 50%;
-  }
 }
 
-.carSummary, .bars {  
+.switchButtons {
+  display: flex;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.iconButton {
+  display: flex;
+  font-size: 12px;
+}
+
+.carCaption {  
   color: var(--text-bright);
-  background-color: rgba(55, 55, 70, 0.8);
+  background-color: var(--dark-opaque);
   width: 100%;
-}
-
-.carSummary {
   display: flex;
   align-items: center;
-  justify-content: center;
-  outline: none; /* remove border on select */
-  cursor: pointer;
+  justify-content: start;
   font-weight: normal;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  padding: 20px;
+  padding: 0px 20px 0px 20px;
 }
 
+.carYear {
+  text-align: right;
+  font-weight: bold;
+}
 
-.name {
+.carTitle {
+  flex: 1;
+  height: 100%;
+}
+
+.carLongLabel {
   /* Long labels */
-  max-width: 70%; /* do not reduce summary arrow */
+  max-width: 100%; /* do not reduce summary arrow */
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
+
+

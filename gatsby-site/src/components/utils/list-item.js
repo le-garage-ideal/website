@@ -1,11 +1,17 @@
 import React from 'react';
 import listItemStyles from  './list-item.module.scss';
 
-export default function ListItem({id, name, image, onClick, selected}) {
+export default function ListItem({id, name, image, onClick, selected, big}) {
 
   const classNames = [listItemStyles.logoLink];
   if (selected) {
     classNames.push(listItemStyles.selected);
+  }
+
+  if (big) {
+    classNames.push(listItemStyles.logoLinkBig)
+  } else {
+    classNames.push(listItemStyles.logoLinkSmall)
   }
 
   return (<li>

@@ -13,11 +13,11 @@ export default class Garage extends React.Component {
     }
 
     componentDidMount() {
-        this.iframeRefs.forEach(ref => {
-            ref.current.addEventListener('load', () => setTimeout(() => {
-                ref.current.style.height = ref.current.contentWindow.document.body.scrollHeight + 'px';
-            }, 2000));
-        });
+        // this.iframeRefs.forEach(ref => {
+        //     ref.current.addEventListener('load', () => setTimeout(() => {
+        //         ref.current.style.height = ref.current.contentWindow.document.body.scrollHeight + 'px';
+        //     }, 2000));
+        // });
     }
 
     render() {
@@ -39,12 +39,14 @@ export default class Garage extends React.Component {
             const title = `#${index}`;
             return (
                 <div className={classCar.join(' ')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+                    <div className={garageStyles.iconButtonContainer}>
+                        <button className={garageStyles.iconButton + " icon-button" }
+                            onClick={() => editCar(index)}>
+                            <FontAwesomeIcon icon="edit" />
+                        </button>
+                    </div>
                     <iframe id={id} title={ title } ref={ this.iframeRefs[index - 1] } className={garageStyles.iframe} src={carUrl}>
                     </iframe>
-                    <button className={garageStyles.searchIcon + ' icon'}
-                        onClick={() => editCar(index)}>
-                        <FontAwesomeIcon icon="edit" />
-                    </button>
                 </div>
             );
 
@@ -56,7 +58,7 @@ export default class Garage extends React.Component {
 
         return (
             <Layout>
-                <h1 className="title is-2">Mon Garage Idéal</h1>
+                <h1 className="title is-2">Le Garage Idéal</h1>
                 <article className="car-content">
                     {car1} {car2} {car3}
                 </article>

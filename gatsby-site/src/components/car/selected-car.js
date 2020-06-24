@@ -28,7 +28,7 @@ export function SelectedCar({ id, variant, power, weight, startYear, endYear, br
     <article className={carStyles.card}>
 
       <div href={imageUrl} className={carStyles.imageLink} style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover' }}>
-        <button className={carStyles.searchIcon + ' icon'} onClick={onClick}>
+        <button className="icon-button icon" onClick={onClick}>
           <FontAwesomeIcon icon="edit" />
         </button>
       </div>

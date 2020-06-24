@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from 'gatsby';
-import Car from "../components/car/car";
+import Spec from "../components/car/spec";
 import { schema } from '../constants';
 import Layout from "../components/layout";
 
@@ -10,7 +10,7 @@ export default (data) => {
     const carNodes = data.pageResources.json.data[schema + 'Cars'].edges;
     const carComponents = carNodes.map(({ node }) => {
         return (
-            <Car key={node.mongodb_id}
+            <Spec key={node.mongodb_id}
                 id={node.mongodb_id}
                 variant={node.variant}
                 power={node.power}
@@ -19,7 +19,7 @@ export default (data) => {
                 endYear={node.endYear}
                 brand={node.model.brand.name}
                 model={node.model.name}>
-            </Car>
+            </Spec>
         )
     });
     return (

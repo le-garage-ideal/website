@@ -23,6 +23,7 @@ const Models = ({data, pageContext, location}) => {
                 id={car.model.name}
                 name={car.model.name}
                 image={`/images/${car.mongodb_id}.jpg`}
+                big={true}
                 onClick={() => {
                     uri.setPath(`/cars/${car.model.brand.name}/${car.model.name}`);
                     window.location.href = uri.toString();

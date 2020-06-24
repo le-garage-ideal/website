@@ -22,3 +22,19 @@ h1.title {
   margin: 0 30px 0 30px;
 }
 
+.icon-button {
+  font-size: 20px;
+  background-color: var(--element-selected);
+  color: var(--element-selected-bright);
+  width: auto;
+  height: auto;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+      background-color: var(--element-hover);
+      color: var(--element-hover-bright);
+  }
+}
+

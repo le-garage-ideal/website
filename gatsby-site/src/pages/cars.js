@@ -11,14 +11,8 @@ export default (data) => {
     const carComponents = carNodes.map(({ node }) => {
         return (
             <Spec key={node.mongodb_id}
-                id={node.mongodb_id}
-                variant={node.variant}
                 power={node.power}
-                weight={node.weight}
-                startYear={node.startYear}
-                endYear={node.endYear}
-                brand={node.model.brand.name}
-                model={node.model.name}>
+                weight={node.weight}>
             </Spec>
         )
     });

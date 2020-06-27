@@ -1,3 +1,21 @@
+.title {
+    font-size: 3rem;
+    color: var(--text-bright);
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+    font-family: Segoe UI Light;
+    text-decoration: underline;
+}
+
+.subTitle {
+    text-align: center;
+    color: var(--text-bright);
+    font-family: Segoe UI Light;
+    font-size: 1.5rem;
+    margin-bottom: -30px;
+}
+
 .car {
     flex: 1;
 }
@@ -19,6 +37,6 @@
 
 .iconButtonContainer {
     margin-right: 15px; // correspond à la marge du body dans l'iframe
-    margin-bottom: -47px;
+    margin-bottom: -48px;
     z-index: 1;
 }

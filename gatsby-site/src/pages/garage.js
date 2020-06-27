@@ -58,7 +58,8 @@ export default class Garage extends React.Component {
 
         return (
             <Layout>
-                <h1 className="title is-2">Le Garage Idéal</h1>
+                <h1 className={garageStyles.title}>Le Garage Idéal</h1>
+                <h4 className={garageStyles.subTitle}><div>Choisissez les 3 voitures de sport</div>qui composeront votre garage idéal</h4>
                 <article className="car-content">
                     {car1} {car2} {car3}
                 </article>

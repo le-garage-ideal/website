@@ -5,7 +5,7 @@ const POWER_MAX = 1200; // max 1200hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 1; // max 1kg/hp else overflow
 
-export default function Spec({brand, variant, power, weight, startYear}) {
+export default function Spec({power, weight}) {
 
   const ratio = Math.round(RATIO_MAX * power * 100 / weight);
 
@@ -20,8 +20,6 @@ export default function Spec({brand, variant, power, weight, startYear}) {
   const barRatioStyle = {
     width: `${ratio}%`
   };
-
-  const year = year ? `(${startYear})` : '';
 
   return (
     <article className={ specStyles.card }>

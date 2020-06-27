@@ -33,7 +33,7 @@ const Models = ({data, pageContext, location}) => {
     });
 
     const search = value => {
-        const filtered = data.filter(({ node: model }) => model.name.match(new RegExp(value, 'i')));
+        const filtered = listName.filter(car => car.model.name.match(new RegExp(value, 'i')));
         setFilteredModels(filtered);
     };
 

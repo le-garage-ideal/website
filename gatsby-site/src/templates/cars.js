@@ -46,7 +46,7 @@ export default ({data, pageContext, location}) => {
     });
     
     const search = value => {
-        const filtered = data.filter(({ node: car }) => car.name.match(new RegExp(value, 'i')));
+        const filtered = completeCarList.filter(car => car.variant.match(new RegExp(value, 'i')));
         setFilteredCars(filtered);
     };
 

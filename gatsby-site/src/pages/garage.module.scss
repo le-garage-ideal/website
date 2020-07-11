@@ -8,7 +8,9 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     align-self: center;
     margin-top: 10px;
     margin-bottom: -20px;
-    padding: 30px 60px;
+    padding: 30px 0px;
+    width: 36vw;
+    max-width: 450px;
     border-radius: 10px;
 }
 
@@ -35,7 +37,6 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     max-height: $cardMaxHeight;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     justify-content: center;
     flex: 1;
     margin: 0 $iframeBodyMargin;
@@ -43,10 +44,12 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
 
 .withCar {
     height: $cardHeight + $labelHeight;
+    align-items: flex-end;
 }
 
 .noCar {
     height: $cardHeight;
+    align-items: center;
 }
 
 .car2 {
@@ -70,13 +73,6 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
 .iframe {
     flex: 8;
     width: 100%;
-}
-
-.bigButton {
-    background-color: var(--dark-opaque);
-    margin: $iframeBodyMargin;
-    width: 100%;
-    height: 100%;   
 }
 
 .iconButton {

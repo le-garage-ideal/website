@@ -50,7 +50,12 @@ export default class Garage extends React.Component {
                         <span className={[garageStyles.carLabel, 'badge'].join(' ')}>{ title }</span>
                     </div>
                 </>
-            ) : <button className={garageStyles.bigButton + " icon-button"} onClick={() => editCar(index)}>{title}</button>;
+            ) : (<span className={'badge '+ garageStyles.carLabel}>
+                    {title} &nbsp;
+                    <button className={garageStyles.iconButton + " icon-button"} onClick={() => editCar(index)}>
+                        <FontAwesomeIcon icon="edit" />
+                    </button>
+                </span>);
             return (
                 <div className={classCar.join(' ')}>
                     {thumbnail}

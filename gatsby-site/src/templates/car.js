@@ -20,23 +20,16 @@ export default ({ pageContext }) => {
         setCurrentPageIndex(currentPageIndex + 1);
     }
 
-    const divStyle = currentPageIndex === 0 ? {
-        backgroundImage: `url(${imageUrl})`,
-        backgroundSize: 'cover',
-        backgroundPositionY: 'center'
-    } : {
-        backgroundColor: 'rgba(55, 55, 70, 0.8)'
-    };
-
-    const divContent = currentPageIndex === 0 ? '' : (
+    const divContent = currentPageIndex === 0 ?
+        <img src={imageUrl} className={carStyles.image} alt={`${car.model.brand.name} ${car.variant}`} /> :
         <Spec brand={car.model.brand.name} variant={car.variant} power={car.power} weight={car.weight} startYear={car.startYear} />
-    );
+    ;
 
     return (
         <EmptyLayout>
             <article className={carStyles.card}>
 
-                <div href={car.imageUrl} className={carStyles.imageLink} style={divStyle}>
+                <div href={car.imageUrl} className={carStyles.imageContainer}>
                         { divContent }
                 </div>
 

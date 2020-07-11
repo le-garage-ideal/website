@@ -15,18 +15,25 @@ export default ({location}) => {
     uri.deleteQueryParam('car');
 
     // take parameters as 1st choice for cars, else localStorage
-    let car1Param = uri.getQueryParamValue('car1') || localStorage.getItem('car1') || "5e4c011c1050a45c707d9c11";
-    let car2Param = uri.getQueryParamValue('car2') || localStorage.getItem('car2') || "5e4c011c1050a45c707d9c45";
-    let car3Param = uri.getQueryParamValue('car3') || localStorage.getItem('car3') || "5e4c011c1050a45c707d9d0b";
-    
-    // save to localStorage
-    localStorage.setItem('car1', car1Param);
-    localStorage.setItem('car2', car2Param);
-    localStorage.setItem('car3', car3Param);
+    let car1Param = uri.getQueryParamValue('car1') || localStorage.getItem('car1');
+    let car2Param = uri.getQueryParamValue('car2') || localStorage.getItem('car2');
+    let car3Param = uri.getQueryParamValue('car3') || localStorage.getItem('car3');
 
     uri.setPath(`/garage`);
-    uri.addQueryParam('car1', car1Param);
-    uri.addQueryParam('car2', car2Param);
-    uri.addQueryParam('car3', car3Param);
+
+    // save to localStorage + add param
+    if (car1Param) {
+        localStorage.setItem('car1', car1Param);
+        uri.addQueryParam('car1', car1Param);
+    }
+    if (car2Param) {
+        localStorage.setItem('car2', car2Param);
+        uri.addQueryParam('car2', car2Param);
+    }
+    if (car3Param) {
+        localStorage.setItem('car3', car3Param);
+        uri.addQueryParam('car3', car3Param);
+    }
+
     window.location.href = uri.toString();
 }

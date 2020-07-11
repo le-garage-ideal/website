@@ -13,11 +13,6 @@ export default class Garage extends React.Component {
     }
 
     componentDidMount() {
-        // this.iframeRefs.forEach(ref => {
-        //     ref.current.addEventListener('load', () => setTimeout(() => {
-        //         ref.current.style.height = ref.current.contentWindow.document.body.scrollHeight + 'px';
-        //     }, 2000));
-        // });
     }
 
     render() {
@@ -35,32 +30,46 @@ export default class Garage extends React.Component {
             if (index === 2) {
                 classCar.push(garageStyles.car2);
             }
+            if (carUrl) {
+                classCar.push(garageStyles.withCar);
+            } else {
+                classCar.push(garageStyles.noCar);
+            }
             const id = `frame-${index}`;
-            const title = `#${index}`;
-            return (
-                <div className={classCar.join(' ')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+            const title = index === 1 ? 'Daily' : index === 3 ? 'Pistarde' : 'Collector';
+            const thumbnail = carUrl ? (
+                <>
                     <div className={garageStyles.iconButtonContainer}>
-                        <button className={garageStyles.iconButton + " icon-button" }
-                            onClick={() => editCar(index)}>
+                        <button className={garageStyles.iconButton + " icon-button"} onClick={() => editCar(index)}>
                             <FontAwesomeIcon icon="edit" />
                         </button>
                     </div>
-                    <iframe id={id} title={ title } ref={ this.iframeRefs[index - 1] } className={garageStyles.iframe} src={carUrl}>
+                    <iframe id={id} title={title} ref={this.iframeRefs[index - 1]} className={garageStyles.iframe} src={`/car/${carUrl}`}>
                     </iframe>
+                    <div className={[garageStyles.carLabelContainer, 'container', 'is-full'].join(' ')}>
+                        <span className={[garageStyles.carLabel, 'badge'].join(' ')}>{ title }</span>
+                    </div>
+                </>
+            ) : <button className={garageStyles.bigButton + " icon-button"} onClick={() => editCar(index)}>{title}</button>;
+            return (
+                <div className={classCar.join(' ')}>
+                    {thumbnail}
                 </div>
             );
 
         };
 
-        const car1 = transform(`/car/${uri.getQueryParamValue('car1')}`, 1);
-        const car2 = transform(`/car/${uri.getQueryParamValue('car2')}`, 2);
-        const car3 = transform(`/car/${uri.getQueryParamValue('car3')}`, 3);
+        const car1 = transform(uri.getQueryParamValue('car1'), 1);
+        const car2 = transform(uri.getQueryParamValue('car2'), 2);
+        const car3 = transform(uri.getQueryParamValue('car3'), 3);
 
         return (
             <Layout>
-                <h1 className={garageStyles.title}>Le Garage Idéal</h1>
-                <h4 className={garageStyles.subTitle}><div>Choisissez les 3 voitures de sport</div>qui composeront votre garage idéal</h4>
-                <article className="car-content">
+                <div className={[garageStyles.titleContainer, 'badge'].join(' ')}>
+                    <h1 className={[garageStyles.title, 'chrome-text'].join(' ')}><span>Le Garage Idéal</span></h1>
+                    <h4 className={garageStyles.subTitle}>Les 3 voitures de sport de votre garage idéal</h4>
+                </div>
+                <article className={garageStyles.carsContainer}>
                     {car1} {car2} {car3}
                 </article>
             </Layout>

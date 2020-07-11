@@ -3,6 +3,7 @@ import { graphql } from 'gatsby';
 import Spec from "../components/car/spec";
 import { schema } from '../constants';
 import Layout from "../components/layout";
+import carsStyles from "./cars.module.scss";
 
 
 export default (data) => {
@@ -19,7 +20,7 @@ export default (data) => {
     return (
         <Layout>
             <main className="appContainer">
-                <section className="car-content">{ carComponents } </section>
+                <section className={carsStyles.carContent}>{ carComponents } </section>
             </main>
         </Layout>
     );

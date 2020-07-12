@@ -13,7 +13,8 @@ export default (data) => {
         return (
             <Spec key={node.mongodb_id}
                 power={node.power}
-                weight={node.weight}>
+                weight={node.weight}
+                officialWeight={node.officialWeight}>
             </Spec>
         )
     });

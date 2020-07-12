@@ -22,7 +22,8 @@ export default ({ pageContext }) => {
 
     const divContent = currentPageIndex === 0 ?
         <img src={imageUrl} className={carStyles.image} alt={`${car.model.brand.name} ${car.variant}`} /> :
-        <Spec brand={car.model.brand.name} variant={car.variant} power={car.power} weight={car.weight} startYear={car.startYear} />
+        <Spec brand={car.model.brand.name} variant={car.variant} power={car.power} weight={car.weight}
+        officialWeight={car.officialWeight} startYear={car.startYear} />
     ;
 
     return (

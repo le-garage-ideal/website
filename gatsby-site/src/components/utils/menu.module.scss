@@ -1,0 +1,17 @@
+@import '../../styles/theme.scss';
+
+.menuContainer {
+    background-color: var(--dark-opaque);
+    padding: 10px;
+    ul {
+        li {
+            a {
+                color: var(--text-bright)!important;
+                &:hover {
+                    color: var(--text-dark)!important;
+                }
+            }
+        }
+    }
+}
+

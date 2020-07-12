@@ -50,11 +50,11 @@ export default ({data, pageContext, location}) => {
         setFilteredCars(filtered);
     };
 
-    const title = `Variantes ${pageContext.brand} ${pageContext.model}`;
+    const title = `Variantes de ${pageContext.brand} ${pageContext.model}`;
 
     return (
         <Layout>
-            <h1></h1>
+            <h1>{title}</h1>
             <FilteredList title={title} render={() => carComponents} filter={search} />
         </Layout>
     );

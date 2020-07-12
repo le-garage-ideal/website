@@ -1,12 +1,13 @@
 import React from "react";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSearch, faEdit, faThList, faImage } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faThList, faImage, faBars } from '@fortawesome/free-solid-svg-icons';
 import layoutStyles from  './layout.module.scss';
 
 library.add(faSearch);
 library.add(faEdit);
 library.add(faThList);
 library.add(faImage);
+library.add(faBars);
 
 export default function Layout({ children }) {
     return (

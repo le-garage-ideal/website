@@ -23,6 +23,22 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     color: var(--text-bright);
 }
 
+.menu {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    button {
+        padding: 5px 10px;
+    }
+}
+
+.menuExpanded {
+    padding: 5px 10px;
+    width: 100%;
+    text-align: left;
+}
+
 .carsContainer {
     align-self: center;
     align-items: flex-start;

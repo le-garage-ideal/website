@@ -5,10 +5,14 @@ body {
   margin: 0;
 }
 
-.badge {
+.badge, .paragraph {
   background-color: var(--dark-opaque);
-  text-align: center;
+  color: var(--text-bright);
+}
+
+.badge {
   font-family: Segoe UI Light;
+  text-align: center;
   border-width: 3px;
   border-style: solid;
   border-color: var(--text-medium);
@@ -40,5 +44,6 @@ body {
       background-color: var(--element-hover);
       color: var(--element-hover-bright);
   }
+  
 }
 

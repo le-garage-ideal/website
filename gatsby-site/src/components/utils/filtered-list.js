@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import filteredListStyles from  './filtered-list.module.scss';
 
-export function FilteredList({title, render, filter}) {
+const FilteredList = ({title, render, filter}) => {
 
     const [previousFilterValue, setPreviousFilterValue] = useState(null);
     const [filterInputTimeout, setFilterInputTimeout] = useState(null);
@@ -39,3 +39,5 @@ export function FilteredList({title, render, filter}) {
         </>
     );
 }
+
+export default FilteredList;

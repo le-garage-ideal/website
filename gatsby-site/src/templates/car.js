@@ -35,7 +35,7 @@ export default ({ pageContext }) => {
                 </div>
 
                 <div className={carStyles.carCaption }>
-                    <div class={carStyles.switchButtons}>
+                    <div className={carStyles.switchButtons}>
                         {
                             currentPageIndex === 1 && 
                             <button className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>

@@ -1,26 +1,11 @@
 import React, { useState } from "react";
 import Uri from 'jsuri';
 import { graphql } from 'gatsby';
-import { FilteredList } from "../components/utils/filtered-list";
+import FilteredList from "../components/utils/filtered-list";
 import ListItem from "../components/utils/list-item";
 import { schema } from '../constants';
 import Layout from "../components/layout";
-
-const sortCars = (a, b) => {
-    const sortField = (a, b, field) => {
-        if (!a[field] && !b[field]) {
-            return 0;
-        }
-        if (!a[field]) {
-            return -1;
-        }
-        if (!b[field]) {
-            return 1;
-        }
-        return a[field] < b[field] ? -1 : a[field] === b[field] ? 0 : 1;
-    }; 
-    return sortField(a, b, 'startYear') === 0 ? sortField(a, b, 'variant') : sortField(a, b, 'startYear');
-};
+import sortCars from '../functions/sort';
 
 export default ({data, pageContext, location}) => {
     const uri = new Uri(location.href);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ListItem from "./utils/list-item";
-import { FilteredList } from "./utils/filtered-list";
+import FilteredList from "./utils/filtered-list";
 
 
 export default function Brands({data, selectedBrand, onBrandSelect}) {

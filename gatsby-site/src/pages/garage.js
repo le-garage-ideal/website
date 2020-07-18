@@ -4,14 +4,13 @@ import Layout from "../components/layout";
 import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import garageStyles from './garage.module.scss';
-import Menu from '../components/utils/menu';
+import { carLabels } from "../constants";
 
 export default class Garage extends React.Component {
 
     constructor(props) {
         super(props);
         this.iframeRefs = [React.createRef(), React.createRef(), React.createRef()];
-        this.state = {showMenu: false};
     }
 
     componentDidMount() {
@@ -21,7 +20,6 @@ export default class Garage extends React.Component {
         const uri = new Uri(this.props.location.href);
 
         const editCar = index => {
-            console.log('editCar');
             uri.setPath('/browse');
             uri.addQueryParam('edit', index);
             window.location.href = uri.toString();
@@ -38,7 +36,7 @@ export default class Garage extends React.Component {
                 classCar.push(garageStyles.noCar);
             }
             const id = `frame-${index}`;
-            const title = index === 1 ? 'Daily' : index === 3 ? 'Pistarde' : 'Collector';
+            const title = carLabels[index-1];
             const thumbnail = carUrl ? (
                 <>
                     <div className={garageStyles.iconButtonContainer}>
@@ -70,22 +68,11 @@ export default class Garage extends React.Component {
         const car2 = transform(uri.getQueryParamValue('car2'), 2);
         const car3 = transform(uri.getQueryParamValue('car3'), 3);
 
-        const menuButtonClass = [garageStyles.iconButton, 'icon-button'];
-        if (this.state.showMenu) {
-            menuButtonClass.push(garageStyles.menuExpanded);
-        }
-
         return (
             <Layout>
-                <div className={garageStyles.menu}>
-                    <button className={menuButtonClass.join(' ')} onClick={() => this.setState({showMenu: !this.state.showMenu})}>
-                        <FontAwesomeIcon icon="bars" />
-                    </button>
-                    { this.state.showMenu && <Menu /> }
-                </div>
                 <div className={[garageStyles.titleContainer, 'badge'].join(' ')}>
                     <h1 className={[garageStyles.title, 'chrome-text'].join(' ')}><span>Le Garage Idéal</span></h1>
-                    <h4 className={garageStyles.subTitle}>Les 3 voitures de sport de votre garage idéal</h4>
+                    <h4 className={garageStyles.subTitle}>Créez et partagez votre garage idéal</h4>
                 </div>
                 <article className={garageStyles.carsContainer}>
                     {car1} {car2} {car3}

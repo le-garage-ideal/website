@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Spec from '../components/car/spec';
 import carStyles from './car.module.scss';
 import { EmptyLayout } from '../components/layout';
+import SEO from "../components/seo/seo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default ({ pageContext }) => {
@@ -21,13 +22,16 @@ export default ({ pageContext }) => {
     }
 
     const divContent = currentPageIndex === 0 ?
-        <img src={imageUrl} className={carStyles.image} alt={`${car.model.brand.name} ${car.variant}`} /> :
+        <img src={imageUrl}
+             className={[carStyles.image, 'animate__animated', 'animate__bounce'].join(' ')}
+             alt={`${car.model.brand.name} ${car.variant}`} /> :
         <Spec brand={car.model.brand.name} variant={car.variant} power={car.power} weight={car.weight}
         officialWeight={car.officialWeight} startYear={car.startYear} />
     ;
 
     return (
         <EmptyLayout>
+            <SEO title={`${car.model.brand.name} ${car.variant}`} description={`Photo et détail de la voiture : ${car.model.brand.name} ${car.variant}`} />
             <article className={carStyles.card}>
 
                 <div href={car.imageUrl} className={carStyles.imageContainer}>

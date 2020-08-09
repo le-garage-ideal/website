@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Uri from 'jsuri';
 import FilteredList from "../components/utils/filtered-list";
 import ListItem from "../components/utils/list-item";
+import SEO from "../components/seo/seo";
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { schema } from '../constants';
@@ -41,6 +42,7 @@ const Models = ({data, pageContext, location}) => {
 
     return (
         <Layout>
+            <SEO title={title} />
             <FilteredList title={title} render={() => modelComponents} filter={search} />
         </Layout>
     );

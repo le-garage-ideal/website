@@ -7,7 +7,9 @@ export default function Brands({data, selectedBrand, onBrandSelect}) {
 
     const [filteredBrands, setFilteredBrands] = useState(data);
 
-    const brandComponents = filteredBrands.map(({ node: brand }) => {
+    const brandComponents = filteredBrands.map(({ node: brand }) => brand)
+        .sort((brand1, brand2) => brand1.name > brand2.name ? 1 : -1)
+        .map(brand => {
         return (
             <ListItem key={brand.id}
                 id={brand.id}

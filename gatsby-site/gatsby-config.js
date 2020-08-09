@@ -31,6 +31,15 @@ module.exports = {
       resolve: `gatsby-plugin-sass`
     },
     `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`
+    `gatsby-plugin-sharp`,
+    `gatsby-plugin-react-helmet`
   ],
+  siteMetadata: {
+    title: "Le Garage Idéal",
+    titleTemplate: "%s · Le Garage Idéal",
+    description:
+      "Créez et partagez votre garage de rêve, en 3 voitures de sport.",
+    url: "https://perfect-garage.org", // No trailing slash allowed!
+    image: "/logo.jpg", // Path to your image you placed in the 'static' folder
+  },
 }

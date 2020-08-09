@@ -1,6 +1,7 @@
 import React from "react";
 import Uri from 'jsuri';
 import Layout from "../components/layout";
+import SEO from "../components/seo/seo";
 import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import garageStyles from './garage.module.scss';
@@ -70,7 +71,8 @@ export default class Garage extends React.Component {
 
         return (
             <Layout>
-                <div className={[garageStyles.titleContainer, 'badge'].join(' ')}>
+                <SEO title="Accueil" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
+                <div className={[garageStyles.titleContainer, 'badge', 'animate__animated', 'animate__bounce'].join(' ')}>
                     <h1 className={[garageStyles.title, 'chrome-text'].join(' ')}><span>Le Garage Idéal</span></h1>
                     <h4 className={garageStyles.subTitle}>Créez et partagez votre garage idéal</h4>
                 </div>

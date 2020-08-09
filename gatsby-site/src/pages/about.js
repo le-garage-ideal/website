@@ -1,26 +1,22 @@
 import React from 'react';
 import Layout from '../components/layout';
+import SEO from "../components/seo/seo";
+import aboutStyles from "./about.module.scss";
 
 const About = () => {
     return (
         <Layout>
+            <SEO title="A propos" description="A propos du site - mentions légales" />
             <section className="paragraph"
-                style={{minWidth: '300px', width: '70vw', display: 'flex', flexDirection: 'column', alignItems: 'center',
+                style={{minWidth: '300px', width: '70vw', display: 'flex', flexDirection: 'column',
                 alignSelf: 'center', margin: 'auto', padding: '30px' }}>
-            <p>
-                Ce site vous permet de créer votre garage idéal en choisissant vos 3 voitures de sport préférées,<br />
-                et pouvoir les partager sur les réseaux sociaux.<br />
-                Seulement 3 voitures car comme beaucoup de chose, c'est avec des contraintes que les choses deviennent intéressantes! 
-            </p>
-            <p>
-                J'ai créé ce site car je suis passionné de sport automobile.<br />
-                Il n'y aura jamais aucune pub, aucune source de profit liée à ce site.<br />
-                Si vous aimez aussi, n'hésitez pas à le faire connaitre.<br />
-                Si vous avez des suggestions, vous pouvez me contacter par mail : <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a><br />
-            </p>
-            <p style={{fontSize: 'small', fontStyle: 'italic', marginTop: '50px'}}>
-                Mentions obligatoires : site hébergé par o2switch.com. Aucun cookie ni aucune donnée personnelle ne sont utilisés.
-            </p>
+                <p className={aboutStyles.sentence}>Ce site vous permet de créer votre garage idéal en choisissant vos 3 voitures de sport préférées, et de pouvoir les partager sur les réseaux sociaux.</p>
+                <p className={aboutStyles.sentence}>Pourquoi seulement trois? Comme dans la vraie vie, pour se contraindre à choisir...</p>
+                <p className={aboutStyles.sentence}>J'ai créé ce site car je suis passionné de sport automobile. Il n'y aura jamais aucune pub, aucune source de profit liée à ce site. Si vous l'aimez, n'hésitez pas à le faire connaitre.</p>
+                <p className={aboutStyles.sentence}>Enfin, si vous avez des suggestions, vous pouvez me contacter par mail : <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a></p>
+                <p className={aboutStyles.sentence} style={{fontSize: 'small', fontStyle: 'italic'}}>
+                    Mentions obligatoires : site hébergé par o2switch.com. Aucun cookie ni aucune donnée personnelle ne sont utilisés.
+                </p>
             </section>
         </Layout>
     );

@@ -3,6 +3,7 @@ import Uri from 'jsuri';
 import { graphql } from 'gatsby';
 import FilteredList from "../components/utils/filtered-list";
 import ListItem from "../components/utils/list-item";
+import SEO from "../components/seo/seo";
 import { schema } from '../constants';
 import Layout from "../components/layout";
 import sortCars from '../functions/sort';
@@ -39,6 +40,7 @@ export default ({data, pageContext, location}) => {
 
     return (
         <Layout>
+            <SEO title={title} />
             <h1>{title}</h1>
             <FilteredList title={title} render={() => carComponents} filter={search} />
         </Layout>

@@ -3,19 +3,21 @@ import { graphql } from 'gatsby';
 import Uri from 'jsuri';
 import { schema, carLabels } from '../constants';
 import Layout from "../components/layout";
+import SEO from "../components/seo/seo";
 import carsStyles from "./cars.module.scss";
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
 import sortCars from '../functions/sort';
-import { filter } from "../../.cache/api-runner-browser-plugins";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default (data) => {
     
     const uri = new Uri(window.location);
     
     const completeCarList = data.pageResources.json.data[schema + 'Cars'].edges.map(({ node }) => node).sort(sortCars);
-    const [filteredCars, setFilteredCars] = useState(completeCarList);
-    filteredCars.slice(50);
+    const [filteredCars, setFilteredCars] = useState([...completeCarList]);
+    filteredCars.splice(0, filteredCars.length - 20);
     
     const [selectedCar, setSelectedCar] = useState(null);
 
@@ -35,14 +37,21 @@ export default (data) => {
                     name={car.variant + (car.startYear ? ' - ' + car.startYear : '')}
                     image={imageUrl}
                     big={true}
-                    selected={isSelected}
+                    selected={false}
                     onClick={() => {
-                        setSelectedCar(car.mongodb_id);
+                        uri.setPath(`/car/${car.mongodb_id}`);
+                        window.location.href = uri.toString();
                     }}>
                 </ListItem>
+                { !isSelected && 
+                    <button className={carsStyles.iconButton + " icon-button"} onClick={() => setSelectedCar(car.mongodb_id)}
+                        title="Ajouter au garage">
+                        <FontAwesomeIcon icon="plus" />
+                    </button>
+                }
                 { 
-                    isSelected && <div className={carsStyles.carSelectionBox}>
-                        <div>Ajouter au garage</div>
+                    isSelected &&
+                    <div className={carsStyles.carSelectionBox}>
                         <div className="control">
                             <label className="radio">
                                 <input type="radio" name={carLabels[0]} onChange={() => validateCar(1, car.mongodb_id)} />&nbsp;
@@ -71,7 +80,8 @@ export default (data) => {
 
     return (
         <Layout>
-            <FilteredList title={completeCarList.length + ' voitures disponibles!'} render={() => carComponents} filter={search} />
+            <SEO title="Toutes les voitures sportives" description="Liste de toutes les voitures sportives disponibles" />
+            <FilteredList title={completeCarList.length + ' voitures de sport disponibles!'} render={() => carComponents} filter={search} />
         </Layout>
     );
 };

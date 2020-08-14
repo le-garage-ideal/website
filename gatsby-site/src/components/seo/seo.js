@@ -3,12 +3,8 @@ import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 import { useStaticQuery, graphql } from "gatsby";
 
-const SEO = ({ title, description, image, article }) => {
+const SEO = ({ location, title, description, image, article }) => {
 
-  const urlRelativePathRegex = /(?:\d|\w)+(\/.*)/;
-  const relativePath = urlRelativePathRegex.exec(window.location.href);
-
-  const pathname = relativePath[0];
   const { site } = useStaticQuery(query)
 
   const {
@@ -23,7 +19,7 @@ const SEO = ({ title, description, image, article }) => {
     title: title || defaultTitle,
     description: description || defaultDescription,
     image: `${siteUrl}${image || defaultImage}`,
-    url: `${siteUrl}${pathname}`,
+    url: `${siteUrl}${location || ''}`,
   }
 
   return (

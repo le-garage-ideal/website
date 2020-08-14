@@ -3,10 +3,10 @@ import Layout from '../components/layout';
 import SEO from "../components/seo/seo";
 import aboutStyles from "./about.module.scss";
 
-const About = () => {
+const About = ({location}) => {
     return (
         <Layout>
-            <SEO title="A propos" description="A propos du site - mentions légales" />
+            <SEO location={location.pathname} title="A propos" description="A propos du site - mentions légales" />
             <section className="paragraph"
                 style={{minWidth: '300px', width: '70vw', display: 'flex', flexDirection: 'column',
                 alignSelf: 'center', margin: 'auto', padding: '30px' }}>
@@ -14,9 +14,6 @@ const About = () => {
                 <p className={aboutStyles.sentence}>Pourquoi seulement trois? Comme dans la vraie vie, pour se contraindre à choisir...</p>
                 <p className={aboutStyles.sentence}>J'ai créé ce site car je suis passionné de sport automobile. Il n'y aura jamais aucune pub, aucune source de profit liée à ce site. Si vous l'aimez, n'hésitez pas à le faire connaitre.</p>
                 <p className={aboutStyles.sentence}>Enfin, si vous avez des suggestions, vous pouvez me contacter par mail : <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a></p>
-                <p className={aboutStyles.sentence} style={{fontSize: 'small', fontStyle: 'italic'}}>
-                    Mentions obligatoires : site hébergé par o2switch.com. Aucun cookie ni aucune donnée personnelle ne sont utilisés.
-                </p>
             </section>
         </Layout>
     );

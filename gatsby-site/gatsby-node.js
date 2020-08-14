@@ -47,6 +47,7 @@ exports.createPages = async function({ actions, graphql, reporter }) {
             startYear,
             endYear,
             favcarsVariants { name, urls },
+            selectedFavcarsUrl,
             model {
                 brand {
                     name

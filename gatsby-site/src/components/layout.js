@@ -18,7 +18,7 @@ library.add(faImage);
 library.add(faBars);
 library.add(faPlus);
 
-export default function Layout({ children }) {
+export default function Layout({ location, children }) {
 
     const [showMenu, setShowMenu] = useState(false);
 
@@ -31,23 +31,32 @@ export default function Layout({ children }) {
         <React.Fragment>
             <div className={layoutStyles.overlay} style={{ zIndex: -1 }}></div>
             <div className={layoutStyles.background} style={{ zIndex: -2 }}></div>
-            <main className={layoutStyles.appContainer}>
-                <div className={layoutStyles.menu}>
-                    <button className={menuButtonClass.join(' ')} onClick={() => setShowMenu(!showMenu)}>
-                        <FontAwesomeIcon icon="bars" />
-                    </button>
-                    { showMenu && <Menu /> }
-                </div>
-                <div className={layoutStyles.shareButtonsBar}>
-                    <FacebookShareButton url={document.URL}>
-                        <FacebookIcon size="32" />
-                    </FacebookShareButton>
-                    <TwitterShareButton url={document.URL}>
-                        <TwitterIcon size="32" />
-                    </TwitterShareButton>
-                </div>
-                {children}
-            </main>
+            <div className={layoutStyles.appContainer}>
+                <header className={layoutStyles.appHeader}>
+                    <div className={layoutStyles.menu}>
+                        <button className={menuButtonClass.join(' ')} onClick={() => setShowMenu(!showMenu)}>
+                            <FontAwesomeIcon icon="bars" />
+                        </button>
+                        { showMenu && <Menu /> }
+                    </div>
+                    { location && 
+                        <div className={layoutStyles.shareButtonsBar}>
+                            <FacebookShareButton url={location}>
+                                <FacebookIcon size="32" />
+                            </FacebookShareButton>
+                            <TwitterShareButton url={location}>
+                                <TwitterIcon size="32" />
+                            </TwitterShareButton>
+                        </div>
+                    }
+                </header>
+                <main className={layoutStyles.appBody}>
+                    {children}
+                </main>
+                <footer className={layoutStyles.appFooter}>
+                    Mentions obligatoires : site hébergé par o2switch.com. Aucun cookie ni aucune donnée personnelle ne sont utilisés.
+                </footer>
+            </div>
         </React.Fragment>
 
     );

@@ -18,18 +18,6 @@ body {
   border-color: var(--text-medium);
 }
 
-.chrome-text {
-  span {
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    font-family: sans-serif;
-    background: linear-gradient(var(--text-dark), var(--text-bright), var(--text-dark));
-    background-clip: text;
-    color: transparent;
-  }
-}
-
 .icon-button {
   font-size: 20px;
   background-color: var(--element-selected);

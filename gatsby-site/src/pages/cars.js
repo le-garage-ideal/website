@@ -11,11 +11,11 @@ import sortCars from '../functions/sort';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default (data) => {
+export default ({data, location}) => {
     
-    const uri = new Uri(window.location);
+    const uri = new Uri(location.href);
     
-    const completeCarList = data.pageResources.json.data[schema + 'Cars'].edges.map(({ node }) => node).sort(sortCars);
+    const completeCarList = data[schema + 'Cars'].edges.map(({ node }) => node).sort(sortCars);
     const [filteredCars, setFilteredCars] = useState([...completeCarList]);
     filteredCars.splice(0, filteredCars.length - 20);
     
@@ -80,7 +80,7 @@ export default (data) => {
 
     return (
         <Layout>
-            <SEO title="Toutes les voitures sportives" description="Liste de toutes les voitures sportives disponibles" />
+            <SEO location={location.pathname} title="Toutes les voitures sportives" description="Liste de toutes les voitures sportives disponibles" />
             <FilteredList title={completeCarList.length + ' voitures de sport disponibles!'} render={() => carComponents} filter={search} />
         </Layout>
     );

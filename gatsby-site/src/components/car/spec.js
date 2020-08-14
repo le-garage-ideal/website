@@ -1,11 +1,13 @@
 import React from 'react';
+import Uri from 'jsuri';
 import specStyles from  './spec.module.scss';
+import { extractHostname } from '../../functions/url'; 
 
 const POWER_MAX = 1200; // max 1200hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 20; // max 1kg/hp else overflow
 
-export default function Spec({power, weight, officialWeight}) {
+export default function Spec({power, weight, officialWeight, imageUrl}) {
 
   const theWeight = weight ? weight : officialWeight;
 
@@ -23,6 +25,9 @@ export default function Spec({power, weight, officialWeight}) {
     width: `${ratio * 100 / RATIO_MAX}%`
   };
 
+  const imageUri = new Uri(imageUrl);
+  const imageOrigin = extractHostname(imageUri.uriParts.host);
+
   return (
     <article className={ specStyles.card }>
       <section className={ specStyles.bars }>
@@ -35,6 +40,11 @@ export default function Spec({power, weight, officialWeight}) {
         <legend>
           Source :&nbsp;<a href="http://weightcars-fr.com">weightcars-fr.com</a>
         </legend>
+        { imageOrigin && 
+          <legend>
+           Photo :&nbsp;<a href={`http://${imageOrigin}`}>{imageOrigin}</a>
+          </legend>
+        }
       </section>
     </article>
   );

@@ -1,39 +1,110 @@
 import Uri from 'jsuri';
+import React from 'react';
+import Layout from "../components/layout";
+import SEO from "../components/seo/seo";
+import { Title } from "../components/title/title";
+import { motion } from 'framer-motion';
 import './bulma-theme.scss';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import indexStyles from './index.module.scss';
+import { carLabels } from "../constants";
 
-export default ({location}) => {
+export default class Index extends React.Component {
 
-    const uri = new Uri(location.href);
-
-    // if edit=X parameter, save car to carX parameter
-    const editParam = uri.getQueryParamValue('edit');
-    const carParam = uri.getQueryParamValue('car');
-    if (editParam && carParam) {
-        uri.replaceQueryParam(`car${editParam}`, carParam);
-    }
-    uri.deleteQueryParam('edit');
-    uri.deleteQueryParam('car');
-
-    // take parameters as 1st choice for cars, else localStorage
-    let car1Param = uri.getQueryParamValue('car1') || localStorage.getItem('car1');
-    let car2Param = uri.getQueryParamValue('car2') || localStorage.getItem('car2');
-    let car3Param = uri.getQueryParamValue('car3') || localStorage.getItem('car3');
-
-    uri.setPath(`/garage`);
-
-    // save to localStorage + add param
-    if (car1Param) {
-        localStorage.setItem('car1', car1Param);
-        uri.addQueryParam('car1', car1Param);
-    }
-    if (car2Param) {
-        localStorage.setItem('car2', car2Param);
-        uri.addQueryParam('car2', car2Param);
-    }
-    if (car3Param) {
-        localStorage.setItem('car3', car3Param);
-        uri.addQueryParam('car3', car3Param);
+    constructor(props) {
+        super(props);
+        this.state = { uri: this.props.location.href, car1: null, car2: null, car3: null, isTitleVisible: false };
     }
 
-    window.location.href = uri.toString();
+    componentDidMount() {
+    
+        const uri = new Uri(this.state.uri);
+
+        // if edit=X parameter, save car to carX parameter
+        const editParam = uri.getQueryParamValue('edit');
+        const carParam = uri.getQueryParamValue('car');
+        if (editParam && carParam) {
+            uri.replaceQueryParam(`car${editParam}`, carParam);
+            localStorage.setItem(`car${editParam}`, carParam);
+        }
+        uri.deleteQueryParam('edit');
+        uri.deleteQueryParam('car');
+
+        // add missing params + save state
+        const newState = {...this.state};
+        for (let i = 1; i <= 3; i++) {
+            if (!uri.getQueryParamValue(`car${i}`)) {
+                uri.addQueryParam(`car${i}`, localStorage.getItem(`car${i}`));
+            }
+            newState[`car${i}`] = uri.getQueryParamValue(`car${i}`);
+        }
+        newState.uri = uri.toString();
+        this.setState(newState);
+
+        setTimeout(() => {
+            this.setState({ isTitleVisible: true });
+          }, 1000);
+    }
+
+
+    render() {
+
+        const editCar = index => {
+            const uri = new Uri(this.state.uri);
+            uri.setPath('/browse');
+            uri.addQueryParam('edit', index);
+            window.location.href = uri.toString();
+        };
+
+        const transform = (carUrl, index) => {
+            const classCar = [indexStyles.car];
+            if (index === 2) {
+                classCar.push(indexStyles.car2);
+            }
+            if (carUrl) {
+                classCar.push(indexStyles.withCar);
+            } else {
+                classCar.push(indexStyles.noCar);
+            }
+            const id = `frame-${index}`;
+            const title = carLabels[index-1];
+            const thumbnail = carUrl ? (
+                <motion.iframe id={id} title={title} className={indexStyles.iframe} src={`/car/${carUrl}`}
+                        initial="hidden" animate="visible" 
+                        variants={{ hidden: { scale: 0.1 }, visible: { scale: 1 }}}
+                        transition={{ duration: 3}}>
+                </motion.iframe>
+            ) : (
+                <div className={indexStyles.noCarThumbnail}>?</div>
+            );
+            return (
+                <div className={classCar.join(' ')}>
+                    <div className={indexStyles.iconButtonContainer}>
+                        <button className={indexStyles.iconButton + " icon-button"} onClick={() => editCar(index)}>
+                            <FontAwesomeIcon icon="edit" />
+                        </button>
+                    </div>                    
+                    {thumbnail}
+                    <div className={[indexStyles.carLabelContainer, 'container', 'is-full'].join(' ')}>
+                        <span className={[indexStyles.carLabel, 'badge'].join(' ')}>{ title }</span>
+                    </div>                    
+                </div>
+            );
+
+        };
+
+        const car1 = transform(this.state.car1, 1);
+        const car2 = transform(this.state.car2, 2);
+        const car3 = transform(this.state.car3, 3);
+
+        return (
+            <Layout location={this.props.location.href}>
+                <SEO location={this.props.location.pathname} title="Accueil" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
+                <Title />
+                <article className={indexStyles.carsContainer}>
+                    {car1} {car2} {car3}
+                </article>
+            </Layout>
+        );
+    }
 }

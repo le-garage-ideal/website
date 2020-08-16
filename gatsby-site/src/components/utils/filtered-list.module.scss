@@ -21,3 +21,11 @@
     margin-right: 15px;
   }
 }
+
+.searchInput {
+  ////// else it is hidden by header
+  z-index: 2; 
+  position: relative;
+  //////
+  width: auto; 
+}

@@ -27,7 +27,7 @@ const FilteredList = ({title, render, filter}) => {
             <header className={["field", "is-size-4", filteredListStyles.listHeader].join(' ')}>
                 <h1 className="has-text-light">{ title }</h1>
                 <p className="control has-text-dark has-icons-right">
-                    <input className="input" type="text" onKeyUp={search} style={ {width: 'auto'} } />
+                    <input type="text" onKeyUp={search} className={[filteredListStyles.searchInput, 'input'].join(' ')} />
                     <span className="icon is-right">
                         <FontAwesomeIcon icon="search" />
                     </span>

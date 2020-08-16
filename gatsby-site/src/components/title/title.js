@@ -26,6 +26,6 @@ export const Title = () => {
                     Perfect Garage
             </motion.div>
         </h1>
-        <h4 className={titleStyles.subTitle}>Votre garage idéal en trois voitures</h4>
+        <h4 className={titleStyles.subTitle}>Votre garage idéal en trois voitures de sport</h4>
     </div>;
 };

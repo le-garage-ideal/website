@@ -9,11 +9,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import indexStyles from './index.module.scss';
 import { carLabels } from "../constants";
 
+const eachCar = fn => {
+    const result = []; 
+    for (let i = 0; i < 3; i++) {
+        result.push(fn(`car${i+1}`));
+    }
+    return result;
+}
+
 export default class Index extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { uri: this.props.location.href, car1: null, car2: null, car3: null, isTitleVisible: false };
+        this.state = {
+            uri: this.props.location.href,
+            car1: null,
+            car2: null,
+            car3: null,
+            saveOk: true,
+            showSaveMessage: false,
+        };
     }
 
     componentDidMount() {
@@ -25,25 +40,26 @@ export default class Index extends React.Component {
         const carParam = uri.getQueryParamValue('car');
         if (editParam && carParam) {
             uri.replaceQueryParam(`car${editParam}`, carParam);
-            localStorage.setItem(`car${editParam}`, carParam);
+            this.setState({saveOk: false});
         }
         uri.deleteQueryParam('edit');
         uri.deleteQueryParam('car');
 
         // add missing params + save state
         const newState = {...this.state};
-        for (let i = 1; i <= 3; i++) {
-            if (!uri.getQueryParamValue(`car${i}`)) {
-                uri.addQueryParam(`car${i}`, localStorage.getItem(`car${i}`));
+        eachCar(param => {
+            if (!uri.getQueryParamValue(param)) {
+                uri.addQueryParam(param, localStorage.getItem(param));
             }
-            newState[`car${i}`] = uri.getQueryParamValue(`car${i}`);
-        }
+            newState[param] = uri.getQueryParamValue(param);
+        });
         newState.uri = uri.toString();
+
+        // Save button enabled?
+        newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
+
         this.setState(newState);
 
-        setTimeout(() => {
-            this.setState({ isTitleVisible: true });
-          }, 1000);
     }
 
 
@@ -97,8 +113,17 @@ export default class Index extends React.Component {
         const car2 = transform(this.state.car2, 2);
         const car3 = transform(this.state.car3, 3);
 
+        const save = () => {
+            for (let saveIndex = 1; saveIndex <= 3; saveIndex++) {
+                const saveParam = `car${saveIndex}`;
+                localStorage.setItem(saveParam, this.state[saveParam]);
+                this.setState({saveOk: true, showSaveMessage: true});
+                setTimeout(() => this.setState({showSaveMessage: false}), 1000)
+            }
+        }
+
         return (
-            <Layout location={this.state.uri}>
+            <Layout location={this.state.uri} save={save} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
                 <SEO location={this.props.location.pathname} title="" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
                 <Title />
                 <article className={indexStyles.carsContainer}>

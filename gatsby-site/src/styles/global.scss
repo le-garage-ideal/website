@@ -32,6 +32,14 @@ body {
       background-color: var(--element-hover);
       color: var(--element-hover-bright);
   }
+  &:disabled {
+    cursor: initial;
+    color: var(--text-medium-dark);
+    &:hover {
+      background-color: var(--element-selected);
+      color: var(--text-medium-dark);
+    }
+  }
   
 }
 

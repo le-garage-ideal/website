@@ -35,10 +35,10 @@ module.exports = {
     `gatsby-plugin-react-helmet`
   ],
   siteMetadata: {
-    title: "Le Garage Idéal",
-    titleTemplate: "%s · Le Garage Idéal",
+    title: "Perfect Garage",
+    titleTemplate: "%s · Perfect Garage",
     description:
-      "Créez et partagez votre garage de rêve, en 3 voitures de sport.",
+      "Créez et partagez votre garage idéal, en 3 voitures de sport.",
     url: "https://perfect-garage.org", // No trailing slash allowed!
     image: "/logo.jpg", // Path to your image you placed in the 'static' folder
   },

@@ -88,7 +88,7 @@ export default class Index extends React.Component {
                 <motion.iframe id={id} title={title} className={indexStyles.iframe} src={`/car/${carUrl}`}
                         initial="hidden" animate="visible" 
                         variants={{ hidden: { scale: 0.1 }, visible: { scale: 1 }}}
-                        transition={{ duration: 3}}>
+                        transition={{ duration: 1, ease: 'easeInOut'}}>
                 </motion.iframe>
             ) : (
                 <div className={indexStyles.noCarThumbnail}>?</div>

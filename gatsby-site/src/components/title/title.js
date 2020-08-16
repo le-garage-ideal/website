@@ -23,7 +23,7 @@ export const Title = () => {
             <motion.div className={titleStyles.chromeText}
                 animate={titleAnimation}
                 transition={titleTransition}>
-                    Le Garage Idéal
+                    Perfect Garage
             </motion.div>
         </h1>
         <h4 className={titleStyles.subTitle}>Votre garage idéal en trois voitures</h4>

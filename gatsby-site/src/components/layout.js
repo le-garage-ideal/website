@@ -54,7 +54,7 @@ export default function Layout({ location, children }) {
                     {children}
                 </main>
                 <footer className={layoutStyles.appFooter}>
-                    Mentions obligatoires : site hébergé par o2switch.com. Aucun cookie ni aucune donnée personnelle ne sont utilisés.
+                    Site hébergé par <a href="o2switch.fr">o2switch.fr</a>. Aucun cookie ni aucune donnée personnelle ne sont utilisés.
                 </footer>
             </div>
         </React.Fragment>

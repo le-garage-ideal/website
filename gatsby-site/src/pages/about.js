@@ -6,7 +6,7 @@ import aboutStyles from "./about.module.scss";
 const About = ({location}) => {
     return (
         <Layout>
-            <SEO location={location.pathname} title="A propos" description="A propos du site - mentions légales" />
+            <SEO location={location.pathname} title="A propos" description="A propos du site" />
             <section className="paragraph"
                 style={{minWidth: '300px', width: '70vw', display: 'flex', flexDirection: 'column',
                 alignSelf: 'center', margin: 'auto', padding: '30px' }}>

@@ -46,6 +46,8 @@ const SEO = ({ location, title, description, image, article }) => {
       )}
 
       {seo.image && <meta name="twitter:image" content={seo.image} />}
+
+      <link rel="icon" type="image/png" href="/logo.png" />
     </Helmet>
   )
 }

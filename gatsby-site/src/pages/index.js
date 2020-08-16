@@ -98,8 +98,8 @@ export default class Index extends React.Component {
         const car3 = transform(this.state.car3, 3);
 
         return (
-            <Layout location={this.props.location.href}>
-                <SEO location={this.props.location.pathname} title="Accueil" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
+            <Layout location={this.state.uri}>
+                <SEO location={this.props.location.pathname} title="" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
                 <Title />
                 <article className={indexStyles.carsContainer}>
                     {car1} {car2} {car3}

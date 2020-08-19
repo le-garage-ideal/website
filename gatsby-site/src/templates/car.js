@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Spec from '../components/car/spec';
 import carStyles from './car.module.scss';
+import { motion } from 'framer-motion';
 import { EmptyLayout } from '../components/layout';
 import SEO from "../components/seo/seo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +14,7 @@ export default ({ pageContext, location }) => {
 
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-    const imageUrl = `/images/${car.mongodb_id}.jpg`;
+    const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
 
     const clickLeft = () => {
         setCurrentPageIndex(currentPageIndex - 1);
@@ -25,7 +26,8 @@ export default ({ pageContext, location }) => {
 
     let divContent = null;
     if (currentPageIndex === 0) {
-        divContent = <img src={imageUrl} className={carStyles.image} alt={carFullname} />
+        divContent = <motion.img src={imageUrl} className={carStyles.image} alt={carFullname}
+            initial={{opacity: 0}} animate={{ opacity: 1 }} />
     } else {
         divContent = 
             <Spec brand={car.model.brand.name} 

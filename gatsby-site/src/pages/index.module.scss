@@ -65,6 +65,7 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
 .iframe {
     flex: 8;
     width: 100%;
+    min-height: $cardHeight;
 }
 
 .iconButton {
@@ -76,4 +77,5 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     margin-right: $iframeBodyMargin;
     margin-bottom: -48px;
     z-index: 1;
+    opacity: 0; // put to 1 by code 
 }

@@ -12,10 +12,13 @@ import { carLabels } from "../constants";
 const eachCar = fn => {
     const result = []; 
     for (let i = 0; i < 3; i++) {
-        result.push(fn(`car${i+1}`));
+        result.push(fn(`car${i+1}`, i));
     }
     return result;
 }
+
+const frameId = (index) => `frame-${index}`;
+const editButtonId = (index) => `edit-${index}`;
 
 export default class Index extends React.Component {
 
@@ -59,9 +62,7 @@ export default class Index extends React.Component {
         newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
 
         this.setState(newState);
-
     }
-
 
     render() {
 
@@ -82,20 +83,17 @@ export default class Index extends React.Component {
             } else {
                 classCar.push(indexStyles.noCar);
             }
-            const id = `frame-${index}`;
             const title = carLabels[index-1];
             const thumbnail = carUrl ? (
-                <motion.iframe id={id} title={title} className={indexStyles.iframe} src={`/car/${carUrl}`}
-                        initial="hidden" animate="visible" 
-                        variants={{ hidden: { scale: 0.1 }, visible: { scale: 1 }}}
-                        transition={{ duration: 1, ease: 'easeInOut'}}>
+                <motion.iframe id={frameId(index)} title={title} className={indexStyles.iframe} src={`/car/${carUrl}`}
+                    initial={{opacity: 0}} animate={{ opacity: 1 }}>
                 </motion.iframe>
             ) : (
                 <div className={indexStyles.noCarThumbnail}>?</div>
             );
             return (
                 <div className={classCar.join(' ')}>
-                    <div className={indexStyles.iconButtonContainer}>
+                    <div id={editButtonId(index)} className={indexStyles.iconButtonContainer}>
                         <button className={indexStyles.iconButton + " icon-button"} onClick={() => editCar(index)}>
                             <FontAwesomeIcon icon="edit" />
                         </button>

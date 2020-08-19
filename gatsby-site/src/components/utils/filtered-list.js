@@ -9,7 +9,7 @@ const FilteredList = ({title, render, filter}) => {
     const [filterInputTimeout, setFilterInputTimeout] = useState(null);
 
     const search = () => {
-        const input = document.querySelector('.input');
+        const input = document.querySelector('#search-input');
         if (input.value !== previousFilterValue) { // if text has changed
 
             clearTimeout(filterInputTimeout); // this will interrupt previous search
@@ -27,7 +27,7 @@ const FilteredList = ({title, render, filter}) => {
             <header className={["field", "is-size-4", filteredListStyles.listHeader].join(' ')}>
                 <h1 className="has-text-light">{ title }</h1>
                 <p className="control has-text-dark has-icons-right">
-                    <input type="text" onKeyUp={search} className={[filteredListStyles.searchInput, 'input'].join(' ')} />
+                    <input id="search-input" type="text" onKeyUp={search} className={[filteredListStyles.searchInput, 'input'].join(' ')} />
                     <span className="icon is-right">
                         <FontAwesomeIcon icon="search" />
                     </span>

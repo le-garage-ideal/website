@@ -75,6 +75,7 @@ $footerHeight: 60px;
     flex-direction: column;
     align-items: center;
     margin-top: -1 * $headerHeight;
+    max-height: 100%;
 }
 
 .appFooter {

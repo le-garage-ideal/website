@@ -9,6 +9,8 @@ export default ({ pageContext, location }) => {
 
     const car = pageContext.car;
 
+    const carFullname = `${car.model.brand.name} ${car.variant}`;
+
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
     const imageUrl = `/images/${car.mongodb_id}.jpg`;
@@ -21,17 +23,23 @@ export default ({ pageContext, location }) => {
         setCurrentPageIndex(currentPageIndex + 1);
     }
 
-    const divContent = currentPageIndex === 0 ?
-        <img src={imageUrl}
-             className={[carStyles.image].join(' ')}
-             alt={`${car.model.brand.name} ${car.variant}`} /> :
-        <Spec brand={car.model.brand.name} variant={car.variant} power={car.power} weight={car.weight}
-        officialWeight={car.officialWeight} startYear={car.startYear} imageUrl={car.selectedFavcarsUrl} />
-    ;
+    let divContent = null;
+    if (currentPageIndex === 0) {
+        divContent = <img src={imageUrl} className={carStyles.image} alt={carFullname} />
+    } else {
+        divContent = 
+            <Spec brand={car.model.brand.name} 
+                variant={car.variant} 
+                power={car.power} 
+                weight={car.weight}
+                officialWeight={car.officialWeight} 
+                startYear={car.startYear} 
+                imageUrl={car.selectedFavcarsUrl} />;
+    }
 
     return (
         <EmptyLayout>
-            <SEO location={location.pathname} title={`${car.model.brand.name} ${car.variant}`} description={`Photo et détail de la voiture : ${car.model.brand.name} ${car.variant}`} />
+            <SEO location={location.pathname} title={carFullname} description={`Photo et détail de la voiture : ${carFullname}`} />
             <article className={carStyles.card}>
 
                 <div href={car.imageUrl} className={carStyles.imageContainer}>
@@ -54,7 +62,7 @@ export default ({ pageContext, location }) => {
                         }
                     </div>
                     <div className={carStyles.carTitle}>
-                        <h3 className={carStyles.carLongLabel}>{car.model.brand.name} {car.variant}</h3>
+                        <h3 className={carStyles.carLongLabel} title={carFullname}>{carFullname}</h3>
                     </div>
                     <div className={carStyles.carYear}>{car.startYear}</div>
                 </div>

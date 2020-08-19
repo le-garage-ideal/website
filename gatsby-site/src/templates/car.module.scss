@@ -61,6 +61,7 @@ html {
 .carTitle {
   flex: 1;
   height: 100%;
+  min-width: 0; // to allow element to shrink when page is smaller
 }
 
 .carLongLabel {

@@ -59,6 +59,7 @@ exports.createPages = async function({ actions, graphql, reporter }) {
       }
     }`);
 
+
     brands[schema + 'Brands'].edges.forEach(({ node: brand }) => {
       
       actions.createPage({
@@ -79,43 +80,33 @@ exports.createPages = async function({ actions, graphql, reporter }) {
 
     });
 
-  /*const images = await graphql(`
-  query {
-    allFile(filter: {relativePath: { eq: "images/${car._id}.jpg" }, extension: { eq: "jpg" }}) {
-      edges {
-        node {
-          childImageSharp {
-            # Specify the image processing specifications right in the query.
-            # Makes it trivial to update as your page's design changes.
-            fluid(maxWidth: 600, maxHeight: 350) {
-              base64
-              tracedSVG
-              aspectRatio
-              src
-              srcSet
-              srcWebp
-              srcSetWebp
-              sizes
-              originalImg
-              presentationWidth
-              presentationHeight
-              originalName
-            }
-          }
-        }
-      }
-    }
-  }
-`);
-  
-  const imagesMap = new Map();
-  images.allFile.edges.forEach(({node}) => imagesMap.set(originalName.substring(0, originalName.length - 4), node));
-*/
-  cars[schema + 'Cars'].edges.forEach(async ({ node: car }) => {
-    actions.createPage({
-      path: `/car/${car.mongodb_id}`,
-      component: path.resolve(`./src/templates/car.js`),
-      context: { car/*, image: images.get(car._id)*/},
-    })
-  });
+
+    cars[schema + 'Cars'].edges.forEach(async ({ node: car }) => {
+
+      // const images = await graphql(`
+      //   query {
+      //     allFile(filter: {relativePath: { eq: "images/${car._id}.jpg" }, extension: { eq: "jpg" }}) {
+      //       edges {
+      //         node {
+      //           childImageSharp {
+      //             # Specify the image processing specifications right in the query.
+      //             # Makes it trivial to update as your page's design changes.
+      //             fluid(maxWidth: 600, maxHeight: 350) {
+      //                 ...GatsbyImageSharpFluid
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // `);
+      
+      // console.log(images);
+
+      actions.createPage({
+        path: `/car/${car.mongodb_id}`,
+        component: path.resolve(`./src/templates/car.js`),
+        context: { car/*, image: images.get(car._id)*/},
+      })
+    });
 }

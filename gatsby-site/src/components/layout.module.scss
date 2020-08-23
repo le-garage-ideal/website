@@ -29,7 +29,7 @@ $footerHeight: 60px;
     background-image: url("/hangar.jpg");
     background-size: cover;
     background-position-y: bottom;
-    z-index: -2;
+    z-index: 5; // then -2 when page ready
 }
 
 .appHeader {

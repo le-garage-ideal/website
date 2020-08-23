@@ -49,7 +49,7 @@ export default function Layout({ location, children, save, saveDisabled, showSav
     return (
         <React.Fragment>
             <div className={layoutStyles.overlay}></div>
-            <div className={layoutStyles.background}></div>
+            <div id="background" className={layoutStyles.background}></div>
             <div className={layoutStyles.appContainer}>
                 <header className={layoutStyles.appHeader}>
                     <div className={layoutStyles.menu}>

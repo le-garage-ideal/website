@@ -8,17 +8,22 @@ import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import indexStyles from './index.module.scss';
 import { carLabels } from "../constants";
+import { onElementReady } from '../functions/dom';
 
-const eachCar = fn => {
+const eachCarIndex = fn => {
     const result = []; 
     for (let i = 0; i < 3; i++) {
-        result.push(fn(`car${i+1}`, i));
+        fn(i);
     }
     return result;
 }
 
-const frameId = (index) => `frame-${index}`;
-const editButtonId = (index) => `edit-${index}`;
+const eachCar = fn => {
+    return eachCarIndex(i => fn(`car${i+1}`, i));
+}
+
+const frameId = index => `frame-${index}`;
+const editButtonId = index => `edit-${index}`;
 
 export default class Index extends React.Component {
 
@@ -62,6 +67,21 @@ export default class Index extends React.Component {
         newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
 
         this.setState(newState);
+
+        if (document) {
+            let framesReady = [];
+            eachCarIndex(frameIdx => framesReady[frameIdx] = false);
+            eachCarIndex(frameIdx => {
+                console.log(framesReady);
+                onElementReady(`#${frameId(frameIdx + 1)}`, () => {
+                    framesReady[frameIdx] = true;
+                    console.log(framesReady);
+                    if (framesReady.every(ready => ready === true)) {
+                        document.querySelector('#background').style.zIndex = -2;
+                    }
+                });
+            });
+        }
     }
 
     render() {

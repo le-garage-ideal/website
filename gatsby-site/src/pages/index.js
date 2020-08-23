@@ -72,12 +72,14 @@ export default class Index extends React.Component {
             let framesReady = [];
             eachCarIndex(frameIdx => framesReady[frameIdx] = false);
             eachCarIndex(frameIdx => {
-                console.log(framesReady);
                 onElementReady(`#${frameId(frameIdx + 1)}`, () => {
                     framesReady[frameIdx] = true;
-                    console.log(framesReady);
                     if (framesReady.every(ready => ready === true)) {
-                        document.querySelector('#background').style.zIndex = -2;
+                        setTimeout(() => {
+                            eachCarIndex(editButtonIdx =>
+                                document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
+                        }, 1000);
+                        
                     }
                 });
             });

@@ -23,7 +23,7 @@ const Models = ({data, pageContext, location}) => {
             <ListItem key={car.model.name}
                 id={car.model.name}
                 name={car.model.name}
-                image={`/images/${car.mongodb_id}.jpg`}
+                image={`/images/${car.mongodb_id}-resized.jpg`}
                 big={true}
                 onClick={() => {
                     uri.setPath(`/cars/${car.model.brand.name}/${car.model.name}`);

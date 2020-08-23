@@ -15,7 +15,7 @@ export default ({data, pageContext, location}) => {
     
 
     const carComponents = filteredCars.map(car => {
-        const imageUrl = `/images/${car.mongodb_id}.jpg`;
+        const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
         return (
             <ListItem key={car.mongodb_id}
                 id={car.mongodb_id}

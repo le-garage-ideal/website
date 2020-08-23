@@ -29,7 +29,7 @@ export default ({data, location}) => {
 
     const carComponents = filteredCars.map(car => {
         const isSelected = selectedCar === car.mongodb_id;
-        const imageUrl = `/images/${car.mongodb_id}.jpg`;
+        const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
         return (
             <div key={'carItem' + car.mongodb_id}>
                 <ListItem

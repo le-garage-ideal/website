@@ -3,6 +3,7 @@
  *
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
+import mongodbPassword from './passwords';
 const path = require(`path`)
 module.exports = {
   plugins: [
@@ -15,7 +16,7 @@ module.exports = {
       resolve: `gatsby-source-mongodb`,
       options: {
         server: { address: 'bmbu7ynqra11rqi-mongodb.services.clever-cloud.com', port: '27017' },
-        auth: { user: 'uepch5uqblw5mad6k1x1', password: 'BN5Ufr4twpbJqZjdshDr' },
+        auth: { user: 'uepch5uqblw5mad6k1x1', password: mongodbPassword },
         dbName: 'bmbu7ynqra11rqi',
         collection: ['cars', 'models', 'brands']
       },

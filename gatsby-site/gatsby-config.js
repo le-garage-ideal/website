@@ -3,7 +3,7 @@
  *
  * See: https://www.gatsbyjs.org/docs/gatsby-config/
  */
-import mongodbPassword from './passwords';
+const { mongodbPassword } = require('./passwords');
 const path = require(`path`)
 module.exports = {
   plugins: [

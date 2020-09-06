@@ -88,3 +88,19 @@ $footerHeight: 60px;
     z-index: 1;
     color: var(--text-medium-dark);
 }
+
+
+@media (orientation: portrait) {
+    .appBody {
+        height: auto;
+        max-height: none;
+    }
+
+    .appContainer {
+        height: auto;
+    }
+    .overlay,
+    .background {
+        height: 100%;
+    }
+}

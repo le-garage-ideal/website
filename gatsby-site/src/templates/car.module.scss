@@ -74,4 +74,10 @@ html {
   padding-bottom: 20px;
 }
 
+@media (orientation: portrait) {
+  .imageContainer {
+    height: auto;
+    max-height: none;
+  }
+}
 

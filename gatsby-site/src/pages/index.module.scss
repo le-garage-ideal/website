@@ -83,14 +83,16 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
 @media (orientation: portrait) {
     
     .carsContainer {
-        flex-direction: column;
+        display: block;
+        margin-top: 20px;
     }
 
     .car {
         max-width: 100%;
         width: 100%;
-        max-height: 300px;
-        height: 300px;
+        max-height: none;
+        height: 90vw;
+        margin: 0;
     }
 
     .car2 {

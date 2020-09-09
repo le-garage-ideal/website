@@ -29,3 +29,16 @@
   //////
   width: auto; 
 }
+
+@media (orientation: portrait) {
+
+  .listHeader {
+    z-index: 0; // else it hides menu 
+    flex-direction: column;
+    padding: 10px 20px 0px 20px;
+    h1 {
+      text-align: right;
+    }
+  }
+
+}

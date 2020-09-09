@@ -22,14 +22,14 @@ $footerHeight: 60px;
 
 .overlay {
     background-color: var(--dark-extra-transparent);
-    z-index: -1;
+    z-index: -2;
 }
   
 .background {
     background-image: url("/hangar.jpg");
     background-size: cover;
     background-position-y: bottom;
-    z-index: -2;
+    z-index: -3;
 }
 
 .appHeader {
@@ -52,6 +52,10 @@ $footerHeight: 60px;
     &:hover {
         background-color: var(--dark-transparent);
     }
+}
+
+.menuButtonIcon {
+    height: 20px; // fix size unless when loading svg take the full page (?)
 }
 
 .menuExpanded {
@@ -85,7 +89,7 @@ $footerHeight: 60px;
     width: 100%;
     position: absolute;
     bottom: 0px;
-    z-index: 1;
+    z-index: -1; // else it hides last cars selection buttons
     color: var(--text-medium-dark);
 }
 
@@ -93,7 +97,8 @@ $footerHeight: 60px;
 @media (orientation: portrait) {
     .appBody {
         height: auto;
-        max-height: none;
+        max-height: 100vh;
+        overflow-y: auto;
     }
 
     .appContainer {

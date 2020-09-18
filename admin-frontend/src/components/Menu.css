@@ -1,0 +1,55 @@
+* {
+    --menu-item-width-1: 200px;
+    --menu-item-width-2: 310px;
+    --menu-item-selected-color: #1abc9c;
+    --menu-item-height: 35px;
+}
+
+.css-menu {
+	margin: 27px auto 0;
+	position: relative;
+	width: calc(var(--menu-item-width-1) + var(--menu-item-width-2));
+	height: var(--menu-item-height);
+	background-color: #34495e;
+	font-size: 0;
+}
+.css-menu .menu-item {
+	background-color: transparent;
+	line-height: var(--menu-item-height);
+	height: 100%;
+	display: inline-block;
+	position: relative;
+	z-index: 1;
+	text-decoration: none;
+	text-align: center;
+	color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+.css-menu .animation {
+	position: absolute;
+	height: 100%;
+	top: 0;
+	z-index: 0;
+	transition: all .5s ease 0s;
+}
+.css-menu .menu-item:nth-child(1) {
+	width: var(--menu-item-width-1);
+}
+.css-menu .menu-item:nth-child(2) {
+	width: var(--menu-item-width-2);
+}
+
+.css-menu .menu-item.selected, .css-menu .menu-item:hover~.animation {
+    background-color: var(--menu-item-selected-color);
+}
+
+.css-menu .menu-item:nth-child(1):hover~.animation {
+	width: var(--menu-item-width-1);
+	left: 0;
+}
+.css-menu .menu-item:nth-child(2):hover~.animation {
+	width: var(--menu-item-width-2);
+	left: var(--menu-item-width-1);
+}
+

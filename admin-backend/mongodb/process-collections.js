@@ -25,6 +25,13 @@ export async function updateCars(filter, transform, async = false) {
 
 }
 
+export async function createCars(filter, transform, async = false) {
+
+    const car = new Car.find(filter).exec();
+    return await update(cars, transform, async);
+
+}
+
 async function update(collection, transform, async) {
     const results = [];
     for (let document of collection) {

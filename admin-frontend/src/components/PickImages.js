@@ -13,7 +13,7 @@ export const PickImages = ({ selectedBrand, selectedModel, selectedCars, select,
         <button key={car._id + variant.name + url}
           style={{ border: car.selectedFavcarsUrl === url ? '3px solid yellow' : 'none' }}
           onClick={() => select(car._id, variant.name, url)}>
-          <img src={url} style={{ maxHeight: '250px' }} />
+          <img src={url} style={{ maxHeight: '250px' }} alt={variant.name} />
         </button>)
       );
 
@@ -33,7 +33,7 @@ export const PickImages = ({ selectedBrand, selectedModel, selectedCars, select,
       );
     }
 
-    const selectedImage = car.selectedFavcarsUrl ? <img src={car.selectedFavcarsUrl} style={{ maxHeight: '100px' }} /> : '';
+    const selectedImage = car.selectedFavcarsUrl ? <img src={car.selectedFavcarsUrl} style={{ maxHeight: '100px' }} alt={car.variant} /> : '';
 
     const unselectButton = car.selectedFavcarsUrl ? <button onClick={() => unselect(car._id, car.selectedFavcarsVariant)}>Unselect {car.selectedFavcarsVariant}</button> : '';
 
@@ -54,10 +54,6 @@ export const PickImages = ({ selectedBrand, selectedModel, selectedCars, select,
       </div>
     );
   });
-
-  const selectedBrandElement = selectedBrand ? (<div><hr />
-    <h2>{selectedBrand.name} {selectedModel ? selectedModel.name : ''}</h2>
-    <hr /></div>) : '';
 
   return (
     <>

@@ -16,15 +16,22 @@ router.get('/models', (req, res, next) => {
   selectModels({}, doc => doc).then(result => res.json(result));
 });
 router.post('/cars', (req, res, next) => {
-  console.log(req.body);
+  if (req.body.carId || !req.body.variantName || !req.body.url) {
+    res.status(400).send('Bad parameters');
+  } else {
+    updateCars({_id: req.body.carId}, doc => {
+      doc.selectedFavcarsVariant = req.body.variantName;
+      doc.selectedFavcarsUrl = req.body.url;
+    }).then(result => res.json(result[0]));
+  }
 });
 router.put('/cars', (req, res, next) => {
-    if (!req.body.carId || !req.body.variantName || !req.body.url) {
+    if (!req.body.carId || !req.body.variantName || (!req.body.url && !req.body.selectedFavcarsUrl)) {
       res.status(400).send('Bad parameters');
     } else {
       updateCars({_id: req.body.carId}, doc => {
         doc.selectedFavcarsVariant = req.body.variantName;
-        doc.selectedFavcarsUrl = req.body.url;
+        doc.selectedFavcarsUrl = req.body.url || req.body.selectedFavcarsUrl;
       }).then(result => res.json(result[0]));
     }
 });

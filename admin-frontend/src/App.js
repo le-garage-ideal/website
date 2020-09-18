@@ -1,9 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { BASE_URL } from './config';
 import { PickImages } from './components/PickImages';
 import { CorrectVariants } from './components/CorrectVariants';
+import { Menu, CHOOSE_IMAGES_MENU, CREATE_UPDATE_DELETE_VARIANTS } from './components/Menu';
+import { sortBrands, sortModels } from './functions/sort';
+import { noCarImageMatch, selectCarImage, createCar, removeCar } from './functions/car';
 
 
 class App extends React.Component {
@@ -62,66 +64,20 @@ class App extends React.Component {
     this.setState({cars: newCars, selectedCars: newSelectedCars})
   }
 
-  nomatch(carId) {
-    fetch(BASE_URL + '/cars/favcars/' + carId, {
-      method: 'delete',
-      headers: {
-        'accept': 'application/json'
-      }
-    }).then(response => response.json())
-    .then(updatedCar => this.refreshCarState(updatedCar));
-  }
-
-  select(carId, variantName, url) {
-    fetch(BASE_URL + '/cars', {
-      method: 'put',
-      body: JSON.stringify({ carId, variantName, url }),
-      headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      }
-    }).then(response => response.json())
-    .then(updatedCar => this.refreshCarState(updatedCar));
-  };
-
-  refreshCarState(updatedCar) {
+  refreshCar(updatedCar) {
     const updatedCars = this.state.cars.map(c => c._id === updatedCar._id ? updatedCar : c);
     const updatedSelectedCars = this.state.selectedCars.map(c => c._id === updatedCar._id ? updatedCar : c);
     console.log('updatedCar', updatedCar);
     this.setState({selectedCars: updatedSelectedCars, cars: updatedCars});
   }
 
-  addVariant(car) {
-    fetch(BASE_URL + '/cars', {
-      method: 'post',
-      headers: {
-        'accept': 'application/json'
-      }
-    }).then(response => response.json())
-    .then(addedCar => console.log(addedCar));
-     
-  }
-
-  removeVariant(carId) {
-    fetch(BASE_URL + '/cars/' + carId, {
-      method: 'delete',
-      headers: {
-        'accept': 'application/json'
-      }
-    }).then(response => response.json())
-    .then(deletedCar => console.log(deletedCar));
-     
-  }
-
-  menuSelect(selectedMenu) {
-    this.setState({selectedMenu});
-  }
 
   render() {
 
-    const brandElements = this.state.brands.map(brand => {
-      const okCount = this.state.brandMap[brand._id].okCount;
-      const totalCount = this.state.brandMap[brand._id].totalCount;
+    const brandElements = this.state.brands.sort(sortBrands).map(brand => {
+      const brandStats = this.state.brandMap[brand._id];
+      const okCount = brandStats && brandStats.okCount ? brandStats.okCount : 0;
+      const totalCount = brandStats && brandStats.totalCount ? brandStats.totalCount : 0;
       return (
         <button key={ brand._id } onClick={() => {
             const selectedModels = this.state.models.filter(model => model.brand.name === brand.name);
@@ -134,10 +90,10 @@ class App extends React.Component {
       );
     });
 
-    const modelElements = this.state.selectedModels.map(model => {
-      if (!this.state.modelMap[model._id]) { console.log(model._id); return <div>{model.name}</div> }
-      const okCount = this.state.modelMap[model._id].okCount;
-      const totalCount = this.state.modelMap[model._id].totalCount;
+    const modelElements = this.state.selectedModels.sort(sortModels).map(model => {
+      const modelStats = this.state.modelMap[model._id];
+      const okCount = modelStats && modelStats.okCount ? modelStats.okCount : 0;
+      const totalCount = modelStats && modelStats.totalCount ? modelStats.totalCount : 0;;
       return (
         <button key={ model._id } title={ model.favcarsName } onClick={() => {
             const selectedCars = this.state.cars
@@ -152,32 +108,30 @@ class App extends React.Component {
       );
     });
 
-
-    const menuElements = <select onChange={event => this.menuSelect(event.target.value)}>
-      <option value="">--select--</option>
-      <option value="pickimages">Pick images</option>
-      <option value="correctvariants">Correct variants</option>
-    </select>;
-
     let selectedMenuElement = null;
     switch(this.state.selectedMenu) {
-      case 'pickimages':
-        selectedMenuElement = <PickImages
+      case CHOOSE_IMAGES_MENU:
+        selectedMenuElement = (
+          <PickImages
             selectedBrand={this.state.selectedBrand}
             selectedModel={this.state.selectedModel}
             selectedCars={this.state.selectedCars}
-            nomatch={carId => this.nomatch(carId)} 
-            select={(carId, variantName, url) => this.select(carId, variantName, url)}
+            nomatch={carId => noCarImageMatch(carId).then(updatedCar => this.refreshCar(updatedCar))} 
+            select={(carId, variantName, url) => selectCarImage(carId, variantName, url).then(updatedCar => this.refreshCar(updatedCar))}
             unselect={carId => this.unselect(carId)}>
-          </PickImages>;
+          </PickImages>
+        );
         break;
-      case 'correctvariants':
+      case CREATE_UPDATE_DELETE_VARIANTS:
         if (this.state.selectedModel) {
-          selectedMenuElement = <CorrectVariants 
-            selectedModel={this.state.selectedModel}
-            selectedCars={this.state.selectedCars}
-            removeVariant={carId => this.removeVariant(carId)}>
-          </CorrectVariants>;
+          selectedMenuElement = (
+            <CorrectVariants 
+              selectedModel={this.state.selectedModel}
+              selectedCars={this.state.selectedCars}
+              removeVariant={carId => removeCar(carId)}
+              createVariant={car => createCar(car)}>
+            </CorrectVariants>
+          );
         }
         break;
       default:
@@ -187,8 +141,11 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <section><div>Admin Site</div>{ menuElements }</section>
-          <section>{ brandElements }</section>
+          <section>
+            <h1>Admin Site</h1>
+            <Menu menuSelect={selectedMenu => this.setState({selectedMenu})} />
+          </section>
+          <section>{ this.state.selectedMenu && brandElements }</section>
           <hr style={{color: 'white'}} />
           <section>{ modelElements }</section>
         </header>

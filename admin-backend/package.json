@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node --experimental-modules ./bin/www"
+    "start": "node --experimental-modules ./bin/www.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

@@ -28,3 +28,16 @@
 .subTitle {
     color: var(--text-bright);
 }
+
+
+@media (orientation: portrait) {
+    .title {
+        font-size: 1.3em;
+    }
+    .titleContainer {
+        width: 95%;
+        max-width: 95%;
+        margin: 60px 10px 0px 10px;
+        padding: 5px;
+    }
+}

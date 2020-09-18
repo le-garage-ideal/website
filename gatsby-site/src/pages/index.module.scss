@@ -78,3 +78,25 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     z-index: 1;
     opacity: 0; // changed to 1 when frames are ready
 }
+
+
+@media (orientation: portrait) {
+    
+    .carsContainer {
+        display: block;
+        margin-top: 20px;
+    }
+
+    .car {
+        max-width: 100%;
+        width: 100%;
+        max-height: none;
+        height: 90vw;
+        margin: 0;
+    }
+
+    .car2 {
+        margin-top: 0px;
+    }
+}
+

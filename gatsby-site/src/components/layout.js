@@ -54,7 +54,7 @@ export default function Layout({ location, children, save, saveDisabled, showSav
                 <header className={layoutStyles.appHeader}>
                     <div className={layoutStyles.menu}>
                         <button className={menuButtonClass.join(' ')} onClick={() => setShowMenu(!showMenu)}>
-                            <FontAwesomeIcon icon="bars" />
+                            <FontAwesomeIcon icon="bars" className={layoutStyles.menuButtonIcon} />
                         </button>
                         {showMenu && <Menu />}
                     </div>

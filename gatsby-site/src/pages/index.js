@@ -8,7 +8,6 @@ import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import indexStyles from './index.module.scss';
 import { carLabels } from "../constants";
-import { onElementReady } from '../functions/dom';
 
 const eachCarIndex = fn => {
     const result = []; 
@@ -69,20 +68,9 @@ export default class Index extends React.Component {
         this.setState(newState);
 
         if (document) {
-            let framesReady = [];
-            eachCarIndex(frameIdx => framesReady[frameIdx] = false);
-            eachCarIndex(frameIdx => {
-                onElementReady(`#${frameId(frameIdx + 1)}`, () => {
-                    framesReady[frameIdx] = true;
-                    if (framesReady.every(ready => ready === true)) {
-                        setTimeout(() => {
-                            eachCarIndex(editButtonIdx =>
-                                document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
-                        }, 1000);
-                        
-                    }
-                });
-            });
+            setTimeout(() => {
+                eachCarIndex(editButtonIdx => document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
+            }, 2000);
         }
     }
 

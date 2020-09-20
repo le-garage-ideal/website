@@ -1,7 +1,6 @@
 $cardHeight: 30vw;
 $labelHeight: 5vw;
 $cardMaxHeight: 80vh;
-$iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
 
 .carsContainer {
     align-self: center;
@@ -20,7 +19,6 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     flex-direction: column;
     justify-content: center;
     flex: 1;
-    margin: 0 $iframeBodyMargin;
     align-items: flex-end;
 }
 
@@ -62,7 +60,7 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
     font-weight: bold;
 }
 
-.iframe {
+.carComponent {
     flex: 8;
     width: 100%;
 }
@@ -73,10 +71,9 @@ $iframeBodyMargin: 15px; // margin in iframe's body, as I failed to remove it
 }
 
 .iconButtonContainer {
-    margin-right: $iframeBodyMargin;
     margin-bottom: -48px;
     z-index: 1;
-    opacity: 0; // changed to 1 when frames are ready
+    opacity: 0; // changed to 1 when cars are ready
 }
 
 

@@ -1,11 +1,4 @@
-@import '../styles/theme.scss';
-
-// pour l'iframe
-html {
-  background-color: rgba(0,0,0,0)!important;
-  overflow: hidden!important;
-}
-//
+@import '../../styles/theme.scss';
 
 .card {
   margin: 15px;
@@ -24,7 +17,6 @@ html {
   align-items: center;
   box-sizing: border-box;
   max-width: 100%;
-  height: 70vh;
   max-height: 65vw;
   background-color: var(--dark-transparent);
 }

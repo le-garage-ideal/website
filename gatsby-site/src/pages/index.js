@@ -1,23 +1,25 @@
 import Uri from 'jsuri';
 import React from 'react';
+import { graphql } from 'gatsby'
 import Layout from "../components/layout";
 import SEO from "../components/seo/seo";
 import { Title } from "../components/title/title";
-import { motion } from 'framer-motion';
 import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import indexStyles from './index.module.scss';
-import { carLabels } from "../constants";
+import { carLabels, schema } from "../constants";
 import { GarageProvider } from '../context/garage.context';
 import { eachCar, eachCarIndex } from '../functions/cars';
+import { Car } from '../components/car/car';
 
-const frameId = index => `frame-${index}`;
+const carComponentId = index => `car-${index}`;
 const editButtonId = index => `edit-${index}`;
 
-export default class Index extends React.Component {
+export default class Garage extends React.Component {
 
     constructor(props) {
         super(props);
+
         const uri = new Uri(props.location.href);
 
         // if edit=X parameter, save car to carX parameter
@@ -36,7 +38,9 @@ export default class Index extends React.Component {
             if (!uri.getQueryParamValue(param)) {
                 uri.addQueryParam(param, localStorage.getItem(param));
             }
-            newState[param] = uri.getQueryParamValue(param);
+            const foundNode = newState[param] = props.data[schema + 'Cars'].edges
+                .find(({ node: car }) => car.mongodb_id === uri.getQueryParamValue(param));
+            newState[param] = foundNode.node;
         });
         newState.uri = uri.toString();
 
@@ -48,7 +52,7 @@ export default class Index extends React.Component {
         if (document) {
             setTimeout(() => {
                 eachCarIndex(editButtonIdx => document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
-            }, 2000);
+            }, 500);
         }
     }
 
@@ -61,21 +65,22 @@ export default class Index extends React.Component {
             window.location.href = uri.toString();
         };
 
-        const transform = (carUrl, index) => {
+        const transform = (car, index) => {
+
             const classCar = [indexStyles.car];
             if (index === 2) {
                 classCar.push(indexStyles.car2);
             }
-            if (carUrl) {
+            if (car) {
                 classCar.push(indexStyles.withCar);
             } else {
                 classCar.push(indexStyles.noCar);
             }
             const title = carLabels[index-1];
-            const thumbnail = carUrl ? (
-                <motion.iframe id={frameId(index)} title={title} className={indexStyles.iframe} src={`/car/${carUrl}`}
+            const thumbnail = car ? (
+                <Car id={carComponentId(index)} title={title} className={indexStyles.carComponent} car={car}
                     initial={{opacity: 0}} animate={{ opacity: 1 }}>
-                </motion.iframe>
+                </Car>
             ) : (
                 <div className={indexStyles.noCarThumbnail}>?</div>
             );
@@ -121,3 +126,29 @@ export default class Index extends React.Component {
         );
     }
 }
+
+export const query = graphql`query {
+    allMongodbBmbu7Ynqra11RqiCars {
+    edges {
+      node {
+          mongodb_id,
+          variant,
+          power,
+          officialWeight, 
+          weight,
+          options,
+          startYear,
+          endYear,
+          favcarsVariants { name, urls },
+          selectedFavcarsUrl,
+          model {
+              brand {
+                  name
+              }
+            name
+          }
+        }
+      }
+    }
+  }`;
+

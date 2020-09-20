@@ -8,6 +8,7 @@ import './bulma-theme.scss';
 import { schema } from '../constants';
 
 export default ({data, location}) => {
+    console.log(data[schema + 'Brands'].edges[0]);
     const uri = new Uri(location.href);
     return (
         <Layout>

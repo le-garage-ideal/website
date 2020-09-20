@@ -8,18 +8,8 @@ import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import indexStyles from './index.module.scss';
 import { carLabels } from "../constants";
-
-const eachCarIndex = fn => {
-    const result = []; 
-    for (let i = 0; i < 3; i++) {
-        fn(i);
-    }
-    return result;
-}
-
-const eachCar = fn => {
-    return eachCarIndex(i => fn(`car${i+1}`, i));
-}
+import { GarageProvider } from '../context/garage.context';
+import { eachCar, eachCarIndex } from '../functions/cars';
 
 const frameId = index => `frame-${index}`;
 const editButtonId = index => `edit-${index}`;
@@ -28,19 +18,7 @@ export default class Index extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            uri: this.props.location.href,
-            car1: null,
-            car2: null,
-            car3: null,
-            saveOk: true,
-            showSaveMessage: false,
-        };
-    }
-
-    componentDidMount() {
-    
-        const uri = new Uri(this.state.uri);
+        const uri = new Uri(props.location.href);
 
         // if edit=X parameter, save car to carX parameter
         const editParam = uri.getQueryParamValue('edit');
@@ -65,7 +43,7 @@ export default class Index extends React.Component {
         // Save button enabled?
         newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
 
-        this.setState(newState);
+        this.state = newState;
 
         if (document) {
             setTimeout(() => {
@@ -131,13 +109,15 @@ export default class Index extends React.Component {
         }
 
         return (
-            <Layout location={this.state.uri} save={save} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
-                <SEO location={this.props.location.pathname} title="" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
-                <Title />
-                <article className={indexStyles.carsContainer}>
-                    {car1} {car2} {car3}
-                </article>
-            </Layout>
+            <GarageProvider value={{uri: this.state.uri, car1: this.state.car1, car2: this.state.car2, car3: this.state.car3}}>
+                <Layout location={this.state.uri} save={save} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
+                    <SEO location={this.props.location.pathname} title="" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
+                    <Title />
+                    <article className={indexStyles.carsContainer}>
+                        {car1} {car2} {car3}
+                    </article>
+                </Layout>
+            </GarageProvider>
         );
     }
 }

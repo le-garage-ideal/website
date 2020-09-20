@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faEdit, faThList, faImage, faBars, faPlus, faSave, faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
+import { garageContext } from '../context/garage.context';
 import {copyToClipboard} from '../functions/clipboard';
 import {
     FacebookShareButton,
@@ -12,6 +13,7 @@ import {
     FacebookIcon,
     TwitterIcon,
 } from "react-share";
+
 
 library.add(faSearch);
 library.add(faEdit);
@@ -24,7 +26,9 @@ library.add(faShareSquare);
 
 const BUTTON_HEIGHT = '40px';
 
-export default function Layout({ location, children, save, saveDisabled, showSaveMessage }) {
+export default function Layout({ children, save, saveDisabled, showSaveMessage }) {
+
+    const garage = useContext(garageContext);
 
     const [showMenu, setShowMenu] = useState(false);
     const [shareModalState, setShareModalState] = useState('');
@@ -36,8 +40,12 @@ export default function Layout({ location, children, save, saveDisabled, showSav
         menuButtonClass.push(layoutStyles.menuExpanded);
     }
 
+    const uri = garage.uri;
+    const title = ''; // todo : on n'a pas les noms des voitures dans le contexte
+
+
     const onShareCopyClick = () => {
-        copyToClipboard(location).then(() => {
+        copyToClipboard(uri).then(() => {
             setShareCopySuccessMessage('Lien copié dans le presse-papier');
             setTimeout(() => setShareCopySuccessMessage(null), 5000);
         }, () => {
@@ -58,7 +66,7 @@ export default function Layout({ location, children, save, saveDisabled, showSav
                         </button>
                         {showMenu && <Menu />}
                     </div>
-                    {location &&
+                    {uri &&
                         <div className={layoutStyles.shareButtonsBar}>
                             <button title="Partager"
                                 className={['icon-button', layoutStyles.customButton].join(' ')}
@@ -73,10 +81,10 @@ export default function Layout({ location, children, save, saveDisabled, showSav
                                 style={{ height: BUTTON_HEIGHT }}>
                                 <FontAwesomeIcon icon="save" />
                             </button>
-                            <FacebookShareButton title="Partager avec Facebook" url={location}>
+                            <FacebookShareButton title={title} url={uri}>
                                 <FacebookIcon size={BUTTON_HEIGHT} />
                             </FacebookShareButton>
-                            <TwitterShareButton title="Partager avec Twitter" url={location}>
+                            <TwitterShareButton title={title} url={uri}>
                                 <TwitterIcon size={BUTTON_HEIGHT} />
                             </TwitterShareButton>
                             {showSaveMessage && 
@@ -91,7 +99,7 @@ export default function Layout({ location, children, save, saveDisabled, showSav
                         <div className="field is-vertical">
                             <label className="label has-text-light" htmlFor="share-link">Partagez ce lien : </label>
                             <p className="control">
-                                <input type="text" name="share-link" id="share-link" value={location}
+                                <input type="text" name="share-link" id="share-link" value={uri}
                                     className="input is-primary" readOnly={true} />
                             </p>
                         </div>

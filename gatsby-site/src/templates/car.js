@@ -1,7 +1,7 @@
 import React from "react";
-import { Car } from '../components/car/car';
 import { EmptyLayout } from '../components/layout';
-import SEO from "../components/seo/seo";
+import { SEO } from "../components/seo/seo";
+import { Car } from '../components/car/car';
 
 export default ({ pageContext, location }) => {
 

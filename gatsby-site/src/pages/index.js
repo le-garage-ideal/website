@@ -1,15 +1,14 @@
 import Uri from 'jsuri';
 import React from 'react';
 import { graphql } from 'gatsby'
-import Layout from "../components/layout";
-import SEO from "../components/seo/seo";
-import { Title } from "../components/title/title";
 import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import indexStyles from './index.module.scss';
 import { carLabels, schema } from "../constants";
-import { GarageProvider } from '../context/garage.context';
 import { eachCar, eachCarIndex } from '../functions/cars';
+import indexStyles from './index.module.scss';
+import { Title } from "../components/title/title";
+import { Layout } from "../components/layout";
+import { SEO } from "../components/seo/seo";
 import { Car } from '../components/car/car';
 
 const carComponentId = index => `car-${index}`;
@@ -34,22 +33,27 @@ export default class Garage extends React.Component {
 
         // add missing params + save state
         const newState = {...this.state};
-        eachCar(param => {
-            if (!uri.getQueryParamValue(param)) {
-                uri.addQueryParam(param, localStorage.getItem(param));
-            }
-            const foundNode = newState[param] = props.data[schema + 'Cars'].edges
-                .find(({ node: car }) => car.mongodb_id === uri.getQueryParamValue(param));
-            newState[param] = foundNode.node;
-        });
+        const windowGlobal = typeof window !== 'undefined' && window;
+        if (windowGlobal) {
+            eachCar(param => {
+                if (!uri.getQueryParamValue(param)) {
+                    uri.addQueryParam(param, localStorage.getItem(param));
+                }
+                const foundNode = newState[param] = props.data[schema + 'Cars'].edges
+                    .find(({ node: car }) => car.mongodb_id === uri.getQueryParamValue(param));
+                newState[param] = foundNode.node;
+            });
+        }
         newState.uri = uri.toString();
 
         // Save button enabled?
-        newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
+        if (windowGlobal) {
+            newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
+        }
 
         this.state = newState;
 
-        if (document) {
+        if (windowGlobal) {
             setTimeout(() => {
                 eachCarIndex(editButtonIdx => document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
             }, 500);
@@ -113,16 +117,18 @@ export default class Garage extends React.Component {
             }
         }
 
+        
+        const title = `${this.state.car1 ? this.state.car1.variant : ''}/${this.state.car2 ? this.state.car2.variant : ''}/${this.state.car3 ? this.state.car3.variant : ''}`;
+
+
         return (
-            <GarageProvider value={{uri: this.state.uri, car1: this.state.car1, car2: this.state.car2, car3: this.state.car3}}>
-                <Layout location={this.state.uri} save={save} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
-                    <SEO location={this.props.location.pathname} title="" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
-                    <Title />
-                    <article className={indexStyles.carsContainer}>
-                        {car1} {car2} {car3}
-                    </article>
-                </Layout>
-            </GarageProvider>
+            <Layout location={this.state.uri} save={save} title={title} uri={this.state.uri} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
+                <SEO location={this.props.location.pathname} title={title} uri={this.state.uri} description="Créez et partagez votre garage idéal en 3 voitures de sport" />
+                <Title />
+                <article className={indexStyles.carsContainer}>
+                    {car1} {car2} {car3}
+                </article>
+            </Layout>
         );
     }
 }

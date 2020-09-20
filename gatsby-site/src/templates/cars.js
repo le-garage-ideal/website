@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Uri from 'jsuri';
 import { graphql } from 'gatsby';
-import Layout from "../components/layout";
+import { Layout } from "../components/layout";
 import FilteredList from "../components/utils/filtered-list";
 import ListItem from "../components/utils/list-item";
-import SEO from "../components/seo/seo";
+import { SEO } from "../components/seo/seo";
 import { schema } from '../constants';
 import sortCars from '../functions/sort';
 

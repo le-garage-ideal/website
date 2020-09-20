@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Spec from './spec';
-import carStyles from './car.module.scss';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import carStyles from './car.module.scss';
+import Spec from './spec';
 
 export const Car = ({ car }) => {
 

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
-import { garageContext } from '../context/garage.context';
 import {copyToClipboard} from '../functions/clipboard';
 import {
     FacebookShareButton,
@@ -26,9 +25,7 @@ library.add(faShareSquare);
 
 const BUTTON_HEIGHT = '40px';
 
-export default function Layout({ children, save, saveDisabled, showSaveMessage }) {
-
-    const garage = useContext(garageContext);
+export function Layout({ title, uri, children, save, saveDisabled, showSaveMessage }) {
 
     const [showMenu, setShowMenu] = useState(false);
     const [shareModalState, setShareModalState] = useState('');
@@ -39,10 +36,6 @@ export default function Layout({ children, save, saveDisabled, showSaveMessage }
     if (showMenu) {
         menuButtonClass.push(layoutStyles.menuExpanded);
     }
-
-    const uri = garage.uri;
-    const title = ''; // todo : on n'a pas les noms des voitures dans le contexte
-
 
     const onShareCopyClick = () => {
         copyToClipboard(uri).then(() => {
@@ -81,7 +74,7 @@ export default function Layout({ children, save, saveDisabled, showSaveMessage }
                                 style={{ height: BUTTON_HEIGHT }}>
                                 <FontAwesomeIcon icon="save" />
                             </button>
-                            <FacebookShareButton title={title} url={uri}>
+                            <FacebookShareButton title={title} url={uri} quote={title}>
                                 <FacebookIcon size={BUTTON_HEIGHT} />
                             </FacebookShareButton>
                             <TwitterShareButton title={title} url={uri}>

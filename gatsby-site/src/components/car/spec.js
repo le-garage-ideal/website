@@ -9,7 +9,7 @@ const RATIO_MAX = 20; // max 1kg/hp else overflow
 
 export default function Spec({power, weight, officialWeight, imageUrl}) {
 
-  const theWeight = weight ? weight : officialWeight;
+  const theWeight = weight || officialWeight;
 
   const ratio = Math.round((theWeight * 10) / power) / 10;
 

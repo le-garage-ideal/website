@@ -2,12 +2,13 @@ import React from "react";
 import { EmptyLayout } from '../components/layout';
 import { SEO } from "../components/seo/seo";
 import { Car } from '../components/car/car';
+import { fullname } from '../functions/cars';
 
 export default ({ pageContext, location }) => {
 
     const car = pageContext.car;
 
-    const carFullname = `${car.model.brand.name} ${car.variant}`;
+    const carFullname = fullname(car);
 
     return (
         <EmptyLayout>

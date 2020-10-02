@@ -36,7 +36,7 @@ module.exports = {
     `gatsby-plugin-react-helmet`
   ],
   siteMetadata: {
-    title: "Perfect Garage",
+    title: "Build Your",
     titleTemplate: "%s · Perfect Garage",
     description:
       "Créez et partagez votre garage idéal, en 3 voitures de sport.",

@@ -4,7 +4,7 @@ import { graphql } from 'gatsby'
 import './bulma-theme.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { carLabels, schema } from "../constants";
-import { eachCar, eachCarIndex } from '../functions/cars';
+import { eachCar, eachCarIndex, fullname } from '../functions/cars';
 import indexStyles from './index.module.scss';
 import { Title } from "../components/title/title";
 import { Layout } from "../components/layout";
@@ -36,12 +36,26 @@ export default class Garage extends React.Component {
         const windowGlobal = typeof window !== 'undefined' && window;
         if (windowGlobal) {
             eachCar(param => {
-                if (!uri.getQueryParamValue(param)) {
-                    uri.addQueryParam(param, localStorage.getItem(param));
+                // Priority to URL if user copy paste shared garage
+                const carId = uri.getQueryParamValue(param) || localStorage.getItem(param);
+                
+                if (carId) {
+                    const foundNode = props.data[schema + 'Cars'].edges
+                        .find(({ node: car }) => car.mongodb_id === carId);
+                    
+                    if (foundNode) {
+                        if (!uri.getQueryParamValue(param)) {
+                            // If carId comes from localstorage and was not on URL, add it
+                            uri.addQueryParam(param, foundNode.node);
+                        }
+                        newState[param] = foundNode.node;
+                    } else {
+                        if (!uri.getQueryParamValue(param)) {
+                            // If carId comes from localstorage and was not found, remove it
+                            localStorage.removeItem(param);
+                        }
+                    }
                 }
-                const foundNode = newState[param] = props.data[schema + 'Cars'].edges
-                    .find(({ node: car }) => car.mongodb_id === uri.getQueryParamValue(param));
-                newState[param] = foundNode.node;
             });
         }
         newState.uri = uri.toString();
@@ -118,9 +132,7 @@ export default class Garage extends React.Component {
         }
 
         
-        const title = `${this.state.car1 ? this.state.car1.variant : ''}/${this.state.car2 ? this.state.car2.variant : ''}/${this.state.car3 ? this.state.car3.variant : ''}`;
-
-
+        const title = eachCar(car => this.state[car] ? fullname(this.state[car]) : null).filter(s => !!s).join("\n");
         return (
             <Layout location={this.state.uri} save={save} title={title} uri={this.state.uri} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
                 <SEO location={this.props.location.pathname} title={title} uri={this.state.uri} description="Créez et partagez votre garage idéal en 3 voitures de sport" />

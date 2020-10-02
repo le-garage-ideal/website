@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faEdit, faThList, faImage, faBars, faPlus, faSave, faShareSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -74,7 +74,7 @@ export function Layout({ title, uri, children, save, saveDisabled, showSaveMessa
                                 style={{ height: BUTTON_HEIGHT }}>
                                 <FontAwesomeIcon icon="save" />
                             </button>
-                            <FacebookShareButton title={title} url={uri} quote={title}>
+                            <FacebookShareButton title={title} url={uri.replace('localhost:8000', 'perfect-garage.org')} quote={title}>
                                 <FacebookIcon size={BUTTON_HEIGHT} />
                             </FacebookShareButton>
                             <TwitterShareButton title={title} url={uri}>

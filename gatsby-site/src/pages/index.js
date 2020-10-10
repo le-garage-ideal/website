@@ -127,7 +127,7 @@ export default class Garage extends React.Component {
                 const saveParam = `car${saveIndex}`;
                 localStorage.setItem(saveParam, this.state[saveParam]);
                 this.setState({saveOk: true, showSaveMessage: true});
-                setTimeout(() => this.setState({showSaveMessage: false}), 500)
+                setTimeout(() => this.setState({showSaveMessage: false}), 2000); // message will be displayed during 2s
             }
         }
 

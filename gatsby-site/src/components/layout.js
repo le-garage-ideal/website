@@ -59,7 +59,7 @@ export function Layout({ title, uri, children, save, saveDisabled, showSaveMessa
                         <button className={menuButtonClass.join(' ')} onClick={() => setShowMenu(!showMenu)}>
                             <FontAwesomeIcon icon="bars" className={layoutStyles.menuButtonIcon} />
                         </button>
-                        {showMenu && <Menu />}
+                        {showMenu && <Menu uri={uri} />}
                     </div>
                     {uri &&
                         <div className={layoutStyles.shareButtonsBar}>

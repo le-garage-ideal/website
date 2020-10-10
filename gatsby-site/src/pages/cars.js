@@ -38,10 +38,11 @@ export default ({data, location}) => {
                     image={imageUrl}
                     big={true}
                     selected={false}
-                    onClick={() => {
+                    onClick={() => setSelectedCar(car.mongodb_id)
+                        /*() => {
                         uri.setPath(`/car/${car.mongodb_id}`);
                         window.location.href = uri.toString();
-                    }}>
+                    }*/}>
                 </ListItem>
                 { !isSelected && 
                     <button className={carsStyles.iconButton + " icon-button"} onClick={() => setSelectedCar(car.mongodb_id)}

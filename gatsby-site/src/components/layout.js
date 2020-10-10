@@ -11,6 +11,8 @@ import {
     TwitterShareButton,
     FacebookIcon,
     TwitterIcon,
+    RedditShareButton,
+    RedditIcon,
 } from "react-share";
 
 
@@ -80,6 +82,9 @@ export function Layout({ title, uri, children, save, saveDisabled, showSaveMessa
                             <TwitterShareButton title={title} url={uri}>
                                 <TwitterIcon size={BUTTON_HEIGHT} />
                             </TwitterShareButton>
+                            <RedditShareButton title={title} url={uri}>
+                                <RedditIcon size={BUTTON_HEIGHT} />
+                            </RedditShareButton>
                             {showSaveMessage && 
                                 <div style={{position: 'absolute'}}><Toast classNames={['is-success']}>Garage sauvegardé!</Toast></div>}
                         </div>

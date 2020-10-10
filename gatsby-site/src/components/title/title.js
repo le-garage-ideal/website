@@ -14,7 +14,7 @@ export const Title = () => {
     };
 
     const titleTransition = {
-        duration: 2,
+        duration: 1,
         ease: "easeInOut",
     };
 

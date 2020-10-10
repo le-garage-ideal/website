@@ -70,7 +70,7 @@ export default class Garage extends React.Component {
         if (windowGlobal) {
             setTimeout(() => {
                 eachCarIndex(editButtonIdx => document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
-            }, 500);
+            }, 200);
         }
     }
 
@@ -127,12 +127,12 @@ export default class Garage extends React.Component {
                 const saveParam = `car${saveIndex}`;
                 localStorage.setItem(saveParam, this.state[saveParam]);
                 this.setState({saveOk: true, showSaveMessage: true});
-                setTimeout(() => this.setState({showSaveMessage: false}), 1000)
+                setTimeout(() => this.setState({showSaveMessage: false}), 500)
             }
         }
 
         
-        const title = eachCar(car => this.state[car] ? fullname(this.state[car]) : null).filter(s => !!s).join("\n");
+        const title = eachCar(car => this.state[car] ? fullname(this.state[car]) : null).filter(s => !!s).join("\n") + '\n';
         return (
             <Layout location={this.state.uri} save={save} title={title} uri={this.state.uri} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
                 <SEO location={this.props.location.pathname} title={title} uri={this.state.uri} description="Créez et partagez votre garage idéal en 3 voitures de sport" />

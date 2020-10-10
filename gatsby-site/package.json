@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "cpr": "^3.0.1",
+    "eslint": "^7.11.0",
     "prettier": "^1.19.1"
   },
   "repository": {

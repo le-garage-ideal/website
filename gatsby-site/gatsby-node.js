@@ -33,7 +33,7 @@ exports.createPages = async function({ actions, graphql, reporter }) {
             }
         }
     }`);
-    
+    /*
     const { data: cars } = await graphql(`query {
       allMongodbBmbu7Ynqra11RqiCars {
       edges {
@@ -58,6 +58,7 @@ exports.createPages = async function({ actions, graphql, reporter }) {
         }
       }
     }`);
+    */
 
 
     brands[schema + 'Brands'].edges.forEach(({ node: brand }) => {
@@ -80,7 +81,7 @@ exports.createPages = async function({ actions, graphql, reporter }) {
 
     });
 
-
+/*
     cars[schema + 'Cars'].edges.forEach(async ({ node: car }) => {
 
       // const images = await graphql(`
@@ -106,7 +107,8 @@ exports.createPages = async function({ actions, graphql, reporter }) {
       actions.createPage({
         path: `/car/${car.mongodb_id}`,
         component: path.resolve(`./src/templates/car.js`),
-        context: { car/*, image: images.get(car._id)*/},
+        context: { car},
       })
     });
+    */
 }

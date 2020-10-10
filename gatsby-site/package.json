@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "postbuild": "xcopy /e/h/y/q \"public\\*\" \"..\\..\\website-dist\"",
+    "postbuild": "cpr ../../website-dist/.cpanel.yml ../.. && cpr ../../website-dist/.git ../.. &&  cpr public ../../website-dist -d && move ../../.git ../../website-dist && move ../../.cpanel ../../website-dist",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
@@ -37,6 +37,7 @@
     "react-share": "^4.2.1"
   },
   "devDependencies": {
+    "cpr": "^3.0.1",
     "prettier": "^1.19.1"
   },
   "repository": {

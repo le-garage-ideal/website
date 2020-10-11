@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { schema, carLabels } from '../constants';
+import { carLabels } from '../constants';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import carsStyles from './cars.module.scss';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
-import sortCars from '../functions/sort';
+import { sortCars } from '../functions/sort';
 
-export default ({ data, location }) => {
+const Cars = ({ data, location }) => {
   const uri = new Uri(location.href);
 
-  const completeCarList = data[`${schema}Cars`].edges.map(({ node }) => node).sort(sortCars);
+  const completeCarList = data.allMongodbBmbu7Ynqra11RqiCars.edges.map(({ node }) => node).sort(sortCars);
   const [filteredCars, setFilteredCars] = useState([...completeCarList]);
   filteredCars.splice(0, filteredCars.length - 20);
 
@@ -36,13 +37,10 @@ export default ({ data, location }) => {
           image={imageUrl}
           big
           selected={false}
-          onClick={() => setSelectedCar(car.mongodb_id)
-                        /* () => {
-                        uri.setPath(`/car/${car.mongodb_id}`);
-                        window.location.href = uri.toString();
-                    } */}
+          onClick={() => setSelectedCar(car.mongodb_id)}
         />
-        { !isSelected
+        {
+          !isSelected
           && (
             <button
               type="button"
@@ -52,7 +50,8 @@ export default ({ data, location }) => {
             >
               <FontAwesomeIcon icon="plus" />
             </button>
-          )}
+          )
+        }
         {
           isSelected
           && (
@@ -103,6 +102,34 @@ export default ({ data, location }) => {
   );
 };
 
+Cars.propTypes = {
+  data: PropTypes.shape({
+    allMongodbBmbu7Ynqra11RqiCars: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            mongodb_id: PropTypes.string.isRequired,
+            variant: PropTypes.string.isRequired,
+            startYear: PropTypes.string,
+            model: PropTypes.shape({
+              brand: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+              }),
+              name: PropTypes.string.isRequired,
+            }).isRequired,
+          }).isRequired,
+        }).isRequired,
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  location: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export default Cars;
+
 export const query = graphql`
     query {
         allMongodbBmbu7Ynqra11RqiCars {
@@ -110,12 +137,7 @@ export const query = graphql`
           node {
               mongodb_id,
               variant,
-              power,
-              officialWeight, 
-              weight,
-              options,
               startYear,
-              endYear,
               model {
                   brand {
                       name

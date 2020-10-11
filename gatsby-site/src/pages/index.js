@@ -1,11 +1,12 @@
 import Uri from 'jsuri';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
 import './bulma-theme.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { carLabels, schema } from '../constants';
 import { eachCar, eachCarIndex, fullname } from '../functions/cars';
 import indexStyles from './index.module.scss';
+import { carLabels } from '../constants';
+import { Card } from '../components/utils/card';
 import { Title } from '../components/title/title';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
@@ -14,7 +15,7 @@ import { Car } from '../components/car/car';
 const carComponentId = index => `car-${index}`;
 const editButtonId = index => `edit-${index}`;
 
-export default class Garage extends React.Component {
+class Garage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -39,7 +40,7 @@ export default class Garage extends React.Component {
         const carId = uri.getQueryParamValue(param) || localStorage.getItem(param);
 
         if (carId) {
-          const foundNode = props.data[`${schema}Cars`].edges
+          const foundNode = props.data.allMongodbBmbu7Ynqra11RqiCars.edges
             .find(({ node: car }) => car.mongodb_id === carId);
 
           if (foundNode) {
@@ -74,23 +75,22 @@ export default class Garage extends React.Component {
   }
 
   render() {
+    const {
+      uri, car1, car2, car3, saveOk, showSaveMessage,
+    } = this.state;
+
+    const {
+      location,
+    } = this.props;
+
     const editCar = index => {
-      const uri = new Uri(this.state.uri);
-      uri.setPath('/browse');
-      uri.addQueryParam('edit', index);
-      window.location.href = uri.toString();
+      const newUri = new Uri(uri);
+      newUri.setPath('/browse');
+      newUri.addQueryParam('edit', index);
+      window.location.href = newUri.toString();
     };
 
     const transform = (car, index) => {
-      const classCar = [indexStyles.car];
-      if (index === 2) {
-        classCar.push(indexStyles.car2);
-      }
-      if (car) {
-        classCar.push(indexStyles.withCar);
-      } else {
-        classCar.push(indexStyles.noCar);
-      }
       const title = carLabels[index - 1];
       const thumbnail = car ? (
         <Car
@@ -102,64 +102,97 @@ export default class Garage extends React.Component {
           animate={{ opacity: 1 }}
         />
       ) : (
-          <div className={indexStyles.noCarThumbnail}>?</div>
-        );
+        <div className={indexStyles.noCarThumbnail}>?</div>
+      );
       return (
-        <div className={classCar.join(' ')}>
-          <div id={editButtonId(index)} className={indexStyles.iconButtonContainer}>
-            <button type="button" className={`${indexStyles.iconButton} icon-button`} onClick={() => editCar(index)}>
-              <FontAwesomeIcon icon="edit" />
-            </button>
-          </div>
-          {thumbnail}
-          <div className={[indexStyles.carLabelContainer, 'container', 'is-full'].join(' ')}>
-            <span className={[indexStyles.carLabel, 'badge'].join(' ')}>{title}</span>
-          </div>
-        </div>
+        <Card
+          marginCard={index === 2}
+          empty={!car}
+          index={index}
+          title={title}
+          edit={editCar}
+          render={() => (thumbnail)}
+          editButtonId={editButtonId(index)}
+        />
       );
     };
 
-    const car1 = transform(this.state.car1, 1);
-    const car2 = transform(this.state.car2, 2);
-    const car3 = transform(this.state.car3, 3);
+    const car1Element = transform(car1, 1);
+    const car2Element = transform(car2, 2);
+    const car3Element = transform(car3, 3);
 
     const save = () => {
-      for (let saveIndex = 1; saveIndex <= 3; saveIndex += 1) {
-        const saveParam = `car${saveIndex}`;
+      eachCar(saveParam => {
         localStorage.setItem(saveParam, this.state[saveParam]);
         this.setState({ saveOk: true, showSaveMessage: true });
         setTimeout(() => this.setState({ showSaveMessage: false }), 2000); // message will be displayed during 2s
-      }
+      });
     };
 
-    const title = eachCar(car => (this.state[car] ? fullname(this.state[car]) : null)).filter(s => !!s).join('\n');
+    const title = eachCar(car => (this.state[car] ? fullname(this.state[car]) : null))
+      .filter(s => !!s)
+      .join('\n');
+
     return (
       <Layout
-        location={this.state.uri}
+        location={uri}
         save={save}
         title={title}
-        uri={this.state.uri}
-        saveDisabled={this.state.saveOk}
-        showSaveMessage={this.state.showSaveMessage}
+        uri={uri}
+        saveDisabled={saveOk}
+        showSaveMessage={showSaveMessage}
       >
         <SEO
-          location={this.props.location.pathname}
+          location={location.pathname}
           title={title}
-          uri={this.state.uri}
+          uri={uri}
           description="Créez et partagez votre garage idéal en 3 voitures de sport"
         />
         <Title />
         <article className={indexStyles.carsContainer}>
-          {car1}
+          {car1Element}
           {' '}
-          {car2}
+          {car2Element}
           {' '}
-          {car3}
+          {car3Element}
         </article>
       </Layout>
     );
   }
 }
+
+Garage.propTypes = {
+  data: PropTypes.shape({
+    allMongodbBmbu7Ynqra11RqiCars: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            mongodb_id: PropTypes.string.isRequired,
+            variant: PropTypes.string.isRequired,
+            power: PropTypes.number,
+            officialWeight: PropTypes.number,
+            weight: PropTypes.number,
+            options: PropTypes.string,
+            startYear: PropTypes.string,
+            endYear: PropTypes.string,
+            imageUrl: PropTypes.string,
+            selectedFavcarsUrl: PropTypes.string,
+            model: PropTypes.shape({
+              brand: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+              }),
+              name: PropTypes.string.isRequired,
+            }).isRequired,
+          }).isRequired,
+        }).isRequired,
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  location: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export const query = graphql`query {
     allMongodbBmbu7Ynqra11RqiCars {
@@ -173,7 +206,7 @@ export const query = graphql`query {
           options,
           startYear,
           endYear,
-          favcarsVariants { name, urls },
+          imageUrl,
           selectedFavcarsUrl,
           model {
               brand {
@@ -185,3 +218,5 @@ export const query = graphql`query {
       }
     }
   }`;
+
+export default Garage;

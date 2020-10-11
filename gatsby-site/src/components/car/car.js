@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import carStyles from './car.module.scss';
@@ -55,21 +56,21 @@ export const Car = ({ car }) => {
       <div className={carStyles.carCaption}>
         <div className={carStyles.switchButtons}>
           {
-                            currentPageIndex === 1
-                            && (
-                            <button className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
-                              <FontAwesomeIcon icon="image" size="2x" onClick={clickLeft} />
-                            </button>
-                            )
-                        }
+            currentPageIndex === 1
+            && (
+              <button type="button" className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
+                <FontAwesomeIcon icon="image" size="2x" onClick={clickLeft} />
+              </button>
+            )
+          }
           {
-                            currentPageIndex === 0
-                            && (
-                            <button className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
-                              <FontAwesomeIcon icon="th-list" size="2x" onClick={clickRight} />
-                            </button>
-                            )
-                        }
+            currentPageIndex === 0
+            && (
+            <button type="button" className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
+              <FontAwesomeIcon icon="th-list" size="2x" onClick={clickRight} />
+            </button>
+            )
+          }
         </div>
         <div className={carStyles.carTitle}>
           <h3 className={carStyles.carLongLabel} title={carFullname}>{carFullname}</h3>
@@ -79,4 +80,25 @@ export const Car = ({ car }) => {
 
     </article>
   );
+};
+
+Car.propTypes = {
+  car: PropTypes.shape({
+    mongodb_id: PropTypes.string.isRequired,
+    variant: PropTypes.string.isRequired,
+    power: PropTypes.number,
+    officialWeight: PropTypes.number,
+    weight: PropTypes.number,
+    options: PropTypes.string,
+    startYear: PropTypes.string,
+    endYear: PropTypes.string,
+    imageUrl: PropTypes.string,
+    selectedFavcarsUrl: PropTypes.string,
+    model: PropTypes.shape({
+      brand: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }),
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };

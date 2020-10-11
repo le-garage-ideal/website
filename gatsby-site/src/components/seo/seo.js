@@ -3,7 +3,26 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 
-export const SEO = ({ uri, title, description, image }) => {
+const query = graphql`
+  query SEO {
+    site {
+      siteMetadata {
+        defaultTitle: title
+        titleTemplate
+        defaultDescription: description
+        siteUrl: url
+        defaultImage: image
+      }
+    }
+  }
+`;
+
+export const SEO = ({
+  uri,
+  title,
+  description,
+  image,
+}) => {
   const { site } = useStaticQuery(query);
 
   const {
@@ -52,27 +71,15 @@ export const SEO = ({ uri, title, description, image }) => {
 };
 
 SEO.propTypes = {
+  uri: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   image: PropTypes.string,
 };
 
 SEO.defaultProps = {
+  uri: null,
   title: null,
   description: null,
   image: null,
 };
-
-const query = graphql`
-  query SEO {
-    site {
-      siteMetadata {
-        defaultTitle: title
-        titleTemplate
-        defaultDescription: description
-        siteUrl: url
-        defaultImage: image
-      }
-    }
-  }
-`;

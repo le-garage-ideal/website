@@ -1,16 +1,18 @@
 import React from 'react';
-import listItemStyles from  './list-item.module.scss';
+import listItemStyles from './list-item.module.scss';
 
-export default function ListItem({id, name, image, onClick, selected, big}) {
+const ListItem = ({
+  id, name, image, onClick, selected, big,
+}) => {
   const classNames = [listItemStyles.logoLink];
   if (selected) {
     classNames.push(listItemStyles.selected);
   }
 
   if (big) {
-    classNames.push(listItemStyles.logoLinkBig)
+    classNames.push(listItemStyles.logoLinkBig);
   } else {
-    classNames.push(listItemStyles.logoLinkSmall)
+    classNames.push(listItemStyles.logoLinkSmall);
   }
 
   return (
@@ -24,3 +26,5 @@ export default function ListItem({id, name, image, onClick, selected, big}) {
     </li>
   );
 };
+
+export default ListItem;

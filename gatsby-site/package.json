@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "postbuild": "cpr ../../website-dist/.cpanel.yml ../.. && cpr ../../website-dist/.git ../.. &&  cpr public ../../website-dist -d && move ../../.git ../../website-dist && move ../../.cpanel ../../website-dist",
+    "postbuild": "shx rm -rf ../../temp/* && shx cp ../../website-dist/.cpanel.yml ../../temp/ && shx cp -r ../../website-dist/.git ../../temp/ && shx rm -rf ../../website-dist/* && shx cp -r ./public/* ../../website-dist && shx cp -r ../../temp/.git ../../website-dist/ && shx cp ../../temp/.cpanel.yml ../../website-dist/",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
@@ -31,15 +31,21 @@
     "gatsby-transformer-sharp": "^2.5.5",
     "jsuri": "^1.3.1",
     "node-sass": "^4.13.1",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^6.1.0",
     "react-share": "^4.2.1"
   },
   "devDependencies": {
-    "cpr": "^3.0.1",
     "eslint": "^7.11.0",
-    "prettier": "^1.19.1"
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.21.4",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "prettier": "^1.19.1",
+    "shx": "^0.3.2"
   },
   "repository": {
     "type": "git",

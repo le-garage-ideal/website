@@ -2,7 +2,6 @@ import React from 'react';
 import listItemStyles from  './list-item.module.scss';
 
 export default function ListItem({id, name, image, onClick, selected, big}) {
-
   const classNames = [listItemStyles.logoLink];
   if (selected) {
     classNames.push(listItemStyles.selected);
@@ -14,14 +13,14 @@ export default function ListItem({id, name, image, onClick, selected, big}) {
     classNames.push(listItemStyles.logoLinkSmall)
   }
 
-  return (<li>
-    <button className={ classNames.join(' ') } onClick={() => onClick(id)}>
-      <figure>
+  return (
+    <li>
+      <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
+        <figure>
           <img src={image} alt={name} />
           <figcaption>{name}</figcaption>
-      </figure>
-    </button>
-  </li>);
-}
-
-
+        </figure>
+      </button>
+    </li>
+  );
+};

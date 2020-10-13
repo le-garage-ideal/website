@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSearch,
@@ -35,9 +36,9 @@ library.add(faShareSquare);
 
 const BUTTON_HEIGHT = '40px';
 
-export function Layout({
+export const Layout = ({
   title, uri, children, save, saveDisabled, showSaveMessage,
-}) {
+}) => {
   const [showMenu, setShowMenu] = useState(false);
   const [shareModalState, setShareModalState] = useState('');
   const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState(null);
@@ -167,13 +168,24 @@ export function Layout({
       </div>
     </>
   );
-}
+};
 
-export function EmptyLayout({ children }) {
-  return (
-    <>
-      {children}
-    </>
+Layout.propTypes = {
+  title: PropTypes.string.isRequired,
+  uri: PropTypes.string.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  save: PropTypes.func.isRequired,
+  saveDisabled: PropTypes.bool,
+  showSaveMessage: PropTypes.bool,
+};
 
-  );
-}
+Layout.defaultProps = {
+  saveDisabled: false,
+  showSaveMessage: false,
+};
+
+export const EmptyLayout = ({ children }) => (<>{children}</>);
+
+EmptyLayout.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+};

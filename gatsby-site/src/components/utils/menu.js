@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { motion } from 'framer-motion';
 import menuStyles from './menu.module.scss';
@@ -22,6 +23,10 @@ const Menu = ({ uri }) => {
       </ul>
     </motion.aside>
   );
+};
+
+Menu.propTypes = {
+  uri: PropTypes.string.isRequired,
 };
 
 export default Menu;

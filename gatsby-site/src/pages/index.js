@@ -24,18 +24,21 @@ class Garage extends React.Component {
     // if edit=X parameter, save car to carX parameter
     const editParam = uri.getQueryParamValue('edit');
     const carParam = uri.getQueryParamValue('car');
+    const initState = {};
     if (editParam && carParam) {
       uri.replaceQueryParam(`car${editParam}`, carParam);
-      this.setState({ saveOk: false });
+      initState.saveOk = false;
     }
     uri.deleteQueryParam('edit');
     uri.deleteQueryParam('car');
 
     // add missing params + save state
-    const newState = { ...this.state };
     const windowGlobal = typeof window !== 'undefined' && window;
+    initState.cars = [];
     if (windowGlobal) {
-      eachCar(param => {
+      eachCar((param, idx) => {
+        initState.cars[idx] = null;
+
         // Priority to URL if user copy paste shared garage
         const carId = uri.getQueryParamValue(param) || localStorage.getItem(param);
 
@@ -48,7 +51,7 @@ class Garage extends React.Component {
               // If carId comes from localstorage and was not on URL, add it
               uri.addQueryParam(param, foundNode.node);
             }
-            newState[param] = foundNode.node;
+            initState.cars[idx] = foundNode.node;
           } else if (!uri.getQueryParamValue(param)) {
             // If carId comes from localstorage and was not found, remove it
             localStorage.removeItem(param);
@@ -56,14 +59,15 @@ class Garage extends React.Component {
         }
       });
     }
-    newState.uri = uri.toString();
+    initState.uri = uri.toString();
 
     // Save button enabled?
     if (windowGlobal) {
-      newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
+      initState.saveOk = eachCar((param, idx) => initState.cars[idx] === localStorage.getItem(param))
+        .every(val => !!val);
     }
 
-    this.state = newState;
+    this.state = initState;
 
     if (windowGlobal) {
       setTimeout(() => {
@@ -76,7 +80,7 @@ class Garage extends React.Component {
 
   render() {
     const {
-      uri, car1, car2, car3, saveOk, showSaveMessage,
+      uri, saveOk, cars, showSaveMessage,
     } = this.state;
 
     const {
@@ -117,19 +121,17 @@ class Garage extends React.Component {
       );
     };
 
-    const car1Element = transform(car1, 1);
-    const car2Element = transform(car2, 2);
-    const car3Element = transform(car3, 3);
+    const carElements = cars.map((car, idx) => transform(car, idx + 1));
 
     const save = () => {
-      eachCar(saveParam => {
-        localStorage.setItem(saveParam, this.state[saveParam]);
+      eachCar((saveParam, idx) => {
+        localStorage.setItem(saveParam, cars[idx]);
         this.setState({ saveOk: true, showSaveMessage: true });
         setTimeout(() => this.setState({ showSaveMessage: false }), 2000); // message will be displayed during 2s
       });
     };
 
-    const title = eachCar(car => (this.state[car] ? fullname(this.state[car]) : null))
+    const title = cars.map(car => (car ? fullname(car) : null))
       .filter(s => !!s)
       .join('\n');
 
@@ -150,11 +152,7 @@ class Garage extends React.Component {
         />
         <Title />
         <article className={indexStyles.carsContainer}>
-          {car1Element}
-          {' '}
-          {car2Element}
-          {' '}
-          {car3Element}
+          {carElements}
         </article>
       </Layout>
     );

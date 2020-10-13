@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import filteredListStyles from './filtered-list.module.scss';
 
@@ -40,6 +40,12 @@ const FilteredList = ({ title, render, filter }) => {
       </ul>
     </>
   );
+};
+
+FilteredList.propTypes = {
+  title: PropTypes.string.isRequired,
+  render: PropTypes.func.isRequired,
+  filter: PropTypes.func.isRequired,
 };
 
 export default FilteredList;

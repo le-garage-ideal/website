@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import listItemStyles from './list-item.module.scss';
 
 const ListItem = ({
@@ -25,6 +26,20 @@ const ListItem = ({
       </button>
     </li>
   );
+};
+
+ListItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  big: PropTypes.bool,
+};
+
+ListItem.defaultProps = {
+  selected: false,
+  big: false,
 };
 
 export default ListItem;

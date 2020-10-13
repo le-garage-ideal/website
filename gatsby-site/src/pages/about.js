@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import aboutStyles from './about.module.scss';
@@ -26,9 +27,9 @@ const About = ({ location }) => (
         Pourquoi seulement trois ? Comme dans la vraie vie, pour se contraindre à choisir...
       </p>
       <p className={aboutStyles.sentence}>
-        J'ai créé ce site car je suis passionné de sport automobile.
-        Il n'y aura jamais aucune pub, aucune source de profit liée à ce site.
-        Si vous l'aimez, n'hésitez pas à le faire connaître!
+        J&apos;ai créé ce site car je suis passionné de sport automobile.
+        Il n&apos;y aura jamais aucune pub, aucune source de profit liée à ce site.
+        Si vous l&apos;aimez, n&apos;hésitez pas à le faire connaître!
       </p>
       <p className={aboutStyles.sentence}>
         Enfin, si vous avez des suggestions, vous pouvez me contacter par mail :
@@ -37,5 +38,9 @@ const About = ({ location }) => (
     </section>
   </Layout>
 );
+
+About.propTypes = {
+  location: PropTypes.string.isRequired,
+};
 
 export default About;

@@ -7,11 +7,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Lancer le programme",
+            "name": "Debug garage back",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["--experimental-modules", "${workspaceFolder}\\bin\\www"]
+            "args": ["--experimental-modules", "${workspaceFolder}\\admin-backend\\bin\\www"],
+            "outFiles": ["${workspaceFolder}/admin-backend/routes/*.js", "${workspaceFolder}/admin-backend/*.js", "${workspaceFolder}/admin-backend/mongodb/*.js"]
         }
     ]
 }

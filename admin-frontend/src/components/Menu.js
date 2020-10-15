@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import './Menu.css';
 
 export const CHOOSE_IMAGES_MENU = "Choose images";
-export const CREATE_UPDATE_DELETE_VARIANTS = "Create/Update/Delete variants"
+export const CREATE_UPDATE_DELETE_VARIANTS = "CRUD cars"
 
 export const Menu = ({ menuSelect }) => {
         

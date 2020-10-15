@@ -1,24 +1,16 @@
+@import "./index.css";
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  width: 100vw;
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--text-dark);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
   padding: 20px;
 }
@@ -29,21 +21,17 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.selected-button {
+  border-color: var(--menu-item-selected-color);
 }
 
-main {
-  padding: 20px;
+.group-incomplete-button {
+  background-color: var(--warning);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.group-empty-button {
+  background-color: var(--error);
 }

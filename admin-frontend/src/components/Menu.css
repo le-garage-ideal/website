@@ -1,30 +1,29 @@
+@import '../theme.css';
+
 * {
-    --menu-item-width-1: 200px;
-    --menu-item-width-2: 310px;
-    --menu-item-selected-color: #1abc9c;
-    --menu-item-height: 35px;
+    --menu-item-width-1: 40vw;
+    --menu-item-width-2: 50vw;
+    --menu-item-selected-color: var(--element-selected-bright);
 }
 
 .css-menu {
 	margin: 27px auto 0;
 	position: relative;
 	width: calc(var(--menu-item-width-1) + var(--menu-item-width-2));
-	height: var(--menu-item-height);
-	background-color: #34495e;
+	background-color: var(--text-medium-dark);
 	font-size: 0;
+	display: flex;
 }
 .css-menu .menu-item {
 	background-color: transparent;
-	line-height: var(--menu-item-height);
-	height: 100%;
-	display: inline-block;
+	line-height: var(--font-size);
+	display: flex;
 	position: relative;
 	z-index: 1;
 	text-decoration: none;
-	text-align: center;
-	color: white;
+	justify-content: center;
+	align-items: center;
     cursor: pointer;
-    font-size: 15px;
 }
 .css-menu .animation {
 	position: absolute;
@@ -32,7 +31,9 @@
 	top: 0;
 	z-index: 0;
 	transition: all .5s ease 0s;
+	display: flex;
 }
+
 .css-menu .menu-item:nth-child(1) {
 	width: var(--menu-item-width-1);
 }
@@ -40,7 +41,10 @@
 	width: var(--menu-item-width-2);
 }
 
-.css-menu .menu-item.selected, .css-menu .menu-item:hover~.animation {
+.css-menu .menu-item.selected {
+	background-color: var(--element-hover-bright);
+}
+.css-menu .menu-item:hover~.animation {
     background-color: var(--menu-item-selected-color);
 }
 

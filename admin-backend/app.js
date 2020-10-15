@@ -1,9 +1,12 @@
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import logger from 'morgan';
 
-import { router } from './routes/index.js';
+import { brandsRouter } from './routes/brands.route.js';
+import { modelsRouter } from './routes/models.route.js';
+import { carsRouter } from './routes/cars.route.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import connectToMongoDb from './mongodb/mongodb.datasource.js';
@@ -21,6 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
 
-app.use('/', router);
+app.use('/cars', carsRouter);
+app.use('/brands', brandsRouter);
+app.use('/models', modelsRouter);
 

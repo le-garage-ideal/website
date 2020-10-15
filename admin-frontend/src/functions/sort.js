@@ -20,3 +20,11 @@ export const sortBrands = (a, b) => {
 export const sortModels = (a, b) => {
     return sortField(a, b, 'name');
 };
+
+export const sortCars = (a, b) => {
+    if ((1 * a.startYear) - (1 * b.startYear) === 0) {
+        return sortField(a, b, 'variant');
+    } else {
+        return sortField(a, b, 'startYear');
+    }
+}

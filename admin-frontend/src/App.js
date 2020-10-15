@@ -1,53 +1,43 @@
 import React from 'react';
 import './App.css';
-import { BASE_URL } from './config';
 import { PickImages } from './components/PickImages';
-import { CorrectVariants } from './components/CorrectVariants';
+import { CrudCars } from './components/CrudCars';
 import { Menu, CHOOSE_IMAGES_MENU, CREATE_UPDATE_DELETE_VARIANTS } from './components/Menu';
+import { fetchInitData } from './functions/api';
 import { sortBrands, sortModels } from './functions/sort';
-import { noCarImageMatch, selectCarImage, createCar, removeCar } from './functions/car';
+import { noCarImageMatch, selectCarImage, createCar, removeCar, computeSelectedCars } from './functions/car';
 
+const computeButtonClassNames = (selected, okCount, totalCount) => {
+  const buttonClassNames = [];
+  if (selected) {
+    buttonClassNames.push('selected-button');
+  }
+  if (okCount === 0) {
+    buttonClassNames.push('group-incomplete-button');
+  }
+  if (okCount < totalCount) {
+    buttonClassNames.push('group-empty-button');
+  }
+  return buttonClassNames;
+};
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { cars: [], brands: [], selectedBrand: null, selectedModels: [], selectedModel: null, selectedCars:[], selectedMenu: null };
+    this.state = {
+      cars: [],
+      brands: [],
+      selectedBrand: null,
+      selectedModels: [],
+      selectedModel: null,
+      selectedCars: [],
+      selectedMenu: null,
+    };
   }
 
   componentDidMount() {
-    Promise.all([fetch(BASE_URL+'/cars').then(res => res.json()),
-      fetch(BASE_URL+'/brands').then(res => res.json()),
-      fetch(BASE_URL+'/models').then(res => res.json())])
-    .then(([cars, brands, models]) => {
-      const modelMap = {};
-      const brandMap = {};
-      for (const car of cars) {
-        
-        const brand = brands.find(brand => brand.name === car.model.brand.name);
-        if (!brand) {
-          console.log(`brand not found for car`, car);
-        } else {
-          if (!brandMap[brand._id]) brandMap[brand._id] = { totalCount: 0, okCount: 0 };
-          brandMap[brand._id].totalCount++;        
-          if (car.selectedFavcarsUrl) {
-            brandMap[brand._id].okCount++;
-          }
-        }
-
-        const model = models.find(model => model.brand.name === car.model.brand.name && model.name === car.model.name);
-        if (!model) {
-          console.log(`model not found for car`, car);
-        } else {
-          if (!modelMap[model._id]) modelMap[model._id] = { totalCount: 0, okCount: 0 };
-          modelMap[model._id].totalCount++;
-          if (car.selectedFavcarsUrl) {
-            modelMap[model._id].okCount++;
-          }
-        }
-      }
-      this.setState({ cars, models, brands, brandMap, modelMap });
-    });
+    fetchInitData().then(initData => this.setState(initData));
   }
 
   unselect(carId) {
@@ -64,13 +54,27 @@ class App extends React.Component {
     this.setState({cars: newCars, selectedCars: newSelectedCars})
   }
 
-  refreshCar(updatedCar) {
-    const updatedCars = this.state.cars.map(c => c._id === updatedCar._id ? updatedCar : c);
-    const updatedSelectedCars = this.state.selectedCars.map(c => c._id === updatedCar._id ? updatedCar : c);
-    console.log('updatedCar', updatedCar);
+  refreshState(updatedCar) {
+    const updatedCarIndex = this.state.cars.findIndex(c => c._id === updatedCar._id);
+    const updatedCars = [...this.state.cars];
+    if (updatedCarIndex >= 0) {
+      updatedCars[updatedCarIndex] = updatedCar;
+    } else {
+      updatedCars.push(updatedCar);
+    }
+    const updatedSelectedCars = this.state.selectedModel ? computeSelectedCars(updatedCars, this.state.selectedModel) : [];
     this.setState({selectedCars: updatedSelectedCars, cars: updatedCars});
   }
 
+  refreshStateRemove(carId) {
+    const updatedCarIndex = this.state.cars.findIndex(c => c._id === carId);
+    if (updatedCarIndex >= 0) {
+      const updatedCars = [...this.state.cars];
+      updatedCars.splice(updatedCarIndex, 1);
+      const updatedSelectedCars = this.state.selectedModel ? computeSelectedCars(updatedCars, this.state.selectedModel) : [];
+      this.setState({ selectedCars: updatedSelectedCars, cars: updatedCars });
+    }
+  }
 
   render() {
 
@@ -78,13 +82,14 @@ class App extends React.Component {
       const brandStats = this.state.brandMap[brand._id];
       const okCount = brandStats && brandStats.okCount ? brandStats.okCount : 0;
       const totalCount = brandStats && brandStats.totalCount ? brandStats.totalCount : 0;
+      const isSelected = this.state.selectedBrand && this.state.selectedBrand._id === brand._id;
+      const buttonClassNames = computeButtonClassNames(isSelected, okCount, totalCount);
       return (
         <button key={ brand._id } onClick={() => {
             const selectedModels = this.state.models.filter(model => model.brand.name === brand.name);
             this.setState({selectedBrand: brand, selectedModels, selectedCars: [], selectedModel: null});
           }}
-          style={{ borderColor: this.state.selectedBrand && this.state.selectedBrand._id === brand._id ? 'yellow' : 'auto',
-                   backgroundColor: okCount === 0 ? 'red' : okCount === totalCount ? 'lightgreen' : 'orange'}}>
+          className={buttonClassNames.join(' ')}>
           { brand.name }
         </button>
       );
@@ -93,16 +98,15 @@ class App extends React.Component {
     const modelElements = this.state.selectedModels.sort(sortModels).map(model => {
       const modelStats = this.state.modelMap[model._id];
       const okCount = modelStats && modelStats.okCount ? modelStats.okCount : 0;
-      const totalCount = modelStats && modelStats.totalCount ? modelStats.totalCount : 0;;
+      const totalCount = modelStats && modelStats.totalCount ? modelStats.totalCount : 0;
+      const isSelected = this.state.selectedModel && this.state.selectedModel._id === model._id;
+      const buttonClassNames = computeButtonClassNames(isSelected, okCount, totalCount);
       return (
         <button key={ model._id } title={ model.favcarsName } onClick={() => {
-            const selectedCars = this.state.cars
-              .filter(car => car.model.brand.name === this.state.selectedBrand.name && car.model.name === model.name)
-              .sort((e1, e2) => (1 * e1.startYear) - (1 * e2.startYear) === 0 ? (e1.variant > e2.variant ? 1 : e1.variant < e2.variant ? -1 : 0) : (1 * e1.startYear) - (1 * e2.startYear));
+          const selectedCars = computeSelectedCars(this.state.cars, model);
             this.setState({selectedModel: model, selectedCars});
           }}
-          style={{ borderColor: this.state.selectedModel && this.state.selectedModel._id === model._id ? 'yellow' : 'auto', 
-                   backgroundColor: okCount === 0 ? 'red' : okCount === totalCount ? 'lightgreen' : 'orange'}}>
+          className={buttonClassNames.join(' ')}>
           { model.name }
         </button>
       );
@@ -116,8 +120,8 @@ class App extends React.Component {
             selectedBrand={this.state.selectedBrand}
             selectedModel={this.state.selectedModel}
             selectedCars={this.state.selectedCars}
-            nomatch={carId => noCarImageMatch(carId).then(updatedCar => this.refreshCar(updatedCar))} 
-            select={(carId, variantName, url) => selectCarImage(carId, variantName, url).then(updatedCar => this.refreshCar(updatedCar))}
+            nomatch={carId => noCarImageMatch(carId).then(updatedCar => this.refreshState(updatedCar))}
+            select={(carId, variantName, url) => selectCarImage(carId, variantName, url).then(updatedCar => this.refreshState(updatedCar))}
             unselect={carId => this.unselect(carId)}>
           </PickImages>
         );
@@ -125,12 +129,12 @@ class App extends React.Component {
       case CREATE_UPDATE_DELETE_VARIANTS:
         if (this.state.selectedModel) {
           selectedMenuElement = (
-            <CorrectVariants 
+            <CrudCars 
               selectedModel={this.state.selectedModel}
               selectedCars={this.state.selectedCars}
-              removeVariant={carId => removeCar(carId)}
-              createVariant={car => createCar(car)}>
-            </CorrectVariants>
+              removeCar={carId => { removeCar(carId); this.refreshStateRemove(carId); }}
+              createCar={car => { createCar(car); this.refreshState(car); }}>
+            </CrudCars>
           );
         }
         break;
@@ -146,7 +150,7 @@ class App extends React.Component {
             <Menu menuSelect={selectedMenu => this.setState({selectedMenu})} />
           </section>
           <section>{ this.state.selectedMenu && brandElements }</section>
-          <hr style={{color: 'white'}} />
+          <hr style={{ color: 'white', width: '100%' }} />
           <section>{ modelElements }</section>
         </header>
         <main>

@@ -1,0 +1,58 @@
+@import '../theme.css';
+
+.crudCarsContainer {
+    display: flex;
+}
+
+.crudCarsContainer .error {
+    color: red;
+    text-align: left;
+    margin: 0 0 10px 10px;
+}
+
+.crudCarsContainer .addButton {
+    margin: 0 0 10px 0;
+    width: auto;
+    max-width: fit-content; 
+}
+
+.crudCarsContainer .fieldsContainer {
+    grid-template-columns: 200px auto;
+    margin: 0 40px;
+}
+.crudCarsContainer .fieldsContainerHidden {
+    display: none;
+}
+.crudCarsContainer .fieldsContainerDisplayed {
+    display: grid;
+}
+
+@media(orientation: portrait) {
+    .crudCarsContainer {
+        flex-direction: column-reverse;
+    }
+    .crudCarsContainer form {
+        display: flex;
+        flex-direction: column;
+    }
+    .crudCarsContainer .error {
+        height: var(--font-size);
+    }
+    .crudCarsContainer .fieldsContainer {
+        margin: 10px 0;
+    }
+}
+
+.crudCarsItem {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.crudCarsItem button {
+    margin-right: '10px';
+    background-color: var(--text-medium-dark);
+}
+
+.crudCarsItem button.complete {
+    background-color: var(--text-bright);
+}

@@ -1,143 +1,220 @@
 import Uri from 'jsuri';
+import PropTypes from 'prop-types';
 import React from 'react';
-import Layout from "../components/layout";
-import SEO from "../components/seo/seo";
-import { Title } from "../components/title/title";
-import { motion } from 'framer-motion';
+import { graphql } from 'gatsby';
 import './bulma-theme.scss';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { eachCar, eachCarIndex, fullname } from '../functions/cars';
 import indexStyles from './index.module.scss';
-import { carLabels } from "../constants";
+import { carLabels } from '../constants';
+import { Card } from '../components/utils/card';
+import { Title } from '../components/title/title';
+import { Layout } from '../components/layout';
+import { SEO } from '../components/seo/seo';
+import { Car } from '../components/car/car';
 
-const eachCarIndex = fn => {
-    const result = []; 
-    for (let i = 0; i < 3; i++) {
-        fn(i);
-    }
-    return result;
-}
-
-const eachCar = fn => {
-    return eachCarIndex(i => fn(`car${i+1}`, i));
-}
-
-const frameId = index => `frame-${index}`;
+const carComponentId = index => `car-${index}`;
 const editButtonId = index => `edit-${index}`;
 
-export default class Index extends React.Component {
+class Garage extends React.Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            uri: this.props.location.href,
-            car1: null,
-            car2: null,
-            car3: null,
-            saveOk: true,
-            showSaveMessage: false,
-        };
+    const uri = new Uri(props.location.href);
+
+    // if edit=X parameter, save car to carX parameter
+    const editParam = uri.getQueryParamValue('edit');
+    const carParam = uri.getQueryParamValue('car');
+    const initState = {};
+    if (editParam && carParam) {
+      uri.replaceQueryParam(`car${editParam}`, carParam);
+      initState.saveOk = false;
     }
+    uri.deleteQueryParam('edit');
+    uri.deleteQueryParam('car');
 
-    componentDidMount() {
-    
-        const uri = new Uri(this.state.uri);
+    // add missing params + save state
+    const windowGlobal = typeof window !== 'undefined' && window;
+    initState.cars = [];
+    if (windowGlobal) {
+      eachCar((param, idx) => {
+        initState.cars[idx] = null;
 
-        // if edit=X parameter, save car to carX parameter
-        const editParam = uri.getQueryParamValue('edit');
-        const carParam = uri.getQueryParamValue('car');
-        if (editParam && carParam) {
-            uri.replaceQueryParam(`car${editParam}`, carParam);
-            this.setState({saveOk: false});
-        }
-        uri.deleteQueryParam('edit');
-        uri.deleteQueryParam('car');
+        // Priority to URL if user copy paste shared garage
+        const carId = uri.getQueryParamValue(param) || localStorage.getItem(param);
 
-        // add missing params + save state
-        const newState = {...this.state};
-        eachCar(param => {
+        if (carId) {
+          const foundNode = props.data.allMongodbBmbu7Ynqra11RqiCars.edges
+            .find(({ node: car }) => car.mongodb_id === carId);
+
+          if (foundNode) {
             if (!uri.getQueryParamValue(param)) {
-                uri.addQueryParam(param, localStorage.getItem(param));
+              // If carId comes from localstorage and was not on URL, add it
+              uri.addQueryParam(param, foundNode.node);
             }
-            newState[param] = uri.getQueryParamValue(param);
+            initState.cars[idx] = foundNode.node;
+          } else if (!uri.getQueryParamValue(param)) {
+            // If carId comes from localstorage and was not found, remove it
+            localStorage.removeItem(param);
+          }
+        }
+      });
+    }
+    initState.uri = uri.toString();
+
+    // Save button enabled?
+    if (windowGlobal) {
+      initState.saveOk = eachCar((param, idx) => initState.cars[idx] === localStorage.getItem(param))
+        .every(val => !!val);
+    }
+
+    this.state = initState;
+
+    if (windowGlobal) {
+      setTimeout(() => {
+        eachCarIndex(editButtonIdx => {
+          document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1';
         });
-        newState.uri = uri.toString();
-
-        // Save button enabled?
-        newState.saveOk = eachCar(param => newState[param] === localStorage.getItem(param)).every(val => !!val);
-
-        this.setState(newState);
-
-        if (document) {
-            setTimeout(() => {
-                eachCarIndex(editButtonIdx => document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1')
-            }, 2000);
-        }
+      }, 200);
     }
+  }
 
-    render() {
+  render() {
+    const {
+      uri, saveOk, cars, showSaveMessage,
+    } = this.state;
 
-        const editCar = index => {
-            const uri = new Uri(this.state.uri);
-            uri.setPath('/browse');
-            uri.addQueryParam('edit', index);
-            window.location.href = uri.toString();
-        };
+    const {
+      location,
+    } = this.props;
 
-        const transform = (carUrl, index) => {
-            const classCar = [indexStyles.car];
-            if (index === 2) {
-                classCar.push(indexStyles.car2);
-            }
-            if (carUrl) {
-                classCar.push(indexStyles.withCar);
-            } else {
-                classCar.push(indexStyles.noCar);
-            }
-            const title = carLabels[index-1];
-            const thumbnail = carUrl ? (
-                <motion.iframe id={frameId(index)} title={title} className={indexStyles.iframe} src={`/car/${carUrl}`}
-                    initial={{opacity: 0}} animate={{ opacity: 1 }}>
-                </motion.iframe>
-            ) : (
-                <div className={indexStyles.noCarThumbnail}>?</div>
-            );
-            return (
-                <div className={classCar.join(' ')}>
-                    <div id={editButtonId(index)} className={indexStyles.iconButtonContainer}>
-                        <button className={indexStyles.iconButton + " icon-button"} onClick={() => editCar(index)}>
-                            <FontAwesomeIcon icon="edit" />
-                        </button>
-                    </div>                    
-                    {thumbnail}
-                    <div className={[indexStyles.carLabelContainer, 'container', 'is-full'].join(' ')}>
-                        <span className={[indexStyles.carLabel, 'badge'].join(' ')}>{ title }</span>
-                    </div>                    
-                </div>
-            );
+    const editCar = index => {
+      const newUri = new Uri(uri);
+      newUri.setPath('/browse');
+      newUri.addQueryParam('edit', index);
+      window.location.href = newUri.toString();
+    };
 
-        };
+    const transform = (car, index) => {
+      const title = carLabels[index - 1];
+      const thumbnail = car ? (
+        <Car
+          id={carComponentId(index)}
+          title={title}
+          className={indexStyles.carComponent}
+          car={car}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        />
+      ) : (
+        <div className={indexStyles.noCarThumbnail}>?</div>
+      );
+      return (
+        <Card
+          marginCard={index === 2}
+          empty={!car}
+          index={index}
+          title={title}
+          edit={editCar}
+          render={() => (thumbnail)}
+          editButtonId={editButtonId(index)}
+        />
+      );
+    };
 
-        const car1 = transform(this.state.car1, 1);
-        const car2 = transform(this.state.car2, 2);
-        const car3 = transform(this.state.car3, 3);
+    const carElements = cars.map((car, idx) => transform(car, idx + 1));
 
-        const save = () => {
-            for (let saveIndex = 1; saveIndex <= 3; saveIndex++) {
-                const saveParam = `car${saveIndex}`;
-                localStorage.setItem(saveParam, this.state[saveParam]);
-                this.setState({saveOk: true, showSaveMessage: true});
-                setTimeout(() => this.setState({showSaveMessage: false}), 1000)
-            }
-        }
+    const save = () => {
+      eachCar((saveParam, idx) => {
+        localStorage.setItem(saveParam, cars[idx]);
+        this.setState({ saveOk: true, showSaveMessage: true });
+        setTimeout(() => this.setState({ showSaveMessage: false }), 2000); // message will be displayed during 2s
+      });
+    };
 
-        return (
-            <Layout location={this.state.uri} save={save} saveDisabled={this.state.saveOk} showSaveMessage={this.state.showSaveMessage}>
-                <SEO location={this.props.location.pathname} title="" description="Créez et partagez votre garage idéal en 3 voitures de sport" />
-                <Title />
-                <article className={indexStyles.carsContainer}>
-                    {car1} {car2} {car3}
-                </article>
-            </Layout>
-        );
-    }
+    const title = cars.map(car => (car ? fullname(car) : null))
+      .filter(s => !!s)
+      .join('\n');
+
+    return (
+      <Layout
+        location={uri}
+        save={save}
+        title={title}
+        uri={uri}
+        saveDisabled={saveOk}
+        showSaveMessage={showSaveMessage}
+      >
+        <SEO
+          location={location.pathname}
+          title={title}
+          uri={uri}
+          description="Créez et partagez votre garage idéal en 3 voitures de sport"
+        />
+        <Title />
+        <article className={indexStyles.carsContainer}>
+          {carElements}
+        </article>
+      </Layout>
+    );
+  }
 }
+
+Garage.propTypes = {
+  data: PropTypes.shape({
+    allMongodbBmbu7Ynqra11RqiCars: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            mongodb_id: PropTypes.string.isRequired,
+            variant: PropTypes.string.isRequired,
+            power: PropTypes.number,
+            officialWeight: PropTypes.number,
+            weight: PropTypes.number,
+            options: PropTypes.string,
+            startYear: PropTypes.string,
+            endYear: PropTypes.string,
+            imageUrl: PropTypes.string,
+            selectedFavcarsUrl: PropTypes.string,
+            model: PropTypes.shape({
+              brand: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+              }),
+              name: PropTypes.string.isRequired,
+            }).isRequired,
+          }).isRequired,
+        }).isRequired,
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  location: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export const query = graphql`query {
+    allMongodbBmbu7Ynqra11RqiCars {
+    edges {
+      node {
+          mongodb_id,
+          variant,
+          power,
+          officialWeight, 
+          weight,
+          options,
+          startYear,
+          endYear,
+          imageUrl,
+          selectedFavcarsUrl,
+          model {
+              brand {
+                  name
+              }
+            name
+          }
+        }
+      }
+    }
+  }`;
+
+export default Garage;

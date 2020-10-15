@@ -1,27 +1,45 @@
 import React from 'react';
-import listItemStyles from  './list-item.module.scss';
+import PropTypes from 'prop-types';
+import listItemStyles from './list-item.module.scss';
 
-export default function ListItem({id, name, image, onClick, selected, big}) {
-
+const ListItem = ({
+  id, name, image, onClick, selected, big,
+}) => {
   const classNames = [listItemStyles.logoLink];
   if (selected) {
     classNames.push(listItemStyles.selected);
   }
 
   if (big) {
-    classNames.push(listItemStyles.logoLinkBig)
+    classNames.push(listItemStyles.logoLinkBig);
   } else {
-    classNames.push(listItemStyles.logoLinkSmall)
+    classNames.push(listItemStyles.logoLinkSmall);
   }
 
-  return (<li>
-    <button className={ classNames.join(' ') } onClick={() => onClick(id)}>
-      <figure>
+  return (
+    <li>
+      <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
+        <figure>
           <img src={image} alt={name} />
           <figcaption>{name}</figcaption>
-      </figure>
-    </button>
-  </li>);
-}
+        </figure>
+      </button>
+    </li>
+  );
+};
 
+ListItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  big: PropTypes.bool,
+};
 
+ListItem.defaultProps = {
+  selected: false,
+  big: false,
+};
+
+export default ListItem;

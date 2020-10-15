@@ -1,11 +1,29 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Helmet } from "react-helmet";
-import { useStaticQuery, graphql } from "gatsby";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import { useStaticQuery, graphql } from 'gatsby';
 
-const SEO = ({ location, title, description, image, article }) => {
+const query = graphql`
+  query SEO {
+    site {
+      siteMetadata {
+        defaultTitle: title
+        titleTemplate
+        defaultDescription: description
+        siteUrl: url
+        defaultImage: image
+      }
+    }
+  }
+`;
 
-  const { site } = useStaticQuery(query)
+export const SEO = ({
+  uri,
+  title,
+  description,
+  image,
+}) => {
+  const { site } = useStaticQuery(query);
 
   const {
     defaultTitle,
@@ -13,14 +31,14 @@ const SEO = ({ location, title, description, image, article }) => {
     defaultDescription,
     siteUrl,
     defaultImage,
-  } = site.siteMetadata
+  } = site.siteMetadata;
 
   const seo = {
     title: title || defaultTitle,
     description: description || defaultDescription,
     image: `${siteUrl}${image || defaultImage}`,
-    url: `${siteUrl}${location || ''}`,
-  }
+    url: `${siteUrl}${uri || ''}`,
+  };
 
   return (
     <Helmet title={seo.title} titleTemplate={titleTemplate}>
@@ -29,7 +47,7 @@ const SEO = ({ location, title, description, image, article }) => {
 
       {seo.url && <meta property="og:url" content={seo.url} />}
 
-      {(article ? true : null) && <meta property="og:type" content="article" />}
+      <meta property="og:type" content="website" />
 
       {seo.title && <meta property="og:title" content={seo.title} />}
 
@@ -49,35 +67,19 @@ const SEO = ({ location, title, description, image, article }) => {
 
       <link rel="icon" type="image/png" href="/logo.png" />
     </Helmet>
-  )
-}
-
-export default SEO;
+  );
+};
 
 SEO.propTypes = {
+  uri: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   image: PropTypes.string,
-  article: PropTypes.bool,
 };
 
 SEO.defaultProps = {
+  uri: null,
   title: null,
   description: null,
   image: null,
-  article: false,
 };
-
-const query = graphql`
-  query SEO {
-    site {
-      siteMetadata {
-        defaultTitle: title
-        titleTemplate
-        defaultDescription: description
-        siteUrl: url
-        defaultImage: image
-      }
-    }
-  }
-`

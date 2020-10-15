@@ -1,51 +1,79 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { graphql } from 'gatsby';
-import Layout from "../components/layout";
-import FilteredList from "../components/utils/filtered-list";
-import ListItem from "../components/utils/list-item";
-import SEO from "../components/seo/seo";
-import { schema } from '../constants';
-import sortCars from '../functions/sort';
+import { Layout } from '../components/layout';
+import FilteredList from '../components/utils/filtered-list';
+import ListItem from '../components/utils/list-item';
+import { SEO } from '../components/seo/seo';
+import { sortCars } from '../functions/sort';
 
-export default ({data, pageContext, location}) => {
-    const uri = new Uri(location.href);
-    const completeCarList = data[schema + 'Cars'].edges.map(({node}) => node).sort(sortCars);
-    const [filteredCars, setFilteredCars] = useState(completeCarList);
-    
+const Cars = ({ data, pageContext, location }) => {
+  const uri = new Uri(location.href);
+  const completeCarList = data.allMongodbBmbu7Ynqra11RqiCars.edges.map(({ node }) => node).sort(sortCars);
+  const [filteredCars, setFilteredCars] = useState(completeCarList);
 
-    const carComponents = filteredCars.map(car => {
-        const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
-        return (
-            <ListItem key={car.mongodb_id}
-                id={car.mongodb_id}
-                name={car.variant + (car.startYear ? ' - ' + car.startYear : '')}
-                image={imageUrl}
-                big={true}
-                onClick={() => {
-                    uri.addQueryParam('car', car.mongodb_id);
-                    uri.setPath('/');
-                    window.location.href = uri.toString();
-                }}>
-            </ListItem>
-        )
-    });
-    
-    const search = value => {
-        const filtered = completeCarList.filter(car => car.variant.match(new RegExp(value, 'i')));
-        setFilteredCars(filtered);
-    };
-
-    const title = `Variantes de ${pageContext.brand} ${pageContext.model}`;
-
+  const carComponents = filteredCars.map(car => {
+    const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
     return (
-        <Layout>
-            <SEO location={location.pathname} title={title} />
-            <h1>{title}</h1>
-            <FilteredList title={title} render={() => carComponents} filter={search} />
-        </Layout>
+      <ListItem
+        key={car.mongodb_id}
+        id={car.mongodb_id}
+        name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
+        image={imageUrl}
+        big
+        onClick={() => {
+          uri.addQueryParam('car', car.mongodb_id);
+          uri.setPath('/');
+          window.location.href = uri.toString();
+        }}
+      />
     );
+  });
 
+  const search = value => {
+    const filtered = completeCarList.filter(car => car.variant.match(new RegExp(value, 'i')));
+    setFilteredCars(filtered);
+  };
+
+  const title = `Variantes de ${pageContext.brand} ${pageContext.model}`;
+
+  return (
+    <Layout>
+      <SEO location={location.pathname} title={title} />
+      <FilteredList title={title} render={() => carComponents} filter={search} />
+    </Layout>
+  );
+};
+
+Cars.propTypes = {
+  data: PropTypes.shape({
+    allMongodbBmbu7Ynqra11RqiCars: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            mongodb_id: PropTypes.string.isRequired,
+            variant: PropTypes.string.isRequired,
+            startYear: PropTypes.string,
+            model: PropTypes.shape({
+              brand: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+              }),
+              name: PropTypes.string.isRequired,
+            }).isRequired,
+          }).isRequired,
+        }).isRequired,
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+  location: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+  pageContext: PropTypes.shape({
+    brand: PropTypes.string.isRequired,
+    model: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export const query = graphql`
@@ -55,12 +83,7 @@ export const query = graphql`
           node {
               mongodb_id,
               variant,
-              power,
-              officialWeight, 
-              weight,
-              options,
               startYear,
-              endYear,
               model {
                   brand {
                       name
@@ -71,3 +94,5 @@ export const query = graphql`
         }
       }
     }`;
+
+export default Cars;

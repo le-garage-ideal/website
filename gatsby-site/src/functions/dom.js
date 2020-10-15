@@ -3,23 +3,16 @@
 const maxTries = 20;
 const delayBetweenTries = 100;
 export function onElementReady(selector, callback, tries) {
+  const currentTriesNumber = !tries ? 1 : tries + 1;
 
-    const currentTriesNumber = !tries ? 1 : tries + 1;
-
-    if (document) { // not available on server-side rendering
-        const element = document.querySelector(selector);
-        if (!element) { 
-            if (currentTriesNumber > maxTries) {
-                return;
-            } else {
-                setTimeout(() => onElementReady(selector, callback, currentTriesNumber), delayBetweenTries);
-            }
-        } else {
-            callback();
-        }
+  if (document) { // not available on server-side rendering
+    const element = document.querySelector(selector);
+    if (!element) {
+      if (currentTriesNumber <= maxTries) {
+        setTimeout(() => onElementReady(selector, callback, currentTriesNumber), delayBetweenTries);
+      }
     } else {
-        return;
+      callback();
     }
+  }
 }
-
-

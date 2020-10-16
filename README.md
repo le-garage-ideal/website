@@ -2,7 +2,7 @@
 
 Users can browse 2000+ sports cars to build their own garage! 
 
-![Perfect garage homepage](perfect-garage.jpg "Perfect garage homepage")
+![Perfect garage homepage](screenshot.jpg "Perfect garage homepage")
 
 ### Index
 - Gatsby-site: public website, see [gatsby-site/README.md](gatsby-site/README.md)

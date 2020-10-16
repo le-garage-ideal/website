@@ -22,3 +22,14 @@ Some unit tests are written with JEST.
 ```
 npm run test
 ```
+
+## Screenshots
+
+Mobile version:
+
+![Perfect Garage Admin for Mobile](screenshot-mobile.png "Perfect Garage Admin for Mobile")
+
+Desktop version:
+
+![Perfect Garage Admin for Desktop](screenshot-desktop.png "Perfect Garage Admin for Desktop")
+

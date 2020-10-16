@@ -1,7 +1,7 @@
 @import '../theme.css';
 
 .crudCarsContainer {
-    display: flex;
+    text-align: left;
 }
 
 .crudCarsContainer .error {
@@ -11,9 +11,19 @@
 }
 
 .crudCarsContainer .addButton {
-    margin: 0 0 10px 0;
+    margin-bottom: 10px;
     width: auto;
     max-width: fit-content; 
+}
+
+.crudCarsContainer .submitButton {
+    margin-top: 10px;
+    width: auto;
+    max-width: fit-content; 
+}
+
+.crudCarsContainer .elementsFormContainer {
+    display: flex;
 }
 
 .crudCarsContainer .fieldsContainer {
@@ -28,7 +38,7 @@
 }
 
 @media(orientation: portrait) {
-    .crudCarsContainer {
+    .crudCarsContainer .elementsFormContainer {
         flex-direction: column-reverse;
     }
     .crudCarsContainer form {
@@ -41,18 +51,27 @@
     .crudCarsContainer .fieldsContainer {
         margin: 10px 0;
     }
+
+    .crudCarsContainer input {
+        width: 100%;
+    }
+    .crudCarsContainer .fieldsContainerDisplayed {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .crudCarsItem {
     display: flex;
     margin-bottom: 10px;
+    align-items: center;
 }
 
 .crudCarsItem button {
-    margin-right: '10px';
-    background-color: var(--text-medium-dark);
+    margin-right: 10px;
 }
 
-.crudCarsItem button.complete {
-    background-color: var(--text-bright);
+.crudCarsItem .has-image {
+    color: green;
+    margin-left: 10px
 }

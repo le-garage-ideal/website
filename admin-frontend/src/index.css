@@ -15,20 +15,12 @@ code {
     monospace;
 }
 
-h1 {
-  margin: 0;
-}
-
 button {
   border: 0;
   padding: 5px 10px;
   font-size: var(--font-size-rem);
   color: var(--text-extra-bright);
   background-color: var(--text-medium);
-}
-
-main {
-  padding: 20px;
 }
 
 input {

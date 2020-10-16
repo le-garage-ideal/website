@@ -145,15 +145,22 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <section>
-            <h1>Admin Site</h1>
+          <section className="top">
+            <section className="title-logo">
+              <img alt="logo" src="logo.png" />
+              <h1>
+                Admin
+                Site
+            </h1>
+            </section>
             <Menu menuSelect={selectedMenu => this.setState({selectedMenu})} />
           </section>
+          {!!this.state.selectedMenu && <hr className="separator" />}
           <section>{ this.state.selectedMenu && brandElements }</section>
-          <hr style={{ color: 'white', width: '100%' }} />
+          {this.state.selectedModels.length > 0 && <hr className="separator" />}
           <section>{ modelElements }</section>
         </header>
-        <main>
+        <main className="App-main">
           { selectedMenuElement }
         </main>
       </div>

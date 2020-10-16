@@ -1,21 +1,25 @@
 @import '../theme.css';
 
 * {
-    --menu-item-width-1: 40vw;
-    --menu-item-width-2: 50vw;
-    --menu-item-selected-color: var(--element-selected-bright);
+    --menu-item-width-1: 50%;
+    --menu-item-width-2: 50%;
+	--menu-max-width: 600px;
+	--menu-item-selected-color: var(--element-selected-bright);
+	--menu-background-color: var(--text-medium-dark);
 }
 
 .css-menu {
 	margin: 27px auto 0;
 	position: relative;
 	width: calc(var(--menu-item-width-1) + var(--menu-item-width-2));
-	background-color: var(--text-medium-dark);
+	max-width: var(--menu-max-width);
+	background-color: var(--menu-background-color);
 	font-size: 0;
 	display: flex;
 }
 .css-menu .menu-item {
 	background-color: transparent;
+	border-left: 1px solid var(--header-background-color);
 	line-height: var(--font-size);
 	display: flex;
 	position: relative;
@@ -23,7 +27,7 @@
 	text-decoration: none;
 	justify-content: center;
 	align-items: center;
-    cursor: pointer;
+	cursor: pointer;
 }
 .css-menu .animation {
 	position: absolute;

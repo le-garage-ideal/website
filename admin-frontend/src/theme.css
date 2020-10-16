@@ -1,5 +1,5 @@
 * {
-    --text-extra-bright: #fff;
+    --text-extra-bright: #eee;
     --text-bright: #e1e1e1;
     --text-medium: #a1a1a1;
     --text-medium-dark: grey;
@@ -16,4 +16,7 @@
 
     --font-size: 1.3em;
     --font-size-rem: 1.3rem;
+
+    --header-background-color: var(--text-dark);
+    --body-background-color: var(--text-extra-bright);
 }

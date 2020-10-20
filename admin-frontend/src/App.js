@@ -8,7 +8,6 @@ import { fetchInitData, noCarImageMatch, selectCarImage, createCar, removeCar, c
 import { authenticate, currentUserObservable } from './functions/api';
 import { Login } from './components/Login';
 import './App.css';
-import { Observable } from 'rxjs';
 
 const computeButtonClassNames = (selected, okCount, totalCount) => {
   const buttonClassNames = [];
@@ -61,7 +60,7 @@ class App extends React.Component {
     authenticate(authFields)
       .then(success => {
         currentUserObservable.next({
-          user: success.username,
+          username: success.username,
           token: success.token
         });
       })
@@ -206,15 +205,16 @@ class App extends React.Component {
               <img alt="logo" src="logo.png" />
               <h1>
                 Admin
-                Site
-            </h1>
+                App
+              </h1>
+              {user && <div style={{ marginLeft: '10px' }}>👤{` ${user.username}`}</div>}
             </section>
-            {!!user && <Menu menuSelect={selectedMenu => this.setState({ selectedMenu })} />}
+            {user && <Menu menuSelect={selectedMenu => this.setState({ selectedMenu })} />}
           </section>
-          {!!user && headerBrandModelElements}
+          {user && headerBrandModelElements}
         </header>
         <main className="App-main">
-          {!!user && selectedMenuElement}
+          {user && selectedMenuElement}
           {!user && <Login onSubmit={this.loginProcess} errorMessage={errorMessage} />}
         </main>
       </div>

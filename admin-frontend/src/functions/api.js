@@ -1,40 +1,42 @@
 import { BASE_URL } from '../config';
+import { BehaviorSubject } from 'rxjs';
 
-export const fetchInitData = () => {
-    return Promise.all([
-        fetch(BASE_URL + '/cars').then(res => res.json()),
-        fetch(BASE_URL + '/brands').then(res => res.json()),
-        fetch(BASE_URL + '/models').then(res => res.json())
-    ]).then(processInitData);
-}
+export const currentUserObservable = new BehaviorSubject(null);
 
-function processInitData ([cars, brands, models]) {
-    const modelMap = {};
-    const brandMap = {};
-    for (const car of cars) {
-
-        const brand = brands.find(brand => brand.name === car.model.brand.name);
-        if (!brand) {
-            console.log(`brand not found for car`, car);
-        } else {
-            if (!brandMap[brand._id]) brandMap[brand._id] = { totalCount: 0, okCount: 0 };
-            brandMap[brand._id].totalCount++;
-            if (car.selectedFavcarsUrl) {
-                brandMap[brand._id].okCount++;
-            }
+export const authenticate = formFields => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `${BASE_URL}/login`,
+      {
+        method: 'post',
+        body: JSON.stringify(formFields),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
         }
-
-        const model = models.find(model => model.brand.name === car.model.brand.name && model.name === car.model.name);
-        if (!model) {
-            console.log(`model not found for car`, car);
+      }
+    )
+      .then(response => {
+        if (`${response.status}` === '200') {
+          response.json().then(user => {
+            resolve(user)
+          });
         } else {
-            if (!modelMap[model._id]) modelMap[model._id] = { totalCount: 0, okCount: 0 };
-            modelMap[model._id].totalCount++;
-            if (car.selectedFavcarsUrl) {
-                modelMap[model._id].okCount++;
-            }
+          response.json().then(reject);
         }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+export const authFetch = (url, opts = {}) =>
+  fetch(`${BASE_URL}${url}`, {
+    ...opts, headers: {
+      ...opts.headers,
+      Authorization: `Bearer ${currentUserObservable.value.token}`,
+      'content-type': 'application/json',
+      accept: 'application/json'
     }
-    return { cars, models, brands, brandMap, modelMap };
-}
-
+  });

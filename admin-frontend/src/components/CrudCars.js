@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
+import { errorToMessage } from '../functions/form';
 import './CrudCars.css';
 
 
@@ -21,17 +22,6 @@ export const CrudCars = ({ selectedModel, selectedCars, createCar, removeCar }) 
       <span role="img" aria-label="Has image" title="Has image" className="has-image">🖼</span>
     </div>
   ));
-
-  const errorToMessage = error => {
-    if (error) {
-      switch (error.type) {
-        case 'required': return 'Field is mandatory';
-        case 'pattern': return 'Field should be a number';
-        default: return '';
-      }
-    }
-    return '';
-  };
 
   const fieldsContainerClassNames = ['fieldsContainer'];
   if (formDisplayed) {

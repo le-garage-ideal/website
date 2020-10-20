@@ -25,4 +25,10 @@ button {
 
 input {
   line-height: 2em;
+  width: 100%;
+  max-width: 250px;
+}
+
+.error {
+  color: red;
 }

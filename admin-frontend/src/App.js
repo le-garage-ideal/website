@@ -1,11 +1,14 @@
 import React from 'react';
-import './App.css';
+import { filter, } from 'rxjs/operators';
 import { PickImages } from './components/PickImages';
 import { CrudCars } from './components/CrudCars';
 import { Menu, CHOOSE_IMAGES_MENU, CREATE_UPDATE_DELETE_VARIANTS } from './components/Menu';
-import { fetchInitData } from './functions/api';
 import { sortBrands, sortModels } from './functions/sort';
-import { noCarImageMatch, selectCarImage, createCar, removeCar, computeSelectedCars } from './functions/car';
+import { fetchInitData, noCarImageMatch, selectCarImage, createCar, removeCar, computeSelectedCars } from './functions/car';
+import { authenticate, currentUserObservable } from './functions/api';
+import { Login } from './components/Login';
+import './App.css';
+import { Observable } from 'rxjs';
 
 const computeButtonClassNames = (selected, okCount, totalCount) => {
   const buttonClassNames = [];
@@ -26,6 +29,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: null,
       cars: [],
       brands: [],
       selectedBrand: null,
@@ -33,11 +37,39 @@ class App extends React.Component {
       selectedModel: null,
       selectedCars: [],
       selectedMenu: null,
+      errorMessage: null,
     };
+
+    this.loginProcess = this.loginProcess.bind(this);
+    this.unselect = this.unselect.bind(this);
+    this.refreshState = this.refreshState.bind(this);
+    this.refreshState = this.refreshState.bind(this);
+    this.refreshStateRemove = this.refreshStateRemove.bind(this);
   }
 
   componentDidMount() {
-    fetchInitData().then(initData => this.setState(initData));
+    currentUserObservable.pipe(
+      filter(currentUser => !!currentUser),
+    ).subscribe(user => {
+      fetchInitData().then(initData => {
+        this.setState({ ...initData, user });
+      })
+    });
+  }
+
+  loginProcess(authFields) {
+    authenticate(authFields)
+      .then(success => {
+        currentUserObservable.next({
+          user: success.username,
+          token: success.token
+        });
+      })
+      .catch(error => {
+        this.setState({
+          errorMessage: error.errorMessage
+        });
+      });
   }
 
   unselect(carId) {
@@ -78,15 +110,30 @@ class App extends React.Component {
 
   render() {
 
-    const brandElements = this.state.brands.sort(sortBrands).map(brand => {
-      const brandStats = this.state.brandMap[brand._id];
+    const {
+      user,
+      selectedMenu,
+      brands,
+      brandMap,
+      selectedBrand,
+      models,
+      modelMap,
+      selectedModels,
+      selectedModel,
+      cars,
+      selectedCars,
+      errorMessage,
+    } = this.state;
+
+    const brandElements = brands.sort(sortBrands).map(brand => {
+      const brandStats = brandMap[brand._id];
       const okCount = brandStats && brandStats.okCount ? brandStats.okCount : 0;
       const totalCount = brandStats && brandStats.totalCount ? brandStats.totalCount : 0;
-      const isSelected = this.state.selectedBrand && this.state.selectedBrand._id === brand._id;
+      const isSelected = selectedBrand && selectedBrand._id === brand._id;
       const buttonClassNames = computeButtonClassNames(isSelected, okCount, totalCount);
       return (
         <button key={ brand._id } onClick={() => {
-            const selectedModels = this.state.models.filter(model => model.brand.name === brand.name);
+          const selectedModels = models.filter(model => model.brand.name === brand.name);
             this.setState({selectedBrand: brand, selectedModels, selectedCars: [], selectedModel: null});
           }}
           className={buttonClassNames.join(' ')}>
@@ -95,15 +142,15 @@ class App extends React.Component {
       );
     });
 
-    const modelElements = this.state.selectedModels.sort(sortModels).map(model => {
-      const modelStats = this.state.modelMap[model._id];
+    const modelElements = selectedModels.sort(sortModels).map(model => {
+      const modelStats = modelMap[model._id];
       const okCount = modelStats && modelStats.okCount ? modelStats.okCount : 0;
       const totalCount = modelStats && modelStats.totalCount ? modelStats.totalCount : 0;
-      const isSelected = this.state.selectedModel && this.state.selectedModel._id === model._id;
+      const isSelected = selectedModel && selectedModel._id === model._id;
       const buttonClassNames = computeButtonClassNames(isSelected, okCount, totalCount);
       return (
         <button key={ model._id } title={ model.favcarsName } onClick={() => {
-          const selectedCars = computeSelectedCars(this.state.cars, model);
+          const selectedCars = computeSelectedCars(cars, model);
             this.setState({selectedModel: model, selectedCars});
           }}
           className={buttonClassNames.join(' ')}>
@@ -113,25 +160,25 @@ class App extends React.Component {
     });
 
     let selectedMenuElement = null;
-    switch(this.state.selectedMenu) {
+    switch (selectedMenu) {
       case CHOOSE_IMAGES_MENU:
         selectedMenuElement = (
           <PickImages
-            selectedBrand={this.state.selectedBrand}
-            selectedModel={this.state.selectedModel}
-            selectedCars={this.state.selectedCars}
+            selectedBrand={selectedBrand}
+            selectedModel={selectedModel}
+            selectedCars={selectedCars}
             nomatch={carId => noCarImageMatch(carId).then(updatedCar => this.refreshState(updatedCar))}
             select={(carId, variantName, url) => selectCarImage(carId, variantName, url).then(updatedCar => this.refreshState(updatedCar))}
-            unselect={carId => this.unselect(carId)}>
+            unselect={this.unselect}>
           </PickImages>
         );
         break;
       case CREATE_UPDATE_DELETE_VARIANTS:
-        if (this.state.selectedModel) {
+        if (selectedModel) {
           selectedMenuElement = (
             <CrudCars 
-              selectedModel={this.state.selectedModel}
-              selectedCars={this.state.selectedCars}
+              selectedModel={selectedModel}
+              selectedCars={selectedCars}
               removeCar={carId => { removeCar(carId); this.refreshStateRemove(carId); }}
               createCar={car => { createCar(car); this.refreshState(car); }}>
             </CrudCars>
@@ -141,7 +188,16 @@ class App extends React.Component {
       default:
         selectedMenuElement = '';
     }
-    
+
+    const headerBrandModelElements = (
+      <>
+        { !!selectedMenu && <hr className="separator" />}
+        <section>{selectedMenu && brandElements}</section>
+        { selectedModels.length > 0 && <hr className="separator" />}
+        <section>{modelElements}</section>
+      </>
+    );
+
     return (
       <div className="App">
         <header className="App-header">
@@ -153,15 +209,13 @@ class App extends React.Component {
                 Site
             </h1>
             </section>
-            <Menu menuSelect={selectedMenu => this.setState({selectedMenu})} />
+            {!!user && <Menu menuSelect={selectedMenu => this.setState({ selectedMenu })} />}
           </section>
-          {!!this.state.selectedMenu && <hr className="separator" />}
-          <section>{ this.state.selectedMenu && brandElements }</section>
-          {this.state.selectedModels.length > 0 && <hr className="separator" />}
-          <section>{ modelElements }</section>
+          {!!user && headerBrandModelElements}
         </header>
         <main className="App-main">
-          { selectedMenuElement }
+          {!!user && selectedMenuElement}
+          {!user && <Login onSubmit={this.loginProcess} errorMessage={errorMessage} />}
         </main>
       </div>
     );

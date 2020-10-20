@@ -5,10 +5,13 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import compression from 'compression';
 import helmet from 'helmet';
+import jwt from 'express-jwt';
 
+import { jwtSecret } from './passwords.js';
 import { brandsRouter } from './routes/brands.route.js';
 import { modelsRouter } from './routes/models.route.js';
 import { carsRouter } from './routes/cars.route.js';
+import { loginRouter } from './routes/login.route.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import connectToMongoDb from './mongodb/mongodb.datasource.js';
@@ -33,8 +36,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+app.use(jwt({ secret: jwtSecret, exp: '6h', algorithms: ['HS256'] }).unless({ path: ['/login'] }));
 
 app.use('/cars', carsRouter);
 app.use('/brands', brandsRouter);
 app.use('/models', modelsRouter);
-
+app.use('/login', loginRouter);

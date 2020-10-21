@@ -1,15 +1,15 @@
-import express from 'express';
-import { Brand, Model, Car, updateBrands, updateModels, updateCars, selectBrands, selectModels, selectCars } from '../mongodb/process-collections.js';
+const express = require('express');
+const { Car, updateCars, selectCars } = require('../mongodb/process-collections');
 
-export const carsRouter = express.Router();
-carsRouter.get('/like/:variant', (req, res, next) => {
+const carsRouter = express.Router();
+carsRouter.get('/like/:variant', (req, res) => {
   selectCars({variant: new RegExp(`.*${req.params.variant}.*`, 'gi')}, doc => doc).then(result => res.json(result));
 });
-carsRouter.get('', (req, res, next) => {
+carsRouter.get('', (_req, res) => {
   selectCars({}, doc => doc).then(result => res.json(result));
 });
 
-carsRouter.post('', (req, res, next) => {
+carsRouter.post('', (req, res) => {
   if (req.body.carId || !req.body.variant || (!req.body.url && !req.body.selectedFavcarsUrl)) {
     res.status(400).send('Bad parameters');
   } else {
@@ -27,7 +27,7 @@ carsRouter.post('', (req, res, next) => {
     car.save().then(result => res.json(result));
   }
 });
-carsRouter.put('', (req, res, next) => {
+carsRouter.put('', (req, res) => {
     if (!req.body.carId || !req.body.variant || (!req.body.url && !req.body.selectedFavcarsUrl)) {
       res.status(400).send('Bad parameters');
     } else {
@@ -37,14 +37,14 @@ carsRouter.put('', (req, res, next) => {
       }).then(result => res.json(result[0]));
     }
 });
-carsRouter.delete('/:carId', (req, res, next) => {
+carsRouter.delete('/:carId', (req, res) => {
   if (!req.params.carId) {
     res.status(400).send('Bad parameters');
   } else {
     Car.deleteOne({_id: req.params.carId}).then(() => res.sendStatus(200));
   }
 });
-carsRouter.delete('/favcars/:carId', (req, res, next) => {
+carsRouter.delete('/favcars/:carId', (req, res) => {
   if (!req.params.carId) {
     res.status(400).send('Bad parameters');
   } else {
@@ -56,4 +56,4 @@ carsRouter.delete('/favcars/:carId', (req, res, next) => {
   }
 });
 
-
+exports.carsRouter = carsRouter;

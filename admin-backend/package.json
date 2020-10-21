@@ -2,9 +2,8 @@
   "name": "perfect-garage-admin-backend",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "start": "node --experimental-modules ./bin/www.js"
+    "start": "node ./bin/www.js"
   },
   "dependencies": {
     "compression": "^1.7.4",

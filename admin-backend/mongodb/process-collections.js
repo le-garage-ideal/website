@@ -1,38 +1,15 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+const { defineMongoDbSchema } = require('./mongodb.schema');
+const { Car, Model, Brand } = defineMongoDbSchema(mongoose);
 
-import defineMongoDbSchema from './mongodb.schema.js';
-
-export const {Car, Model, Brand} = defineMongoDbSchema(mongoose);
-
-export async function updateBrands(filter, transform, async = false) {
+const updateBrands = async (filter, transform, async = false) => {
 
     const brands = await Brand.find(filter).exec();
     return await update(brands, transform, async);
 
-}
+};
 
-export async function updateModels(filter, transform, async = false) {
-
-    const models = await Model.find(filter).exec();
-    return await update(models, transform, async);
-
-}
-
-export async function updateCars(filter, transform, async = false) {
-
-    const cars = await Car.find(filter).exec();
-    return await update(cars, transform, async);
-
-}
-
-export async function createCars(filter, transform, async = false) {
-
-    const car = new Car.find(filter).exec();
-    return await update(cars, transform, async);
-
-}
-
-async function update(collection, transform, async) {
+const update = async (collection, transform, async) => {
     const results = [];
     for (let document of collection) {
         if (async) {
@@ -45,32 +22,62 @@ async function update(collection, transform, async) {
     return results;
 }
 
+const updateModels = async (filter, transform, async = false) => {
 
-export async function selectBrands(filter, transform) {
+    const models = await Model.find(filter).exec();
+    return await update(models, transform, async);
+
+};
+
+const updateCars = async (filter, transform, async = false) => {
+
+    const cars = await Car.find(filter).exec();
+    return await update(cars, transform, async);
+
+};
+
+const createCars = async (filter, transform, async = false) => {
+
+    const car = new Car.find(filter).exec();
+    return await update(cars, transform, async);
+
+};
+
+const select = async (collection, transform) => {
+    for (let document of collection) {
+        transform(document);
+    }
+    return collection;
+};
+
+const selectBrands = async (filter, transform) => {
 
     const brands = await Brand.find(filter).exec();
     return select(brands, transform);
 
 }
 
-export async function selectModels(filter, transform) {
+const selectModels = async (filter, transform) => {
 
     const models = await Model.find(filter).exec();
     return select(models, transform);
 
-}
+};
 
-export async function selectCars(filter, transform) {
+const selectCars = async (filter, transform) => {
 
     const cars = await Car.find(filter).exec();
     return select(cars, transform);
 
-}
+};
 
-async function select(collection, transform) {
-    for (let document of collection) {
-        transform(document);
-    }
-    return collection;
-}
-
+exports.Car = Car;
+exports.Model = Model;
+exports.Brand = Brand;
+exports.updateBrands = updateBrands;
+exports.updateModels = updateModels;
+exports.updateCars = updateCars;
+exports.createCars = createCars;
+exports.selectBrands = selectBrands;
+exports.selectModels = selectModels;
+exports.selectCars = selectCars;

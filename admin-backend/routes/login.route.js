@@ -1,8 +1,8 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import { jwtSecret, backendUsers } from '../passwords.js';
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const { jwtSecret, backendUsers } = require('../passwords');
 
-export const loginRouter = express.Router();
+const loginRouter = express.Router();
 loginRouter.post('', (req, res) => {
   if (!req.body.username || !backendUsers.has(req.body.username)) {
     res.status(401).send({ errorMessage: 'Unknown username / password' });
@@ -19,3 +19,5 @@ loginRouter.post('', (req, res) => {
   const token = jwt.sign({ data, }, jwtSecret, { expiresIn: expiration, algorithm: 'HS256' });
   res.status(200).json({ username: req.body.username, token });
 });
+
+exports.loginRouter = loginRouter;

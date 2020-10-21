@@ -1,8 +1,10 @@
-import express from 'express';
-import { selectBrands } from '../mongodb/process-collections.js';
+const express = require('express');
+const { selectBrands } = require('../mongodb/process-collections');
 
-export const brandsRouter = express.Router();
+const brandsRouter = express.Router();
 
-brandsRouter.get('', (req, res, next) => {
+brandsRouter.get('', (_req, res) => {
   selectBrands({}, doc => doc).then(result => res.json(result));
 });
+
+exports.brandsRouter = brandsRouter;

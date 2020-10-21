@@ -1,8 +1,10 @@
-import express from 'express';
-import { selectModels } from '../mongodb/process-collections.js';
+const express = require('express');
+const { selectModels } = require('../mongodb/process-collections');
 
-export const modelsRouter = express.Router();
+const modelsRouter = express.Router();
 
-modelsRouter.get('', (req, res, next) => {
+modelsRouter.get('', (_req, res) => {
   selectModels({}, doc => doc).then(result => res.json(result));
 });
+
+exports.modelsRouter = modelsRouter;

@@ -1,10 +1,9 @@
-import { mongodbPassword } from '../passwords.js';
+const { mongodb } = require('../passwords');
 
-export default async function connectToMongoDb(mongoose) {
+const connectToMongoDb = async (mongoose) => {
 
     //Set up default mongoose connection
-    var mongoDB = `mongodb://localhost:27017/perfect-garage`;
-    mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true });
 
     //Get the default connection
     var db = mongoose.connection;
@@ -14,4 +13,6 @@ export default async function connectToMongoDb(mongoose) {
 
     return db;
 
-}
+};
+
+exports.connectToMongoDb = connectToMongoDb;

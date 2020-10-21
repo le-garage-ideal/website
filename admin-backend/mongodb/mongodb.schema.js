@@ -1,4 +1,4 @@
-export default function defineMongoDbSchema(mongoose) {
+const defineMongoDbSchema = (mongoose) => {
 
     // Define schema
     const Schema = mongoose.Schema;
@@ -40,4 +40,6 @@ export default function defineMongoDbSchema(mongoose) {
     const Brand = mongoose.model('Brand', brandSchema);
 
     return {Car, Model, Brand};
-}
+};
+
+exports.defineMongoDbSchema = defineMongoDbSchema;

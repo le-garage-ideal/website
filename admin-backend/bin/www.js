@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-import { app } from '../app.js';
-import debug_ from 'debug';
-import http from 'http';
+const { app } = require('../app');
+const debug_ = require('debug');
+const http = require('http');
 
 const debug = debug_('nodejs-site:server');
 

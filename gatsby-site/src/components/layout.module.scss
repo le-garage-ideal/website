@@ -70,8 +70,19 @@ $footerHeight: 60px;
     height: auto;
 }
 
-.customButton {
+.saveButton, .customShareButton {
     padding: 0px 10px!important;
+    margin: 0px 0px 0px 10px;
+}
+
+.customShareButton {
+    background-color: darkblue;
+    max-width: 40px;
+}
+
+.saveButton:not([disabled]) {
+    position: relative;
+    background-color: green;
 }
 
 .saveButtonIndicator {
@@ -80,7 +91,7 @@ $footerHeight: 60px;
     top: -37px;
     right: 0px;
     font-size: 3em;
-    color: red;
+    color: orange;
 }
 
 .appBody {

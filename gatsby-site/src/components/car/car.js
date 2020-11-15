@@ -67,7 +67,7 @@ export const Car = ({ car }) => {
             currentPageIndex === 0
             && (
             <button type="button" className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
-              <FontAwesomeIcon icon="th-list" size="2x" onClick={clickRight} />
+              <FontAwesomeIcon icon="exchange-alt" size="2x" onClick={clickRight} />
             </button>
             )
           }

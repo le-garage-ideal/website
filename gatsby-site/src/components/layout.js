@@ -4,7 +4,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSearch,
   faEdit,
-  faThList,
+  faExchangeAlt,
   faImage,
   faBars,
   faPlus,
@@ -27,7 +27,7 @@ import { copyToClipboard } from '../functions/clipboard';
 
 library.add(faSearch);
 library.add(faEdit);
-library.add(faThList);
+library.add(faExchangeAlt);
 library.add(faImage);
 library.add(faBars);
 library.add(faPlus);
@@ -76,23 +76,23 @@ export const Layout = ({
             <div className={layoutStyles.shareButtonsBar}>
               <button
                 type="button"
-                title="Partager"
-                className={['icon-button', layoutStyles.customButton].join(' ')}
-                onClick={() => { setShareModalState('is-active'); }}
-                style={{ height: BUTTON_HEIGHT }}
-              >
-                <FontAwesomeIcon icon="share-square" />
-              </button>
-              <button
-                type="button"
                 title={saveDisabled ? 'Garage déjà sauvegardé' : 'Sauvegarder'}
-                className={['icon-button', layoutStyles.customButton].join(' ')}
+                className={['icon-button', layoutStyles.saveButton].join(' ')}
                 disabled={saveDisabled}
                 onClick={() => { if (save) save(); }}
                 style={{ height: BUTTON_HEIGHT }}
               >
                 {!saveDisabled && <span className={layoutStyles.saveButtonIndicator}>·</span>}
                 <FontAwesomeIcon icon="save" />
+              </button>
+              <button
+                type="button"
+                title="Partager"
+                className={['icon-button', layoutStyles.customShareButton].join(' ')}
+                onClick={() => { setShareModalState('is-active'); }}
+                style={{ height: BUTTON_HEIGHT }}
+              >
+                <FontAwesomeIcon icon="share-square" />
               </button>
               <FacebookShareButton
                 title={title}

@@ -37,7 +37,7 @@ library.add(faShareSquare);
 const BUTTON_HEIGHT = '40px';
 
 export const Layout = ({
-  title, uri, children, save, saveDisabled, showSaveMessage,
+  title, uri, children, save, saveDisabled, saveMessage,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [shareModalState, setShareModalState] = useState('');
@@ -91,6 +91,7 @@ export const Layout = ({
                 onClick={() => { if (save) save(); }}
                 style={{ height: BUTTON_HEIGHT }}
               >
+                {!saveDisabled && <span className={layoutStyles.saveButtonIndicator}>·</span>}
                 <FontAwesomeIcon icon="save" />
               </button>
               <FacebookShareButton
@@ -106,10 +107,10 @@ export const Layout = ({
               <RedditShareButton title={title} url={uri}>
                 <RedditIcon size={BUTTON_HEIGHT} />
               </RedditShareButton>
-              {showSaveMessage
+              {saveMessage
                 && (
                   <div style={{ position: 'absolute' }}>
-                    <Toast classNames={['is-success']}>Garage sauvegardé!</Toast>
+                    <Toast classNames={['is-success']}>{saveMessage}</Toast>
                   </div>
                 )}
             </div>
@@ -171,17 +172,19 @@ export const Layout = ({
 };
 
 Layout.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   uri: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
-  save: PropTypes.func.isRequired,
+  save: PropTypes.func,
   saveDisabled: PropTypes.bool,
-  showSaveMessage: PropTypes.bool,
+  saveMessage: PropTypes.string,
 };
 
 Layout.defaultProps = {
+  title: '',
   saveDisabled: false,
-  showSaveMessage: false,
+  saveMessage: null,
+  save: () => {},
 };
 
 export const EmptyLayout = ({ children }) => (<>{children}</>);

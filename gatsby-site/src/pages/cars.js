@@ -87,7 +87,7 @@ const Cars = ({ data, location }) => {
   };
 
   return (
-    <Layout>
+    <Layout uri={uri.toString()}>
       <SEO
         location={location.pathname}
         title="Toutes les voitures sportives"

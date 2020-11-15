@@ -37,7 +37,7 @@ const Browse = ({ data, location }) => {
   };
 
   return (
-    <Layout>
+    <Layout uri={uri.toString()}>
       <SEO location={location.pathname} title="Marques" description="Sélectionnez une marque de voiture" />
       <FilteredList title="Marques" render={() => brandComponents} filter={search} />
     </Layout>

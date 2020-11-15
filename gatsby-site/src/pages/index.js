@@ -4,6 +4,7 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import './bulma-theme.scss';
 import { eachCar, eachCarIndex, fullname } from '../functions/cars';
+import { save } from '../functions/storage';
 import indexStyles from './index.module.scss';
 import { carLabels } from '../constants';
 import { Card } from '../components/utils/card';
@@ -24,7 +25,9 @@ class Garage extends React.Component {
     // if edit=X parameter, save car to carX parameter
     const editParam = uri.getQueryParamValue('edit');
     const carParam = uri.getQueryParamValue('car');
-    const initState = {};
+    const initState = {
+      saveMessage: null,
+    };
     if (editParam && carParam) {
       uri.replaceQueryParam(`car${editParam}`, carParam);
       initState.saveOk = false;
@@ -80,7 +83,7 @@ class Garage extends React.Component {
 
   render() {
     const {
-      uri, saveOk, cars, showSaveMessage,
+      uri, saveOk, cars, saveMessage,
     } = this.state;
 
     const {
@@ -110,6 +113,7 @@ class Garage extends React.Component {
       );
       return (
         <Card
+          key={`card-${car.mongodb_id}`}
           marginCard={index === 2}
           empty={!car}
           index={index}
@@ -123,12 +127,10 @@ class Garage extends React.Component {
 
     const carElements = cars.map((car, idx) => transform(car, idx + 1));
 
-    const save = () => {
-      eachCar((saveParam, idx) => {
-        localStorage.setItem(saveParam, cars[idx]);
-        this.setState({ saveOk: true, showSaveMessage: true });
-        setTimeout(() => this.setState({ showSaveMessage: false }), 2000); // message will be displayed during 2s
-      });
+    const onSave = () => {
+      const garageName = save(cars);
+      this.setState({ saveOk: true, saveMessage: `Garage sauvegardé "${garageName}"` });
+      setTimeout(() => this.setState({ saveMessage: null }), 2000); // message will be displayed during 2s
     };
 
     const title = cars.map(car => (car ? fullname(car) : null))
@@ -138,11 +140,11 @@ class Garage extends React.Component {
     return (
       <Layout
         location={uri}
-        save={save}
+        save={onSave}
         title={title}
         uri={uri}
         saveDisabled={saveOk}
-        showSaveMessage={showSaveMessage}
+        saveMessage={saveMessage}
       >
         <SEO
           location={location.pathname}

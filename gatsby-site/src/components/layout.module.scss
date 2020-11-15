@@ -74,6 +74,15 @@ $footerHeight: 60px;
     padding: 0px 10px!important;
 }
 
+.saveButtonIndicator {
+    position: absolute;
+    z-index: 8;
+    top: -37px;
+    right: 0px;
+    font-size: 3em;
+    color: red;
+}
+
 .appBody {
     display: flex;
     flex-direction: column;

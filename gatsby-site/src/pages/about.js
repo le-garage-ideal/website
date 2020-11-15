@@ -5,7 +5,7 @@ import { SEO } from '../components/seo/seo';
 import aboutStyles from './about.module.scss';
 
 const About = ({ location }) => (
-  <Layout>
+  <Layout uri={location.href}>
     <SEO location={location.pathname} title="A propos" description="A propos du site" />
     <section
       className="paragraph"

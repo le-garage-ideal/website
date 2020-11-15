@@ -6,7 +6,6 @@ import { eachCar } from '../../functions/cars';
 import menuStyles from './menu.module.scss';
 
 const Menu = ({ uri }) => {
-  console.log('Menu component URI: ' + uri);
   const uriObj = new Uri(uri);
   const carsUri = uriObj.setPath('/cars').toString();
   const aboutUri = uriObj.setPath('/about').toString();

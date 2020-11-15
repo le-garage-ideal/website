@@ -113,7 +113,7 @@ class Garage extends React.Component {
       );
       return (
         <Card
-          key={`card-${car.mongodb_id}`}
+          key={`card-${car ? car.mongodb_id : index}`}
           marginCard={index === 2}
           empty={!car}
           index={index}

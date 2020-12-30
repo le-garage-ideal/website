@@ -20,6 +20,7 @@ import {
   RedditIcon,
 } from 'react-share';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useIntl } from 'gatsby-plugin-intl';
 import layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
@@ -37,8 +38,10 @@ library.add(faShareSquare);
 const BUTTON_HEIGHT = '40px';
 
 export const Layout = ({
-  title, uri, children, save, saveDisabled, saveMessage,
+  title, uri, children, save, saveDisabled, saveMessage, showButtons,
 }) => {
+  const intl = useIntl();
+
   const [showMenu, setShowMenu] = useState(false);
   const [shareModalState, setShareModalState] = useState('');
   const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState(null);
@@ -51,13 +54,25 @@ export const Layout = ({
 
   const onShareCopyClick = () => {
     copyToClipboard(uri).then(() => {
-      setShareCopySuccessMessage('Lien copié dans le presse-papier');
+      setShareCopySuccessMessage(intl.formatMessage({ id: 'components.layout.link_clipboard_ok' }));
       setTimeout(() => setShareCopySuccessMessage(null), 5000);
     }, () => {
-      setShareCopyErrorMessage('Impossible! copier le lien manuellement');
+      setShareCopyErrorMessage(intl.formatMessage({ id: 'components.layout.link_clipboard_ko' }));
       setTimeout(() => setShareCopyErrorMessage(null), 5000);
     });
   };
+
+  const savedButtonTooltip = saveDisabled
+    ? intl.formatMessage({ id: 'components.layout.saved_button_tooltip_ok' })
+    : intl.formatMessage({ id: 'components.layout.saved_button_tooltip_ko' });
+
+  const footer = (
+    <footer className={layoutStyles.appFooter}>
+      <span>{intl.formatMessage({ id: 'components.layout.first_footer' })}</span>
+      <a href="o2switch.fr">o2switch.fr</a>
+      <span>{intl.formatMessage({ id: 'components.layout.second_footer' })}</span>
+    </footer>
+  );
 
   return (
     <>
@@ -71,12 +86,12 @@ export const Layout = ({
             </button>
             {showMenu && <Menu uri={uri} />}
           </div>
-          {uri
+          {showButtons
             && (
             <div className={layoutStyles.shareButtonsBar}>
               <button
                 type="button"
-                title={saveDisabled ? 'Garage déjà sauvegardé' : 'Sauvegarder'}
+                title={savedButtonTooltip}
                 className={['icon-button', layoutStyles.saveButton].join(' ')}
                 disabled={saveDisabled}
                 onClick={() => { if (save) save(); }}
@@ -87,7 +102,7 @@ export const Layout = ({
               </button>
               <button
                 type="button"
-                title="Partager"
+                title={intl.formatMessage({ id: 'components.layout.share_link' })}
                 className={['icon-button', layoutStyles.customShareButton].join(' ')}
                 onClick={() => { setShareModalState('is-active'); }}
                 style={{ height: BUTTON_HEIGHT }}
@@ -95,16 +110,22 @@ export const Layout = ({
                 <FontAwesomeIcon icon="share-square" />
               </button>
               <FacebookShareButton
-                title={title}
+                title={intl.formatMessage({ id: 'components.layout.share_with', values: { network: 'Facebook' } })}
                 url={uri.replace('localhost:8000', 'perfect-garage.org')}
                 quote={title}
               >
                 <FacebookIcon size={BUTTON_HEIGHT} />
               </FacebookShareButton>
-              <TwitterShareButton title={title} url={uri}>
+              <TwitterShareButton
+                title={intl.formatMessage({ id: 'components.layout.share_with', values: { network: 'Twitter' } })}
+                url={uri}
+              >
                 <TwitterIcon size={BUTTON_HEIGHT} />
               </TwitterShareButton>
-              <RedditShareButton title={title} url={uri}>
+              <RedditShareButton
+                title={intl.formatMessage({ id: 'components.layout.share_with', values: { network: 'Reddit' } })}
+                url={uri}
+              >
                 <RedditIcon size={BUTTON_HEIGHT} />
               </RedditShareButton>
               {saveMessage
@@ -121,7 +142,9 @@ export const Layout = ({
           <div className="modal-background" />
           <div className="modal-content">
             <div className="field is-vertical">
-              <label className="label has-text-light" htmlFor="share-link">Partagez ce lien : </label>
+              <label className="label has-text-light" htmlFor="share-link">
+                { intl.formatMessage({ id: 'components.layout.link_share_it' })}
+              </label>
               <p className="control">
                 <input
                   type="text"
@@ -160,12 +183,7 @@ export const Layout = ({
         <main className={layoutStyles.appBody}>
           {children}
         </main>
-        <footer className={layoutStyles.appFooter}>
-          Site hébergé par
-          {' '}
-          <a href="o2switch.fr">o2switch.fr</a>
-          . Aucun cookie ni aucune donnée personnelle ne sont utilisés.
-        </footer>
+        { footer }
       </div>
     </>
   );
@@ -178,6 +196,7 @@ Layout.propTypes = {
   save: PropTypes.func,
   saveDisabled: PropTypes.bool,
   saveMessage: PropTypes.string,
+  showButtons: PropTypes.bool,
 };
 
 Layout.defaultProps = {
@@ -185,6 +204,7 @@ Layout.defaultProps = {
   saveDisabled: false,
   saveMessage: null,
   save: () => {},
+  showButtons: false,
 };
 
 export const EmptyLayout = ({ children }) => (<>{children}</>);

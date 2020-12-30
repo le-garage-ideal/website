@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { graphql } from 'gatsby';
+import { useIntl } from 'gatsby-plugin-intl';
 import './bulma-theme.scss';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
@@ -9,6 +10,7 @@ import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 
 const Browse = ({ data, location }) => {
+  const intl = useIntl();
   const uri = new Uri(location.href);
 
   const onBrandSelect = brandName => {
@@ -38,8 +40,16 @@ const Browse = ({ data, location }) => {
 
   return (
     <Layout uri={uri.toString()}>
-      <SEO location={location.pathname} title="Marques" description="Sélectionnez une marque de voiture" />
-      <FilteredList title="Marques" render={() => brandComponents} filter={search} />
+      <SEO
+        location={location.pathname}
+        title={intl.formatMessage({ id: 'pages.browse.meta.title' })}
+        description={intl.formatMessage({ id: 'pages.browse.meta.description' })}
+      />
+      <FilteredList
+        title={intl.formatMessage({ id: 'pages.browse.list_title' })}
+        render={() => brandComponents}
+        filter={search}
+      />
     </Layout>
   );
 };

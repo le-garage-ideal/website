@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useIntl } from 'gatsby-plugin-intl';
 import titleStyles from './title.module.scss';
 
 export const Title = () => {
+  const intl = useIntl();
+
   const titleAnimation = {
     backgroundImage: [
       'linear-gradient(to right, #EEE, #666, #444)',
@@ -25,10 +28,10 @@ export const Title = () => {
           animate={titleAnimation}
           transition={titleTransition}
         >
-          Perfect Garage
+          { intl.formatMessage({ id: 'components.title.title' }) }
         </motion.div>
       </h1>
-      <h4 className={titleStyles.subTitle}>Votre garage idéal en trois voitures de sport</h4>
+      <h4 className={titleStyles.subTitle}>{ intl.formatMessage({ id: 'components.title.subtitle' }) }</h4>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useIntl } from 'gatsby-plugin-intl';
 import { carLabels } from '../constants';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
@@ -12,6 +13,8 @@ import ListItem from '../components/utils/list-item';
 import { sortCars } from '../functions/sort';
 
 const Cars = ({ data, location }) => {
+  const intl = useIntl();
+
   const uri = new Uri(location.href);
 
   const completeCarList = data.allMongodbBmbu7Ynqra11RqiCars.edges.map(({ node }) => node).sort(sortCars);
@@ -46,7 +49,7 @@ const Cars = ({ data, location }) => {
               type="button"
               className={`${carsStyles.iconButton} icon-button`}
               onClick={() => setSelectedCar(car.mongodb_id)}
-              title="Ajouter au garage"
+              title={intl.formatMessage({ id: 'pages.cars.add_to_garage_tooltip' })}
             >
               <FontAwesomeIcon icon="plus" />
             </button>
@@ -60,17 +63,17 @@ const Cars = ({ data, location }) => {
                 <label className="radio">
                   <input type="radio" name={carLabels[0]} onChange={() => validateCar(1, car.mongodb_id)} />
                   &nbsp;
-                  {carLabels[0]}
+                  {carLabels(1, intl)}
                 </label>
                 <label className="radio">
                   <input type="radio" name={carLabels[1]} onChange={() => validateCar(2, car.mongodb_id)} />
                   &nbsp;
-                  {carLabels[1]}
+                  {carLabels(2, intl)}
                 </label>
                 <label className="radio">
                   <input type="radio" name={carLabels[2]} onChange={() => validateCar(3, car.mongodb_id)} />
                   &nbsp;
-                  {carLabels[2]}
+                  {carLabels(3, intl)}
                 </label>
               </div>
             </div>
@@ -90,11 +93,11 @@ const Cars = ({ data, location }) => {
     <Layout uri={uri.toString()}>
       <SEO
         location={location.pathname}
-        title="Toutes les voitures sportives"
-        description="Liste de toutes les voitures sportives disponibles"
+        title={intl.formatMessage({ id: 'pages.cars.meta.title' })}
+        description={intl.formatMessage({ id: 'pages.cars.meta.description' })}
       />
       <FilteredList
-        title={`${completeCarList.length} voitures de sport disponibles!`}
+        title={`${completeCarList.length} ${intl.formatMessage({ id: 'pages.cars.list_title' })}`}
         render={() => carComponents}
         filter={search}
       />

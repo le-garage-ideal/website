@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
+import { useIntl } from 'gatsby-plugin-intl';
 import { graphql } from 'gatsby';
 import { Layout } from '../components/layout';
 import FilteredList from '../components/utils/filtered-list';
@@ -9,6 +10,8 @@ import { SEO } from '../components/seo/seo';
 import { sortCars } from '../functions/sort';
 
 const Cars = ({ data, pageContext, location }) => {
+  const intl = useIntl();
+
   const uri = new Uri(location.href);
   const completeCarList = data.allMongodbBmbu7Ynqra11RqiCars.edges.map(({ node }) => node).sort(sortCars);
   const [filteredCars, setFilteredCars] = useState(completeCarList);
@@ -36,11 +39,23 @@ const Cars = ({ data, pageContext, location }) => {
     setFilteredCars(filtered);
   };
 
-  const title = `Variantes de ${pageContext.brand} ${pageContext.model}`;
+  const title = intl.formatMessage({
+    id: 'templates.cars.title',
+    values: { brand: pageContext.brand, model: pageContext.model },
+  });
+
+  const description = intl.formatMessage({
+    id: 'templates.cars.description',
+    values: { brand: pageContext.brand, model: pageContext.model },
+  });
 
   return (
     <Layout>
-      <SEO location={location.pathname} title={title} />
+      <SEO
+        location={location.pathname}
+        title={title}
+        description={description}
+      />
       <FilteredList title={title} render={() => carComponents} filter={search} />
     </Layout>
   );

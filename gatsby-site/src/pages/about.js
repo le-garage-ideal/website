@@ -1,12 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'gatsby-plugin-intl';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import aboutStyles from './about.module.scss';
 
-const About = ({ location }) => (
+const About = ({ location, intl }) => (
   <Layout uri={location.href}>
-    <SEO location={location.pathname} title="A propos" description="A propos du site" />
+    <SEO
+      location={location.pathname}
+      title={intl.formatMessage({ id: 'pages.about.meta.title' })}
+      description={intl.formatMessage({ id: 'pages.about.meta.description' })}
+    />
     <section
       className="paragraph"
       style={{
@@ -15,24 +20,17 @@ const About = ({ location }) => (
         display: 'flex',
         flexDirection: 'column',
         alignSelf: 'center',
-        margin: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: '50px',
         padding: '30px',
       }}
     >
+      <p className={aboutStyles.sentence}>{ intl.formatMessage({ id: 'pages.about.first_chapter' })}</p>
+      <p className={aboutStyles.sentence}>{ intl.formatMessage({ id: 'pages.about.second_chapter' })}</p>
+      <p className={aboutStyles.sentence}>{ intl.formatMessage({ id: 'pages.about.third_chapter' })}</p>
       <p className={aboutStyles.sentence}>
-        Ce site vous permet de créer votre garage idéal en choisissant vos 3 voitures de sport préférées
-        et de les partager sur les réseaux sociaux.
-      </p>
-      <p className={aboutStyles.sentence}>
-        Pourquoi seulement trois ? Comme dans la vraie vie, pour se contraindre à choisir...
-      </p>
-      <p className={aboutStyles.sentence}>
-        J&apos;ai créé ce site car je suis passionné de sport automobile.
-        Il n&apos;y aura jamais aucune pub, aucune source de profit liée à ce site.
-        Si vous l&apos;aimez, n&apos;hésitez pas à le faire connaître!
-      </p>
-      <p className={aboutStyles.sentence}>
-        Enfin, si vous avez des suggestions, vous pouvez me contacter par mail :
+        { intl.formatMessage({ id: 'pages.about.fourth_chapter' }) }
         <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a>
       </p>
     </section>
@@ -41,6 +39,7 @@ const About = ({ location }) => (
 
 About.propTypes = {
   location: PropTypes.string.isRequired,
+  intl: PropTypes.func.isRequired,
 };
 
-export default About;
+export default injectIntl(About);

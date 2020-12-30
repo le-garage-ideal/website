@@ -2,6 +2,7 @@ import Uri from 'jsuri';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
+import { injectIntl } from 'gatsby-plugin-intl';
 import './bulma-theme.scss';
 import { eachCar, eachCarIndex, fullname } from '../functions/cars';
 import { save } from '../functions/storage';
@@ -88,6 +89,7 @@ class Garage extends React.Component {
 
     const {
       location,
+      intl,
     } = this.props;
 
     const editCar = index => {
@@ -98,7 +100,7 @@ class Garage extends React.Component {
     };
 
     const transform = (car, index) => {
-      const title = carLabels[index - 1];
+      const title = carLabels(index, intl);
       const thumbnail = car ? (
         <Car
           id={carComponentId(index)}
@@ -129,7 +131,8 @@ class Garage extends React.Component {
 
     const onSave = () => {
       const garageName = save(cars);
-      this.setState({ saveOk: true, saveMessage: `Garage sauvegardé "${garageName}"` });
+      const savedMessage = intl.formatMessage({ id: 'pages.index.garage_saved' });
+      this.setState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"` });
       setTimeout(() => this.setState({ saveMessage: null }), 2000); // message will be displayed during 2s
     };
 
@@ -145,12 +148,13 @@ class Garage extends React.Component {
         uri={uri}
         saveDisabled={saveOk}
         saveMessage={saveMessage}
+        showButtons
       >
         <SEO
           location={location.pathname}
           title={title}
           uri={uri}
-          description="Créez et partagez votre garage idéal en 3 voitures de sport"
+          description={intl.formatMessage({ id: 'pages.index.meta.description' })}
         />
         <Title />
         <article className={indexStyles.carsContainer}>
@@ -192,6 +196,7 @@ Garage.propTypes = {
     href: PropTypes.string.isRequired,
     pathname: PropTypes.string.isRequired,
   }).isRequired,
+  intl: PropTypes.func.isRequired,
 };
 
 export const query = graphql`query {
@@ -219,4 +224,4 @@ export const query = graphql`query {
     }
   }`;
 
-export default Garage;
+export default injectIntl(Garage);

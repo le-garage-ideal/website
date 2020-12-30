@@ -22,7 +22,7 @@ const Menu = ({ uri }) => {
     for (let i = 0; i < localStorage.length; i += 1) {
       const savedGarageUri = new Uri(garageUri);
       const garageName = localStorage.key(i);
-      if (garageName !== 'gatsby-intl-language') {
+      if (garageName.startsWith('garage-')) {
         const garage = JSON.parse(localStorage.getItem(garageName));
         eachCar((paramName, idx) => savedGarageUri.replaceQueryParam(paramName, garage[idx].mongodb_id));
         garageElements.push(<li key={garageName}><a href={savedGarageUri.toString()}>{garageName}</a></li>);

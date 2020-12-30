@@ -41,6 +41,7 @@ const Browse = ({ data, location }) => {
   return (
     <Layout uri={uri.toString()}>
       <SEO
+        uri={location.href}
         location={location.pathname}
         title={intl.formatMessage({ id: 'pages.browse.meta.title' })}
         description={intl.formatMessage({ id: 'pages.browse.meta.description' })}

@@ -42,9 +42,16 @@ const Models = ({ data, pageContext, location }) => {
 
   const title = intl.formatMessage({ id: 'templates.models.title', values: { brand: pageContext.brand } });
 
+  const description = intl.formatMessage({ id: 'templates.models.description', values: { brand: pageContext.brand } });
+
   return (
     <Layout>
-      <SEO location={location.pathname} title={title} />
+      <SEO
+        uri={location.href}
+        location={location.pathname}
+        title={title}
+        description={description}
+      />
       <FilteredList title={title} render={() => modelComponents} filter={search} />
     </Layout>
   );

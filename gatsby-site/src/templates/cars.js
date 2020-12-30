@@ -52,6 +52,7 @@ const Cars = ({ data, pageContext, location }) => {
   return (
     <Layout>
       <SEO
+        uri={location.href}
         location={location.pathname}
         title={title}
         description={description}

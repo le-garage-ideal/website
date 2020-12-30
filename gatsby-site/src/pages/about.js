@@ -8,6 +8,7 @@ import aboutStyles from './about.module.scss';
 const About = ({ location, intl }) => (
   <Layout uri={location.href}>
     <SEO
+      uri={location.href}
       location={location.pathname}
       title={intl.formatMessage({ id: 'pages.about.meta.title' })}
       description={intl.formatMessage({ id: 'pages.about.meta.description' })}

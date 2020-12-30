@@ -32,6 +32,7 @@ const Cars = ({ data, location }) => {
   const carComponents = filteredCars.map(car => {
     const isSelected = selectedCar === car.mongodb_id;
     const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
+    const radioClassNames = ['radio', carsStyles.radioLabel].join(' ');
     return (
       <div key={`carItem${car.mongodb_id}`}>
         <ListItem
@@ -60,17 +61,17 @@ const Cars = ({ data, location }) => {
           && (
             <div className={carsStyles.carSelectionBox}>
               <div className="control">
-                <label className="radio">
+                <label className={radioClassNames}>
                   <input type="radio" name={carLabels[0]} onChange={() => validateCar(1, car.mongodb_id)} />
                   &nbsp;
                   {carLabels(1, intl)}
                 </label>
-                <label className="radio">
+                <label className={radioClassNames}>
                   <input type="radio" name={carLabels[1]} onChange={() => validateCar(2, car.mongodb_id)} />
                   &nbsp;
                   {carLabels(2, intl)}
                 </label>
-                <label className="radio">
+                <label className={radioClassNames}>
                   <input type="radio" name={carLabels[2]} onChange={() => validateCar(3, car.mongodb_id)} />
                   &nbsp;
                   {carLabels(3, intl)}
@@ -92,6 +93,7 @@ const Cars = ({ data, location }) => {
   return (
     <Layout uri={uri.toString()}>
       <SEO
+        uri={location.href}
         location={location.pathname}
         title={intl.formatMessage({ id: 'pages.cars.meta.title' })}
         description={intl.formatMessage({ id: 'pages.cars.meta.description' })}

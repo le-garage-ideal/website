@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { motion } from 'framer-motion';
 import { useIntl } from 'gatsby-plugin-intl';
+import { buildGarageName, getSavedGarages } from '../../functions/storage';
 import { eachCar } from '../../functions/cars';
 import menuStyles from './menu.module.scss';
 
@@ -15,20 +16,24 @@ const Menu = ({ uri }) => {
 
   const garageUri = uriObj.setPath('/').toString();
 
-  let garageMenuItem;
-  if (localStorage.length > 0) {
+  const savedGarages = getSavedGarages();
+  let garageMenuItems;
+  if (savedGarages.length > 0) {
     const savedGarageLabel = intl.formatMessage({ id: 'components.menu.saved_garages' });
     const garageElements = [<p key="menu-label" className="menu-label">{ savedGarageLabel }</p>];
-    for (let i = 0; i < localStorage.length; i += 1) {
-      const savedGarageUri = new Uri(garageUri);
-      const garageName = localStorage.key(i);
-      if (garageName.startsWith('garage-')) {
-        const garage = JSON.parse(localStorage.getItem(garageName));
-        eachCar((paramName, idx) => savedGarageUri.replaceQueryParam(paramName, garage[idx].mongodb_id));
-        garageElements.push(<li key={garageName}><a href={savedGarageUri.toString()}>{garageName}</a></li>);
-      }
-    }
-    garageMenuItem = (
+
+    const savedGarageUri = new Uri(garageUri);
+    savedGarages.forEach(garage => {
+      const garageName = buildGarageName(garage);
+      eachCar((carKey, idx) => {
+        if (garage[idx]) {
+          savedGarageUri.replaceQueryParam(carKey, garage[idx].mongodb_id);
+        }
+      });
+      garageElements.push(<li key={garageName}><a href={savedGarageUri.toString()}>{garageName}</a></li>);
+    });
+
+    garageMenuItems = (
       <>
         <a href={garageUri}>{ intl.formatMessage({ id: 'components.menu.garages' }) }</a>
         <ul>
@@ -38,7 +43,7 @@ const Menu = ({ uri }) => {
       </>
     );
   } else {
-    garageMenuItem = <a href={garageUri}>{ intl.formatMessage({ id: 'components.menu.the_garage' }) }</a>;
+    garageMenuItems = <a href={garageUri}>{ intl.formatMessage({ id: 'components.menu.the_garage' }) }</a>;
   }
 
   return (
@@ -49,7 +54,7 @@ const Menu = ({ uri }) => {
       transition={{ ease: 'easeInOut', duration: 0.1 }}
     >
       <ul className="menu-list">
-        <li>{garageMenuItem}</li>
+        <li>{garageMenuItems}</li>
         <li><a href={carsUri}>{ intl.formatMessage({ id: 'components.menu.cars' }) }</a></li>
         <li><a href={aboutUri}>{ intl.formatMessage({ id: 'components.menu.about' }) }</a></li>
       </ul>

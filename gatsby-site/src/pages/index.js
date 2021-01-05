@@ -1,11 +1,12 @@
 import Uri from 'jsuri';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
 import { injectIntl } from 'gatsby-plugin-intl';
 import './bulma-theme.scss';
-import { eachCar, eachCarIndex, fullname } from '../functions/cars';
-import { save } from '../functions/storage';
+import { eachCarIndex, fullname } from '../functions/cars';
+import { getSavedGarages, save, shouldSave } from '../functions/storage';
+import { processEditParams, getCarParams, addCarsToParams } from '../functions/url';
 import indexStyles from './index.module.scss';
 import { carLabels } from '../constants';
 import { Card } from '../components/utils/card';
@@ -21,62 +22,63 @@ class Garage extends React.Component {
   constructor(props) {
     super(props);
 
-    const uri = new Uri(props.location.href);
+    let uri = new Uri(props.location.href);
 
     // if edit=X parameter, save car to carX parameter
-    const editParam = uri.getQueryParamValue('edit');
-    const carParam = uri.getQueryParamValue('car');
+    const hasEditParams = processEditParams(uri);
     const initState = {
       saveMessage: null,
+      saveOk: !hasEditParams,
     };
-    if (editParam && carParam) {
-      uri.replaceQueryParam(`car${editParam}`, carParam);
-      initState.saveOk = false;
-    }
-    uri.deleteQueryParam('edit');
-    uri.deleteQueryParam('car');
 
     // add missing params + save state
     const windowGlobal = typeof window !== 'undefined' && window;
     initState.cars = [];
     if (windowGlobal) {
-      eachCar((param, idx) => {
+      // Priority to URL if user copy paste shared garage
+      const carParams = getCarParams(uri);
+      carParams.forEach((param, idx) => {
         initState.cars[idx] = null;
 
-        // Priority to URL if user copy paste shared garage
-        const carId = uri.getQueryParamValue(param) || localStorage.getItem(param);
+        if (param) { 
+          const { carId, carLabel } = param;
 
-        if (carId) {
-          const foundNode = props.data.allMongodbBmbu7Ynqra11RqiCars.edges
-            .find(({ node: car }) => car.mongodb_id === carId);
+          if (carId) {
+            const foundNode = props.data.allMongodbBmbu7Ynqra11RqiCars.edges
+              .find(({ node: car }) => car.mongodb_id === carId);
 
-          if (foundNode) {
-            if (!uri.getQueryParamValue(param)) {
-              // If carId comes from localstorage and was not on URL, add it
-              uri.addQueryParam(param, foundNode.node);
+            if (foundNode) {
+              initState.cars[idx] = foundNode.node;
+              initState.cars[idx].label = carLabel ? carLabel : carLabels(idx + 1, props.intl);
             }
-            initState.cars[idx] = foundNode.node;
-          } else if (!uri.getQueryParamValue(param)) {
-            // If carId comes from localstorage and was not found, remove it
-            localStorage.removeItem(param);
           }
         }
       });
+
+      // If no car found in url, load 1st garage from storage
+      if (!initState.cars.some(car => !!car)) {
+        const savedGarages = getSavedGarages();
+        if (savedGarages.length > 0) {
+          [initState.cars] = savedGarages;
+          uri = addCarsToParams(initState.cars, uri);
+        }
+      }
     }
-    initState.uri = uri.toString();
+    initState.uri = uri;
 
     // Save button enabled?
-    if (windowGlobal) {
-      initState.saveOk = eachCar((param, idx) => initState.cars[idx] === localStorage.getItem(param))
-        .every(val => !!val);
-    }
+    initState.saveOk = !windowGlobal || !shouldSave(initState.cars);
 
     this.state = initState;
 
     if (windowGlobal) {
+      history.pushState({foo: 'bar'}, '', uri.toString());
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
-          document.querySelector(`#${editButtonId(editButtonIdx + 1)}`).style.opacity = '1';
+          const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`);
+          if (editButton) {
+            editButton.style.opacity = '1';
+          }
         });
       }, 200);
     }
@@ -92,19 +94,27 @@ class Garage extends React.Component {
       intl,
     } = this.props;
 
+    // Click on edit button on a car's card 
     const editCar = index => {
-      const newUri = new Uri(uri);
+      const newUri = new Uri(uri.toString());
       newUri.setPath('/browse');
       newUri.addQueryParam('edit', index);
       window.location.href = newUri.toString();
     };
 
+    // Click on save button of a car's card label
+    const editCardLabel = (index, newLabel) => {
+      const newCars = [...cars];
+      newCars[index].label = newLabel;
+      const newUri = addCarsToParams(newCars, uri);
+      this.setState({ cars: newCars, saveOk: !shouldSave(cars), uri: newUri });
+      history.pushState({foo: 'bar'}, '', newUri.toString());
+    };
+
     const transform = (car, index) => {
-      const title = carLabels(index, intl);
       const thumbnail = car ? (
         <Car
           id={carComponentId(index)}
-          title={title}
           className={indexStyles.carComponent}
           car={car}
           initial={{ opacity: 0 }}
@@ -119,20 +129,23 @@ class Garage extends React.Component {
           marginCard={index === 2}
           empty={!car}
           index={index}
-          title={title}
+          label={car ? car.label : carLabels(index, intl)}
           edit={editCar}
           render={() => (thumbnail)}
           editButtonId={editButtonId(index)}
+          onLabelChanged={car ? newLabel => editCardLabel(index - 1, newLabel) : null}
         />
       );
     };
 
     const carElements = cars.map((car, idx) => transform(car, idx + 1));
 
+    // Click on garage save button
     const onSave = () => {
       const garageName = save(cars);
+      const newUri = addCarsToParams(cars, uri);
       const savedMessage = intl.formatMessage({ id: 'pages.index.garage_saved' });
-      this.setState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"` });
+      this.setState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"`, uri: newUri });
       setTimeout(() => this.setState({ saveMessage: null }), 2000); // message will be displayed during 2s
     };
 
@@ -142,10 +155,10 @@ class Garage extends React.Component {
 
     return (
       <Layout
-        location={uri}
+        location={uri.toString()}
         save={onSave}
         title={title}
-        uri={uri}
+        uri={uri.toString()}
         saveDisabled={saveOk}
         saveMessage={saveMessage}
         showButtons
@@ -153,7 +166,7 @@ class Garage extends React.Component {
         <SEO
           location={location.pathname}
           title={title}
-          uri={uri}
+          uri={uri.toString()}
           description={intl.formatMessage({ id: 'pages.index.meta.description' })}
         />
         <Title />
@@ -196,7 +209,9 @@ Garage.propTypes = {
     href: PropTypes.string.isRequired,
     pathname: PropTypes.string.isRequired,
   }).isRequired,
-  intl: PropTypes.func.isRequired,
+  intl: PropTypes.shape({
+    formatMessage: func.isRequired,
+  }).isRequired,
 };
 
 export const query = graphql`query {

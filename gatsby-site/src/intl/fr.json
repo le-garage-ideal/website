@@ -58,7 +58,7 @@
       "link_clipboard_ko": "Impossible! Copier le lien manuellement",
       "link_share_it": "Partagez ce lien : ",
       "saved_button_tooltip_ok": "Garage déjà sauvegardé",
-      "saved_button_tooltip_ko": "Sauvegarder le garage",
+      "saved_button_tooltip_ko": "Sauvegarder le garage, il apparaitra dans le menu",
       "first_footer": "Site hébergé par ",
       "second_footer": ". Aucun cookie ni aucune donnée personnelle ne sont utilisés.",
       "share_link": "Partager le lien vers ce garage",
@@ -75,7 +75,7 @@
       "description": "Faites votre choix parmi tous les modèles de {brand} disponibles"
     }
   },
-  "label_1": "Daily",
-  "label_2": "Collector",
-  "label_3": "Performances"
+  "label_1": "#1 - Daily",
+  "label_2": "#2 - Collector",
+  "label_3": "#3 - Performances"
 }

@@ -15,7 +15,7 @@ export const Toast = ({ children, classNames }) => (
 );
 
 Toast.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: PropTypes.string.isRequired,
   classNames: PropTypes.arrayOf(PropTypes.string),
 };
 

@@ -4,7 +4,6 @@ import { graphql } from 'gatsby';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useIntl } from 'gatsby-plugin-intl';
-import { carLabels } from '../constants';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import carsStyles from './cars.module.scss';
@@ -62,19 +61,19 @@ const Cars = ({ data, location }) => {
             <div className={carsStyles.carSelectionBox}>
               <div className="control">
                 <label className={radioClassNames}>
-                  <input type="radio" name={carLabels[0]} onChange={() => validateCar(1, car.mongodb_id)} />
+                  <input type="radio" name="#1" onChange={() => validateCar(1, car.mongodb_id)} />
                   &nbsp;
-                  {carLabels(1, intl)}
+                  #1
                 </label>
                 <label className={radioClassNames}>
-                  <input type="radio" name={carLabels[1]} onChange={() => validateCar(2, car.mongodb_id)} />
+                  <input type="radio" name="#2" onChange={() => validateCar(2, car.mongodb_id)} />
                   &nbsp;
-                  {carLabels(2, intl)}
+                  #2
                 </label>
                 <label className={radioClassNames}>
-                  <input type="radio" name={carLabels[2]} onChange={() => validateCar(3, car.mongodb_id)} />
+                  <input type="radio" name="#3" onChange={() => validateCar(3, car.mongodb_id)} />
                   &nbsp;
-                  {carLabels(3, intl)}
+                  #3
                 </label>
               </div>
             </div>

@@ -38,16 +38,28 @@ $cardMaxHeight: 80vh;
 
 .carLabelContainer {
     height: $labelHeight;
-    flex-grow: 1;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 .carLabel {
     color: var(--text-bright);
     font-size: 1.2rem;
     text-align: center;
-    padding: 5px 50px 5px 50px;
+    padding-top: 5px;
+    padding-right: 50px;
+    padding-bottom: 5px;
+    padding-left: 50px;
     border-radius: 10px;
     font-weight: bold;
+    width: 100%;
+    display: flex;
+}
+
+.carLabelEdit {
+    padding-right: 10px;
 }
 
 @media (orientation: portrait) {

@@ -10,6 +10,8 @@ import {
   faPlus,
   faSave,
   faShareSquare,
+  faCheck,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   FacebookShareButton,
@@ -34,6 +36,8 @@ library.add(faBars);
 library.add(faPlus);
 library.add(faSave);
 library.add(faShareSquare);
+library.add(faCheck);
+library.add(faTimes);
 
 const BUTTON_HEIGHT = '40px';
 
@@ -110,20 +114,20 @@ export const Layout = ({
                 <FontAwesomeIcon icon="share-square" />
               </button>
               <FacebookShareButton
-                title={intl.formatMessage({ id: 'components.layout.share_with', values: { network: 'Facebook' } })}
+                title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Facebook' })}
                 url={uri.replace('localhost:8000', 'perfect-garage.org')}
                 quote={title}
               >
                 <FacebookIcon size={BUTTON_HEIGHT} />
               </FacebookShareButton>
               <TwitterShareButton
-                title={intl.formatMessage({ id: 'components.layout.share_with', values: { network: 'Twitter' } })}
+                title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Twitter' })}
                 url={uri}
               >
                 <TwitterIcon size={BUTTON_HEIGHT} />
               </TwitterShareButton>
               <RedditShareButton
-                title={intl.formatMessage({ id: 'components.layout.share_with', values: { network: 'Reddit' } })}
+                title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Reddit' })}
                 url={uri}
               >
                 <RedditIcon size={BUTTON_HEIGHT} />

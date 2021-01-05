@@ -36,7 +36,11 @@ export const shouldSave = cars => {
       if (garage.length !== cars.length) {
         return true;
       }
-      return cars.some((car, idx) => car.mongodb_id !== garage[idx].mongodb_id || car.label !== garage[idx].label);
+      return cars.some((car, idx) => car && (
+        !garage[idx]
+        || car.mongodb_id !== garage[idx].mongodb_id
+        || car.label !== garage[idx].label
+      ));
     }
   }
   return false;

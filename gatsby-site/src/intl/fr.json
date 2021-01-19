@@ -62,7 +62,8 @@
       "first_footer": "Site hébergé par ",
       "second_footer": ". Aucun cookie ni aucune donnée personnelle ne sont utilisés.",
       "share_link": "Partager le lien vers ce garage",
-      "share_with": "Partager avec {network}"
+      "share_with": "Partager avec {network}",
+      "share_title": "Mon garage idéal"
     }
   },
   "templates": {

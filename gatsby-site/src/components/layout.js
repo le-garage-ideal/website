@@ -113,25 +113,31 @@ export const Layout = ({
               >
                 <FontAwesomeIcon icon="share-square" />
               </button>
-              <FacebookShareButton
-                title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Facebook' })}
-                url={uri.replace('localhost:8000', 'perfect-garage.org')}
-                quote={title}
-              >
-                <FacebookIcon size={BUTTON_HEIGHT} />
-              </FacebookShareButton>
-              <TwitterShareButton
-                title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Twitter' })}
-                url={uri}
-              >
-                <TwitterIcon size={BUTTON_HEIGHT} />
-              </TwitterShareButton>
-              <RedditShareButton
-                title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Reddit' })}
-                url={uri}
-              >
-                <RedditIcon size={BUTTON_HEIGHT} />
-              </RedditShareButton>
+              <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Facebook' })}>
+                <FacebookShareButton
+                  quote={intl.formatMessage({ id: 'components.layout.share_title' })}
+                  url={uri.replace('localhost:8000', 'perfect-garage.org')}
+                  quote={title}
+                >
+                  <FacebookIcon size={BUTTON_HEIGHT} />
+                </FacebookShareButton>
+              </div>
+              <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Twitter' })}>
+                <TwitterShareButton
+                  title={intl.formatMessage({ id: 'components.layout.share_title' })}
+                  url={uri}
+                >
+                  <TwitterIcon size={BUTTON_HEIGHT} />
+                </TwitterShareButton>
+              </div>
+              <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Reddit' })}>
+                <RedditShareButton
+                  title={intl.formatMessage({ id: 'components.layout.share_title' })}
+                  url={uri}
+                >
+                  <RedditIcon size={BUTTON_HEIGHT} />
+                </RedditShareButton>
+              </div>
               {saveMessage
                 && (
                   <div style={{ position: 'absolute' }}>

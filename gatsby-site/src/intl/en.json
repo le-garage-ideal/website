@@ -62,7 +62,8 @@
       "first_footer": "Site hosted by ",
       "second_footer": ". No cookie and no personal data are used by this website.",
       "share_link": "Share the link for to this garage",
-      "share_with": "Share with {network}"
+      "share_with": "Share with {network}",
+      "share_title": "My Perfect Garage"
     }
   },
   "templates": {

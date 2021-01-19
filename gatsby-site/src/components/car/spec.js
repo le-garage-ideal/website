@@ -40,8 +40,7 @@ const Spec = ({
   const powerUnit = intl.formatMessage({ id: 'components.spec.hp' });
 
   return (
-    <article className={specStyles.card}>
-      <section className={specStyles.bars}>
+      <section className={specStyles.specContainer}>
         <div className={specStyles.barTitle}>
           <legend>{ intl.formatMessage({ id: 'components.spec.power' }) }</legend>
           <span>
@@ -77,7 +76,6 @@ const Spec = ({
           </legend>
         )}
       </section>
-    </article>
   );
 };
 

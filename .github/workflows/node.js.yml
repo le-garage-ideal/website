@@ -28,6 +28,7 @@ jobs:
     - name: Build Gatsby
       working-directory: gatsby-site
       run: | 
+        echo "module.exports.mongodbPassword = '${{ secrets.MONGODB_PASSWORD }}';" > passwords.js
         npm install
         npm run build
 

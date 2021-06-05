@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "postbuild": "shx rm -rf ../../temp/* && shx cp ../../website-dist/.cpanel.yml ../../temp/ && shx cp -r ../../website-dist/.git ../../temp/ && shx rm -rf ../../website-dist/* && shx cp -r ./public/* ../../website-dist && shx cp -r ../../temp/.git ../../website-dist/ && shx cp ../../temp/.cpanel.yml ../../website-dist/",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",

@@ -24,4 +24,18 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm run build
+
+    - name: Build Gatsby
+      working-directory: gatsby-site
+      run: npm run build
+
+    - name: Simple FTP deploy
+      uses: kevinpainchaud/simple-ftp-deploy-action@v1.2.1
+      with:
+        ftp_host: ${{ secrets.DEPLOY_HOST }}
+        ftp_username: ${{ secrets.DEPLOY_ACCOUNT }}
+        ftp_password: ${{ secrets.DEPLOY_PASSWORD }}
+        local_source_dir: "gatsby-site/public"
+        dist_target_dir: ${{ secrets.DEPLOY_DIR}}
+        delete: "true"
+

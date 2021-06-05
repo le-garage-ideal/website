@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 15.x]
+        node-version: [14.x]
   
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +27,8 @@ jobs:
 
     - name: Build Gatsby
       working-directory: gatsby-site
-      run: npm run build
+      run: npm install
+        npm run build
 
     - name: Simple FTP deploy
       uses: kevinpainchaud/simple-ftp-deploy-action@v1.2.1

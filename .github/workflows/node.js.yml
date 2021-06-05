@@ -27,7 +27,8 @@ jobs:
 
     - name: Build Gatsby
       working-directory: gatsby-site
-      run: npm install
+      run: | 
+        npm install
         npm run build
 
     - name: Simple FTP deploy

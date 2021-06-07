@@ -41,4 +41,6 @@ jobs:
         local_source_dir: "gatsby-site/public"
         dist_target_dir: ${{ secrets.DEPLOY_DIR}}
         delete: "true"
+        only_newer: "true"
+        ignore_time: "true"
 

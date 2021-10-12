@@ -97,7 +97,6 @@ export const Layout = ({
                 type="button"
                 title={savedButtonTooltip}
                 className={['icon-button', layoutStyles.saveButton].join(' ')}
-                disabled={saveDisabled}
                 onClick={() => { if (save) save(); }}
                 style={{ height: BUTTON_HEIGHT }}
               >

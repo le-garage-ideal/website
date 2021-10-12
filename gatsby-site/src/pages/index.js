@@ -142,11 +142,13 @@ class Garage extends React.Component {
 
     // Click on garage save button
     const onSave = () => {
-      const garageName = save(cars);
-      const newUri = addCarsToParams(cars, uri);
-      const savedMessage = intl.formatMessage({ id: 'pages.index.garage_saved' });
-      this.setState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"`, uri: newUri });
-      setTimeout(() => this.setState({ saveMessage: null }), 2000); // message will be displayed during 2s
+      if (!saveOk) {
+        const garageName = save(cars);
+        const newUri = addCarsToParams(cars, uri);
+        const savedMessage = intl.formatMessage({ id: 'pages.index.garage_saved' });
+        this.setState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"`, uri: newUri });
+        setTimeout(() => this.setState({ saveMessage: null }), 2000); // message will be displayed during 2s
+      }
     };
 
     const title = cars.map(car => (car ? fullname(car) : null))

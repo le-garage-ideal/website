@@ -1,8 +1,8 @@
 import React from 'react';
 import Uri from 'jsuri';
 import PropTypes from 'prop-types';
-import { useIntl } from 'gatsby-plugin-intl';
-import specStyles from './spec.module.scss';
+import { useIntl } from 'gatsby-plugin-react-intl';
+import * as specStyles from './spec.module.scss';
 import { extractHostname } from '../../functions/url';
 
 const POWER_MAX = 1200; // max 1200hp, else overflow
@@ -44,7 +44,7 @@ const Spec = ({
         <div className={specStyles.barTitle}>
           <legend>{ intl.formatMessage({ id: 'components.spec.power' }) }</legend>
           <span>
-            <span className={specStyles.power}>{power}</span>
+            <span>{power}</span>
             { powerUnit }
           </span>
         </div>
@@ -52,7 +52,7 @@ const Spec = ({
         <div className={specStyles.barTitle}>
           <legend>{ theWeightLabel}</legend>
           <span>
-            <span className={specStyles.weight}>{theWeight}</span>
+            <span>{theWeight}</span>
             kg
           </span>
         </div>
@@ -60,7 +60,7 @@ const Spec = ({
         <div className={specStyles.barTitle}>
           <legend>{ intl.formatMessage({ id: 'components.spec.ratio' }) }</legend>
           <span>
-            <span className={specStyles.ratio}>{ratio}</span>
+            <span>{ratio}</span>
             { `kg/${powerUnit}` }
           </span>
         </div>

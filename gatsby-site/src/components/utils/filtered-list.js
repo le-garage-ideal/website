@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import filteredListStyles from './filtered-list.module.scss';
+import * as filteredListStyles from './filtered-list.module.scss';
 
 const FilteredList = ({ title, render, filter }) => {
   const [previousFilterValue, setPreviousFilterValue] = useState(null);

@@ -14,6 +14,17 @@ describe('getCarParams', () => {
   });
 });
 
+describe('getRelativePath', () => {
+  it('builds absolute path and retrieve relative path', () => {
+    const relative = '/car/1?param=2';
+    const uri = new Uri(`http://www.test.com:8082${relative}`);
+    uri.setHost(null);
+    uri.setProtocol(null);
+    uri.setPort(null);
+    expect(uri.toString()).toBe(relative);
+  });
+});
+
 describe('addCarsToParams', () => {
   it('adds query params to URL from car data', () => {
     const uri = new Uri('http://test.com');

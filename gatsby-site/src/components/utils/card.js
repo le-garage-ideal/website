@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cardStyles from './card.module.scss';
+import * as cardStyles from './card.module.scss';
 
 export const Card = ({
   empty, marginCard, index, edit, render, editButtonId, label, onLabelChanged,

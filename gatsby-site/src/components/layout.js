@@ -22,8 +22,8 @@ import {
   RedditIcon,
 } from 'react-share';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useIntl } from 'gatsby-plugin-intl';
-import layoutStyles from './layout.module.scss';
+import { useIntl } from 'gatsby-plugin-react-intl';
+import * as layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
 import { copyToClipboard } from '../functions/clipboard';
@@ -147,7 +147,7 @@ export const Layout = ({
             )}
         </header>
 
-        <div className={[layoutStyles.popup, 'modal', shareModalState].join(' ')}>
+        <div className={['modal', shareModalState].join(' ')}>
           <div className="modal-background" />
           <div className="modal-content">
             <div className="field is-vertical">

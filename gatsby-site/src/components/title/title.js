@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useIntl } from 'gatsby-plugin-intl';
-import titleStyles from './title.module.scss';
+import { useIntl } from 'gatsby-plugin-react-intl';
+import * as titleStyles from './title.module.scss';
 
 export const Title = () => {
   const intl = useIntl();

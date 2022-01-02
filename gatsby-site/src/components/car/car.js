@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import carStyles from './car.module.scss';
 import Spec from './spec';
 import { fullname } from '../../functions/cars';
+import * as carStyles from './car.module.scss';
 
 export const Car = ({ car }) => {
   const carFullname = fullname(car);

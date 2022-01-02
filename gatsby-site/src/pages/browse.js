@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { graphql } from 'gatsby';
-import { useIntl } from 'gatsby-plugin-intl';
-import './bulma-theme.scss';
+import { useIntl } from 'gatsby-plugin-react-intl';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
+import './bulma-theme.scss';
 
 const Browse = ({ data, location }) => {
   const intl = useIntl();

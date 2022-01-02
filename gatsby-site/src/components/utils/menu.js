@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { motion } from 'framer-motion';
-import { useIntl } from 'gatsby-plugin-intl';
+import { useIntl, Link } from 'gatsby-plugin-react-intl';
 import { buildGarageName, getSavedGarages } from '../../functions/storage';
 import { eachCar } from '../../functions/cars';
-import menuStyles from './menu.module.scss';
+import * as menuStyles from './menu.module.scss';
 
 const Menu = ({ uri }) => {
   const intl = useIntl();
@@ -55,8 +55,8 @@ const Menu = ({ uri }) => {
     >
       <ul className="menu-list">
         <li>{garageMenuItems}</li>
-        <li><a href={carsUri}>{ intl.formatMessage({ id: 'components.menu.cars' }) }</a></li>
-        <li><a href={aboutUri}>{ intl.formatMessage({ id: 'components.menu.about' }) }</a></li>
+        <li><Link to={carsUri}>{ intl.formatMessage({ id: 'components.menu.cars' }) }</Link></li>
+        <li><Link to={aboutUri}>{ intl.formatMessage({ id: 'components.menu.about' }) }</Link></li>
       </ul>
     </motion.aside>
   );

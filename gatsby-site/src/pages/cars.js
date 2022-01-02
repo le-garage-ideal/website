@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useIntl } from 'gatsby-plugin-intl';
-import { Layout } from '../components/layout';
-import { SEO } from '../components/seo/seo';
-import carsStyles from './cars.module.scss';
+import { useIntl } from 'gatsby-plugin-react-intl';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
+import { Layout } from '../components/layout';
+import { SEO } from '../components/seo/seo';
 import { sortCars } from '../functions/sort';
+import * as carsStyles from './cars.module.scss';
 
 const Cars = ({ data, location }) => {
   const intl = useIntl();

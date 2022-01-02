@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Uri from 'jsuri';
-import { useIntl } from 'gatsby-plugin-intl';
+import { useIntl } from 'gatsby-plugin-react-intl';
 import { sortModels } from '../functions/sort';
-import { Layout } from '../components/layout';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
+import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 
 const Models = ({ data, pageContext, location }) => {

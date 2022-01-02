@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug npm test",
+            "request": "launch",
+            "runtimeArgs": ["--inspect-brk", "--unhandled-rejections=warn", "${workspaceRoot}/node_modules/jest/bin/jest.js", "--runInBand", "--coverage", "false"],
+            "skipFiles": [
+              "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "type": "node"
+          },
+        {
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",

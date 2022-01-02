@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import listItemStyles from './list-item.module.scss';
+import * as listItemStyles from './list-item.module.scss';
 
 const ListItem = ({
   id, name, image, onClick, selected, big,

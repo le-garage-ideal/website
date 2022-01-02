@@ -2,18 +2,18 @@ import Uri from 'jsuri';
 import PropTypes, { func } from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { injectIntl } from 'gatsby-plugin-intl';
-import './bulma-theme.scss';
+import { injectIntl } from 'gatsby-plugin-react-intl';
 import { eachCarIndex, fullname } from '../functions/cars';
 import { getSavedGarages, save, shouldSave } from '../functions/storage';
 import { processEditParams, getCarParams, addCarsToParams } from '../functions/url';
-import indexStyles from './index.module.scss';
+import * as indexStyles from './index.module.scss';
 import { carLabels } from '../constants';
 import { Card } from '../components/utils/card';
 import { Title } from '../components/title/title';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import { Car } from '../components/car/car';
+import './bulma-theme.scss';
 
 const carComponentId = index => `car-${index}`;
 const editButtonId = index => `edit-${index}`;
@@ -23,6 +23,8 @@ class Garage extends React.Component {
     super(props);
 
     let uri = new Uri(props.location.href);
+    uri.setHost(null);
+    uri.setPort(null);
 
     // if edit=X parameter, save car to carX parameter
     const hasEditParams = processEditParams(uri);

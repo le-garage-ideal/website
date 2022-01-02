@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import toastStyles from './toast.module.scss';
+import * as toastStyles from './toast.module.scss';
 
 export const Toast = ({ children, classNames }) => (
   <motion.div

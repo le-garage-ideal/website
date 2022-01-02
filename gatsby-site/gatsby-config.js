@@ -32,20 +32,24 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-sass',
     },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
     'gatsby-plugin-react-helmet',
     {
-      resolve: 'gatsby-plugin-intl',
+      resolve: `gatsby-plugin-react-intl`,
       options: {
         // language JSON resource path
         path: `${__dirname}/src/intl`,
         // supported language
         languages: ['en', 'fr'],
         // language file path
-        defaultLanguage: 'en',
+        defaultLanguage: `en`,
         // option to redirect to `/en` when connecting `/`
         redirect: true,
+        // option for use / as defaultLangauge root path. if your defaultLanguage is `en`, when `redirectDefaultLanguageToRoot` is true, then it will not generate `/en/xxx` pages, instead of `/xxx`
+        redirectDefaultLanguageToRoot: false,
+        // paths that you don't want to genereate locale pages, example: ["/dashboard/","/test/**"], string format is from micromatch https://github.com/micromatch/micromatch
+        ignoredPaths: [],
+        // option to fallback to the defined language instead of the `defaultLanguage` if the user langauge is not in the list
+        fallbackLanguage: `en`,
       },
     },
   ],

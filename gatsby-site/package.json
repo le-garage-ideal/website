@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
+    "postbuild": "shx cp -r ./public/* ../../website-dist",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",

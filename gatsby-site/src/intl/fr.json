@@ -18,9 +18,9 @@
     "browse": {
       "meta": {
         "title": "Marques",
-        "description": "Sélectionnez une marque de voiture"
+        "description": "Liste des marques"
       },
-      "list_title": "voitures de sport disponibles!"
+      "list_title": "Sélectionnez une marque de voiture"
     },
     "about": {
       "meta": {

@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { motion } from 'framer-motion';
-import { useIntl, Link } from 'gatsby-plugin-react-intl';
+import { useIntl, Link, navigate } from 'gatsby-plugin-react-intl';
 import { buildGarageName, getSavedGarages } from '../../functions/storage';
-import { eachCar } from '../../functions/cars';
+import { CarsContext, eachCar } from '../../functions/cars';
 import { extractRelativePathWithParams } from '../../functions/url';
 import * as menuStyles from './menu.module.scss';
 
 const Menu = ({ uri }) => {
   const intl = useIntl();
+  const setCars = useContext(CarsContext)[1];
 
   const uriObj = new Uri(uri);
-  const carsUri = uriObj.setPath('/cars').toString();
-  const aboutUri = uriObj.setPath('/about').toString();
+  const carsUri = extractRelativePathWithParams(uriObj.setPath('/cars'));
+  const aboutUri = extractRelativePathWithParams(uriObj.setPath('/about'));
 
   const garageUri = extractRelativePathWithParams(uriObj.setPath('/'));
 
@@ -31,7 +32,11 @@ const Menu = ({ uri }) => {
           savedGarageUri.replaceQueryParam(carKey, garage[idx].mongodb_id);
         }
       });
-      garageElements.push(<li key={garageName}><Link to={extractRelativePathWithParams(savedGarageUri)}>{garageName}</Link></li>);
+      const onClick = () => {
+        setCars(garage);
+        navigate(extractRelativePathWithParams(savedGarageUri));
+      }
+      garageElements.push(<li key={garageName}><a href="#" onClick={onClick}>{garageName}</a></li>);
     });
 
     garageMenuItems = (

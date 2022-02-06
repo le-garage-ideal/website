@@ -1,9 +1,9 @@
 import Uri from 'jsuri';
 import PropTypes, { func } from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { graphql } from 'gatsby';
 import { injectIntl, navigate } from 'gatsby-plugin-react-intl';
-import { eachCarIndex, fullname } from '../functions/cars';
+import { eachCarIndex, fullname, CarsContext } from '../functions/cars';
 import { getSavedGarages, save, shouldSave } from '../functions/storage';
 import { processEditParams, getCarParams, addCarsToParams, extractRelativePathWithParams } from '../functions/url';
 import * as indexStyles from './index.module.scss';
@@ -18,63 +18,65 @@ import './bulma-theme.scss';
 const carComponentId = index => `car-${index}`;
 const editButtonId = index => `edit-${index}`;
 
-class Garage extends React.Component {
-  constructor(props) {
-    super(props);
+const Garage = ({ location, intl, data }) => {
+  const [cars, setCars] = useState([]);
 
-    let uri = new Uri(props.location.href);
-    uri.setHost(null);
-    uri.setPort(null);
+  const initUri = new Uri(location.href);
+  initUri.setHost(null);
+  initUri.setPort(null);
+  const [uri, setUri] = useState(initUri);
 
-    // if edit=X parameter, save car to carX parameter
-    const hasEditParams = processEditParams(uri);
-    const initState = {
-      saveMessage: null,
-      saveOk: !hasEditParams,
-    };
-
+  // if edit=X parameter, save car to carX parameter
+  const hasEditParams = processEditParams(uri);
+  const [saveState, setSaveState] = useState({
+    saveMessage: null,
+    saveOk: !hasEditParams,
+  });
+  const contextValue = useMemo(() => [cars, setCars], [cars, setCars])
+  const { saveOk, saveMessage } = saveState;
+  useEffect(() => {
     // add missing params + save state
     const windowGlobal = typeof window !== 'undefined' && window;
-    initState.cars = [];
+    const newCars = [...cars];
     if (windowGlobal) {
       // Priority to URL if user copy paste shared garage
       const carParams = getCarParams(uri);
       carParams.forEach((param, idx) => {
-        initState.cars[idx] = null;
+        newCars[idx] = null;
 
-        if (param) { 
+        if (param) {
           const { carId, carLabel } = param;
 
           if (carId) {
-            const foundNode = props.data.allMongodbBmbu7Ynqra11RqiCars.edges
+            const foundNode = data.allMongodbBmbu7Ynqra11RqiCars.edges
               .find(({ node: car }) => car.mongodb_id === carId);
 
             if (foundNode) {
-              initState.cars[idx] = foundNode.node;
-              initState.cars[idx].label = carLabel ? carLabel : carLabels(idx + 1, props.intl);
+              newCars[idx] = foundNode.node;
+              newCars[idx].label = carLabel ? carLabel : carLabels(idx + 1, intl);
             }
           }
         }
       });
 
       // If no car found in url, load 1st garage from storage
-      if (!initState.cars.some(car => !!car)) {
+      if (!newCars.some(car => !!car)) {
         const savedGarages = getSavedGarages();
         if (savedGarages.length > 0) {
-          [initState.cars] = savedGarages;
-          uri = addCarsToParams(initState.cars, uri);
+          newCars.push(...savedGarages);
+          const newUri = addCarsToParams(newCars, initUri);
+          setUri(newUri);
         }
       }
+      setCars(newCars);
     }
-    initState.uri = uri;
 
     // Save button enabled?
-    initState.saveOk = !windowGlobal || !shouldSave(initState.cars);
+    setSaveState({ saveOk: !windowGlobal || !shouldSave(newCars) });
 
-    this.state = initState;
 
     if (windowGlobal) {
-      history.pushState({foo: 'bar'}, '', uri.path());
+      history.pushState({ foo: 'bar' }, '', uri.path());
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
           const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`);
@@ -84,80 +86,74 @@ class Garage extends React.Component {
         });
       }, 200);
     }
-  }
+  }, []);
 
-  render() {
-    const {
-      uri, saveOk, cars, saveMessage,
-    } = this.state;
+  // Click on edit button on a car's card 
+  const editCar = index => {
+    const newUri = new Uri(uri.toString());
+    newUri.setPath('/browse');
+    newUri.addQueryParam('edit', index);
+    navigate(extractRelativePathWithParams(newUri));
+  };
 
-    const {
-      location,
-      intl,
-    } = this.props;
+  // Click on save button of a car's card label
+  const editCardLabel = (index, newLabel) => {
+    const newCars = [...cars];
+    newCars[index].label = newLabel;
+    const newUri = addCarsToParams(newCars, uri);
+    setCars(newCars);
+    setSaveState({ saveOk: !shouldSave(cars) });
+    setUri(newUri);
+    history.pushState({ foo: 'bar' }, '', newUri.path());
+  };
 
-    // Click on edit button on a car's card 
-    const editCar = index => {
-      const newUri = new Uri(uri.toString());
-      newUri.setPath('/browse');
-      newUri.addQueryParam('edit', index);
-      navigate(extractRelativePathWithParams(newUri));
-    };
-
-    // Click on save button of a car's card label
-    const editCardLabel = (index, newLabel) => {
-      const newCars = [...cars];
-      newCars[index].label = newLabel;
-      const newUri = addCarsToParams(newCars, uri);
-      this.setState({ cars: newCars, saveOk: !shouldSave(cars), uri: newUri });
-      history.pushState({foo: 'bar'}, '', newUri.path());
-    };
-
-    const transform = (car, index) => {
-      const thumbnail = car ? (
-        <Car
-          id={carComponentId(index)}
-          className={indexStyles.carComponent}
-          car={car}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        />
-      ) : (
-        <div className={indexStyles.noCarThumbnail}>?</div>
-      );
-      return (
-        <Card
-          key={`card-${car ? car.mongodb_id : index}`}
-          marginCard={index === 2}
-          empty={!car}
-          index={index}
-          label={car ? car.label : carLabels(index, intl)}
-          edit={editCar}
-          render={() => (thumbnail)}
-          editButtonId={editButtonId(index)}
-          onLabelChanged={car ? newLabel => editCardLabel(index - 1, newLabel) : null}
-        />
-      );
-    };
-
-    const carElements = cars.map((car, idx) => transform(car, idx + 1));
-
-    // Click on garage save button
-    const onSave = () => {
-      if (!saveOk) {
-        const garageName = save(cars);
-        const newUri = addCarsToParams(cars, uri);
-        const savedMessage = intl.formatMessage({ id: 'pages.index.garage_saved' });
-        this.setState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"`, uri: newUri });
-        setTimeout(() => this.setState({ saveMessage: null }), 2000); // message will be displayed during 2s
-      }
-    };
-
-    const title = cars.map(car => (car ? fullname(car) : null))
-      .filter(s => !!s)
-      .join('\n');
-
+  const transform = (car, index) => {
+    const thumbnail = car ? (
+      <Car
+        id={carComponentId(index)}
+        className={indexStyles.carComponent}
+        car={car}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      />
+    ) : (
+      <div className={indexStyles.noCarThumbnail}>?</div>
+    );
     return (
+      <Card
+        key={`card-${car ? car.mongodb_id : index}`}
+        marginCard={index === 2}
+        empty={!car}
+        index={index}
+        label={car ? car.label : carLabels(index, intl)}
+        edit={editCar}
+        render={() => (thumbnail)}
+        editButtonId={editButtonId(index)}
+        onLabelChanged={car ? newLabel => editCardLabel(index - 1, newLabel) : null}
+      />
+    );
+  };
+
+  const carElements = cars.map((car, idx) => transform(car, idx + 1));
+
+  // Click on garage save button
+  const onSave = () => {
+    if (!saveOk) {
+      const garageName = save(cars);
+      const newUri = addCarsToParams(cars, uri);
+      const savedMessage = intl.formatMessage({ id: 'pages.index.garage_saved' });
+      setSaveState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"` });
+      setUri(newUri);
+      setTimeout(() => setSaveState({ saveMessage: null }), 2000); // message will be displayed during 2s
+    }
+  };
+
+  const title = cars.map(car => (car ? fullname(car) : null))
+    .filter(s => !!s)
+    .join('\n');
+
+  return (
+    <CarsContext.Provider value={contextValue}>
       <Layout
         location={uri.toString()}
         save={onSave}
@@ -178,9 +174,9 @@ class Garage extends React.Component {
           {carElements}
         </article>
       </Layout>
-    );
-  }
-}
+    </CarsContext.Provider>
+  );
+};
 
 Garage.propTypes = {
   data: PropTypes.shape({

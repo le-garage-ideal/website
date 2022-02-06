@@ -34,7 +34,7 @@ const Cars = ({ data, location }) => {
     const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
     const radioClassNames = ['radio', carsStyles.radioLabel].join(' ');
     return (
-      <div key={`carItem${car.mongodb_id}`}>
+      <li key={`carItem${car.mongodb_id}`}>
         <ListItem
           id={car.mongodb_id}
           name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
@@ -80,7 +80,7 @@ const Cars = ({ data, location }) => {
             </div>
           )
         }
-      </div>
+      </li>
     );
   });
 

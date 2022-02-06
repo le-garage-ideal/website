@@ -1,3 +1,7 @@
+import { createContext } from 'react';
+
+export const CarsContext = createContext()
+
 export const eachCarIndex = fn => {
   const result = [];
   for (let i = 0; i < 3; i += 1) {

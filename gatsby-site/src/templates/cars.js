@@ -20,18 +20,19 @@ const Cars = ({ data, pageContext, location }) => {
   const carComponents = filteredCars.map(car => {
     const imageUrl = `/images/${car.mongodb_id}-resized.jpg`;
     return (
-      <ListItem
-        key={car.mongodb_id}
-        id={car.mongodb_id}
-        name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
-        image={imageUrl}
-        big
-        onClick={() => {
-          uri.addQueryParam('car', car.mongodb_id);
-          uri.setPath('/');
-          navigate(extractRelativePathWithParams(uri));
-        }}
-      />
+      <li key={car.mongodb_id}>
+        <ListItem
+          id={car.mongodb_id}
+          name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
+          image={imageUrl}
+          big
+          onClick={() => {
+            uri.addQueryParam('car', car.mongodb_id);
+            uri.setPath('/');
+            navigate(extractRelativePathWithParams(uri));
+          }}
+        />
+      </li>
     );
   });
 

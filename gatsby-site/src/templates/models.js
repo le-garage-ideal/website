@@ -23,17 +23,18 @@ const Models = ({ data, pageContext, location }) => {
   const [filteredModels, setFilteredModels] = useState(listName);
 
   const modelComponents = filteredModels.map(car => (
-    <ListItem
-      key={car.model.name}
-      id={car.model.name}
-      name={car.model.name}
-      image={`/images/${car.mongodb_id}-resized.jpg`}
-      big
-      onClick={() => {
-        uri.setPath(`/cars/${car.model.brand.name}/${car.model.name}`);
-        navigate(extractRelativePathWithParams(uri));
-      }}
-    />
+    <li key={car.model.name}>
+      <ListItem
+        id={car.model.name}
+        name={car.model.name}
+        image={`/images/${car.mongodb_id}-resized.jpg`}
+        big
+        onClick={() => {
+          uri.setPath(`/cars/${car.model.brand.name}/${car.model.name}`);
+          navigate(extractRelativePathWithParams(uri));
+        }}
+      />
+    </li>
   ));
 
   const search = value => {
@@ -83,7 +84,6 @@ Models.propTypes = {
   }).isRequired,
   pageContext: PropTypes.shape({
     brand: PropTypes.string.isRequired,
-    model: PropTypes.string.isRequired,
   }).isRequired,
 };
 

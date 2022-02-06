@@ -24,13 +24,14 @@ const Browse = ({ data, location }) => {
   const brandComponents = filteredBrands.map(({ node: brand }) => brand)
     .sort((brand1, brand2) => (brand1.name > brand2.name ? 1 : -1))
     .map(brand => (
-      <ListItem
-        key={brand.id}
-        id={brand.id}
-        name={brand.name}
-        image={brand.image}
-        onClick={() => onBrandSelect(brand.name)}
-      />
+      <li key={brand.mongodb_id}>
+        <ListItem
+          id={brand.mongodb_id}
+          name={brand.name}
+          image={brand.image}
+          onClick={() => onBrandSelect(brand.name)}
+        />
+      </li>
     ));
 
   const search = value => {
@@ -79,7 +80,8 @@ export const query = graphql`query {
         edges {
             node {
                 name,
-                image
+                image,
+                mongodb_id,
             }
         }
     }

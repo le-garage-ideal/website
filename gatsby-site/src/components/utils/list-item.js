@@ -17,14 +17,12 @@ const ListItem = ({
   }
 
   return (
-    <li>
-      <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
-        <figure>
-          <img src={image} alt={name} />
-          <figcaption>{name}</figcaption>
-        </figure>
-      </button>
-    </li>
+    <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
+      <figure>
+        <img src={image} alt={name} />
+        <figcaption>{name}</figcaption>
+      </figure>
+    </button>
   );
 };
 

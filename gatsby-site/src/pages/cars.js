@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useIntl } from 'gatsby-plugin-react-intl';
+import { useIntl, navigate } from 'gatsby-plugin-react-intl';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import { sortCars } from '../functions/sort';
+import { extractRelativePathWithParams } from '../functions/url';
 import * as carsStyles from './cars.module.scss';
 
 const Cars = ({ data, location }) => {
@@ -25,7 +26,7 @@ const Cars = ({ data, location }) => {
   const validateCar = (index, id) => {
     uri.replaceQueryParam(`car${index}`, id);
     uri.setPath('/');
-    window.location.href = uri.toString();
+    navigate(extractRelativePathWithParams(uri));
   };
 
   const carComponents = filteredCars.map(car => {

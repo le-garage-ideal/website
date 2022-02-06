@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
 import { graphql } from 'gatsby';
-import { useIntl } from 'gatsby-plugin-react-intl';
+import { useIntl, navigate } from 'gatsby-plugin-react-intl';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
+import { extractRelativePathWithParams } from '../functions/url';
 import './bulma-theme.scss';
 
 const Browse = ({ data, location }) => {
@@ -15,7 +16,7 @@ const Browse = ({ data, location }) => {
 
   const onBrandSelect = brandName => {
     uri.setPath(`/models/${brandName}`);
-    window.location.href = uri.toString();
+    navigate(extractRelativePathWithParams(uri));
   };
 
   const [filteredBrands, setFilteredBrands] = useState(data.allMongodbBmbu7Ynqra11RqiBrands.edges);

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useIntl, Link } from 'gatsby-plugin-react-intl';
 import { buildGarageName, getSavedGarages } from '../../functions/storage';
 import { eachCar } from '../../functions/cars';
+import { extractRelativePathWithParams } from '../../functions/url';
 import * as menuStyles from './menu.module.scss';
 
 const Menu = ({ uri }) => {
@@ -14,7 +15,7 @@ const Menu = ({ uri }) => {
   const carsUri = uriObj.setPath('/cars').toString();
   const aboutUri = uriObj.setPath('/about').toString();
 
-  const garageUri = uriObj.setPath('/').toString();
+  const garageUri = extractRelativePathWithParams(uriObj.setPath('/'));
 
   const savedGarages = getSavedGarages();
   let garageMenuItems;
@@ -30,20 +31,20 @@ const Menu = ({ uri }) => {
           savedGarageUri.replaceQueryParam(carKey, garage[idx].mongodb_id);
         }
       });
-      garageElements.push(<li key={garageName}><a href={savedGarageUri.toString()}>{garageName}</a></li>);
+      garageElements.push(<li key={garageName}><Link to={extractRelativePathWithParams(savedGarageUri)}>{garageName}</Link></li>);
     });
 
     garageMenuItems = (
       <>
-        <a href={garageUri}>{ intl.formatMessage({ id: 'components.menu.garages' }) }</a>
+        <Link to={garageUri}>{ intl.formatMessage({ id: 'components.menu.garages' }) }</Link>
         <ul>
-          <li><a href={garageUri}>{ intl.formatMessage({ id: 'components.menu.current_garage' }) }</a></li>
+          <li><Link to={garageUri}>{ intl.formatMessage({ id: 'components.menu.current_garage' }) }</Link></li>
           { garageElements }
         </ul>
       </>
     );
   } else {
-    garageMenuItems = <a href={garageUri}>{ intl.formatMessage({ id: 'components.menu.the_garage' }) }</a>;
+    garageMenuItems = <Link to={garageUri}>{ intl.formatMessage({ id: 'components.menu.the_garage' }) }</Link>;
   }
 
   return (

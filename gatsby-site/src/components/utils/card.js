@@ -44,7 +44,7 @@ export const Card = ({
         </button>
       </div>
       {render()}
-      <div className={[cardStyles.carLabelContainer, 'container', 'is-full'].join(' ')}>
+      <div className={[cardStyles.carLabelContainer, 'container', 'is-fluid'].join(' ')}>
         <div className={carLabelClasses.join(' ')}>
           {
             editModeLabel && (

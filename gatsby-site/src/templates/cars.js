@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Uri from 'jsuri';
-import { useIntl } from 'gatsby-plugin-react-intl';
+import { useIntl, navigate } from 'gatsby-plugin-react-intl';
 import { graphql } from 'gatsby';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
 import { sortCars } from '../functions/sort';
+import { extractRelativePathWithParams } from '../functions/url';
 
 const Cars = ({ data, pageContext, location }) => {
   const intl = useIntl();
@@ -28,7 +29,7 @@ const Cars = ({ data, pageContext, location }) => {
         onClick={() => {
           uri.addQueryParam('car', car.mongodb_id);
           uri.setPath('/');
-          window.location.href = uri.toString();
+          navigate(extractRelativePathWithParams(uri));
         }}
       />
     );
@@ -39,15 +40,13 @@ const Cars = ({ data, pageContext, location }) => {
     setFilteredCars(filtered);
   };
 
-  const title = intl.formatMessage({
-    id: 'templates.cars.title',
-    values: { brand: pageContext.brand, model: pageContext.model },
-  });
+  const title = intl.formatMessage({ id: 'templates.cars.title' },
+    { brand: pageContext.brand, model: pageContext.model },
+  );
 
-  const description = intl.formatMessage({
-    id: 'templates.cars.description',
-    values: { brand: pageContext.brand, model: pageContext.model },
-  });
+  const description = intl.formatMessage({ id: 'templates.cars.description' },
+    { brand: pageContext.brand, model: pageContext.model },
+  );
 
   return (
     <Layout>

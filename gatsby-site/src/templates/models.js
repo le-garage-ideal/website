@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import Uri from 'jsuri';
-import { useIntl } from 'gatsby-plugin-react-intl';
+import { useIntl, navigate } from 'gatsby-plugin-react-intl';
 import { sortModels } from '../functions/sort';
 import FilteredList from '../components/utils/filtered-list';
 import ListItem from '../components/utils/list-item';
 import { Layout } from '../components/layout';
 import { SEO } from '../components/seo/seo';
+import { extractRelativePathWithParams } from '../functions/url';
 
 const Models = ({ data, pageContext, location }) => {
   const intl = useIntl();
@@ -30,7 +31,7 @@ const Models = ({ data, pageContext, location }) => {
       big
       onClick={() => {
         uri.setPath(`/cars/${car.model.brand.name}/${car.model.name}`);
-        window.location.href = uri.toString();
+        navigate(extractRelativePathWithParams(uri));
       }}
     />
   ));
@@ -40,9 +41,9 @@ const Models = ({ data, pageContext, location }) => {
     setFilteredModels(filtered);
   };
 
-  const title = intl.formatMessage({ id: 'templates.models.title', values: { brand: pageContext.brand } });
+  const title = intl.formatMessage({ id: 'templates.models.title' }, { brand: pageContext.brand });
 
-  const description = intl.formatMessage({ id: 'templates.models.description', values: { brand: pageContext.brand } });
+  const description = intl.formatMessage({ id: 'templates.models.description' }, { brand: pageContext.brand });
 
   return (
     <Layout>

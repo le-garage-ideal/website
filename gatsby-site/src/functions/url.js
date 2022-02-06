@@ -21,6 +21,14 @@ export const extractHostname = fullHost => {
   return imageOrigin;
 };
 
+export const extractRelativePathWithParams = uri => {
+  const uriClone = uri.clone();
+  uriClone.setHost(null);
+  uriClone.setProtocol(null);
+  uriClone.setPort(null);
+  return uriClone.toString();
+};
+
 // When URL contains car edit params from previous car select page:
 //  - add the selected car to URL
 //  - clear edit params
@@ -39,14 +47,11 @@ export const processEditParams = uri => {
 
 const labelKey = carKey => `${carKey}-label`;
 
-export const getCarParams = uri => {
-  const result = eachCar(carKey => ({
+export const getCarParams = uri => eachCar(carKey => ({
     carId: uri.getQueryParamValue(carKey),
     carLabel: uri.getQueryParamValue(labelKey(carKey)),
   }))
   .map(element => element.carId ? element : null);
-  return result;
-};
 
 export const addCarsToParams = (cars, uri) => {
   const newUri = new Uri(uri.toString())

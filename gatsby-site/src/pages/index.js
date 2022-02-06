@@ -2,10 +2,10 @@ import Uri from 'jsuri';
 import PropTypes, { func } from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { injectIntl } from 'gatsby-plugin-react-intl';
+import { injectIntl, navigate } from 'gatsby-plugin-react-intl';
 import { eachCarIndex, fullname } from '../functions/cars';
 import { getSavedGarages, save, shouldSave } from '../functions/storage';
-import { processEditParams, getCarParams, addCarsToParams } from '../functions/url';
+import { processEditParams, getCarParams, addCarsToParams, extractRelativePathWithParams } from '../functions/url';
 import * as indexStyles from './index.module.scss';
 import { carLabels } from '../constants';
 import { Card } from '../components/utils/card';
@@ -74,7 +74,7 @@ class Garage extends React.Component {
     this.state = initState;
 
     if (windowGlobal) {
-      history.pushState({foo: 'bar'}, '', uri.toString());
+      history.pushState({foo: 'bar'}, '', uri.path());
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
           const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`);
@@ -101,7 +101,7 @@ class Garage extends React.Component {
       const newUri = new Uri(uri.toString());
       newUri.setPath('/browse');
       newUri.addQueryParam('edit', index);
-      window.location.href = newUri.toString();
+      navigate(extractRelativePathWithParams(newUri));
     };
 
     // Click on save button of a car's card label
@@ -110,7 +110,7 @@ class Garage extends React.Component {
       newCars[index].label = newLabel;
       const newUri = addCarsToParams(newCars, uri);
       this.setState({ cars: newCars, saveOk: !shouldSave(cars), uri: newUri });
-      history.pushState({foo: 'bar'}, '', newUri.toString());
+      history.pushState({foo: 'bar'}, '', newUri.path());
     };
 
     const transform = (car, index) => {

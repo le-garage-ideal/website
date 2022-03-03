@@ -4,8 +4,13 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { graphql } from 'gatsby';
 import { injectIntl, navigate } from 'gatsby-plugin-react-intl';
 import { eachCarIndex, fullname, CarsContext } from '../functions/cars';
-import { getSavedGarages, save, shouldSave } from '../functions/storage';
-import { processEditParams, getCarParams, addCarsToParams, extractRelativePathWithParams } from '../functions/url';
+import { save, shouldSave } from '../functions/storage';
+import {
+  processEditParams,
+  getCarParams,
+  addCarsToParams,
+  extractRelativePathWithParams
+} from '../functions/url';
 import * as indexStyles from './index.module.scss';
 import { carLabels } from '../constants';
 import { Card } from '../components/utils/card';
@@ -21,9 +26,7 @@ const editButtonId = index => `edit-${index}`;
 const Garage = ({ location, intl, data }) => {
   const [cars, setCars] = useState([]);
 
-  const initUri = new Uri(location.href);
-  initUri.setHost(null);
-  initUri.setPort(null);
+  const initUri = new Uri(extractRelativePathWithParams(new Uri(location.href)));
   const [uri, setUri] = useState(initUri);
 
   // if edit=X parameter, save car to carX parameter
@@ -59,15 +62,6 @@ const Garage = ({ location, intl, data }) => {
         }
       });
 
-      // If no car found in url, load 1st garage from storage
-      if (!newCars.some(car => !!car)) {
-        const savedGarages = getSavedGarages();
-        if (savedGarages.length > 0) {
-          newCars.push(...savedGarages);
-          const newUri = addCarsToParams(newCars, initUri);
-          setUri(newUri);
-        }
-      }
       setCars(newCars);
     }
 

@@ -45,19 +45,17 @@ export const Layout = ({
   title, uri, children, save, saveDisabled, saveMessage, showButtons,
 }) => {
   const intl = useIntl();
-
   const [showMenu, setShowMenu] = useState(false);
   const [shareModalState, setShareModalState] = useState('');
   const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState(null);
   const [shareCopyErrorMessage, setShareCopyErrorMessage] = useState(null);
-
   const menuButtonClass = [layoutStyles.menuButton, 'icon-button'];
   if (showMenu) {
     menuButtonClass.push(layoutStyles.menuExpanded);
   }
 
   const onShareCopyClick = () => {
-    copyToClipboard(uri).then(() => {
+    copyToClipboard(window.location.href).then(() => {
       setShareCopySuccessMessage(intl.formatMessage({ id: 'components.layout.link_clipboard_ok' }));
       setTimeout(() => setShareCopySuccessMessage(null), 5000);
     }, () => {
@@ -73,7 +71,7 @@ export const Layout = ({
   const footer = (
     <footer className={layoutStyles.appFooter}>
       <span>{intl.formatMessage({ id: 'components.layout.first_footer' })}</span>
-      <a href="o2switch.fr">o2switch.fr</a>
+      <a href="https://o2switch.fr">o2switch.fr</a>
       <span>{intl.formatMessage({ id: 'components.layout.second_footer' })}</span>
     </footer>
   );
@@ -115,7 +113,7 @@ export const Layout = ({
               <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Facebook' })}>
                 <FacebookShareButton
                   quote={intl.formatMessage({ id: 'components.layout.share_title' })}
-                  url={uri.replace('localhost:8000', 'perfect-garage.org')}
+                  url={window.location.href}
                   quote={title}
                 >
                   <FacebookIcon size={BUTTON_HEIGHT} />
@@ -124,7 +122,7 @@ export const Layout = ({
               <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Twitter' })}>
                 <TwitterShareButton
                   title={intl.formatMessage({ id: 'components.layout.share_title' })}
-                  url={uri}
+                  url={window.location.href}
                 >
                   <TwitterIcon size={BUTTON_HEIGHT} />
                 </TwitterShareButton>
@@ -132,7 +130,7 @@ export const Layout = ({
               <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Reddit' })}>
                 <RedditShareButton
                   title={intl.formatMessage({ id: 'components.layout.share_title' })}
-                  url={uri}
+                  url={window.location.href}
                 >
                   <RedditIcon size={BUTTON_HEIGHT} />
                 </RedditShareButton>
@@ -159,7 +157,7 @@ export const Layout = ({
                   type="text"
                   name="share-link"
                   id="share-link"
-                  value={uri}
+                  value={window.location.href}
                   className="input is-primary"
                   readOnly
                 />

@@ -21,6 +21,15 @@ export const extractHostname = fullHost => {
   return imageOrigin;
 };
 
+export const addProtocolAndHostToUri = (fullUri, relativeUri) => {
+  const fullUriObj = typeof fullUri === 'string' ? new Uri(fullUri) : fullUri;
+  const resultUriObj = typeof relativeUri === 'string' ? new Uri(relativeUri) : relativeUri.clone();
+  resultUriObj.setProtocol(fullUriObj.protocol());
+  resultUriObj.setHost(fullUriObj.host());
+  resultUriObj.setPort(fullUriObj.port());
+  return resultUriObj;
+};
+
 export const extractRelativePathWithParams = uri => {
   const uriClone = uri.clone();
   uriClone.setHost(null);
@@ -54,7 +63,7 @@ export const getCarParams = uri => eachCar(carKey => ({
   .map(element => element.carId ? element : null);
 
 export const addCarsToParams = (cars, uri) => {
-  const newUri = new Uri(uri.toString())
+  const newUri = uri.clone();
   eachCar((carKey, idx) => {
     if (cars[idx]) {
       newUri.replaceQueryParam(carKey, cars[idx].mongodb_id);

@@ -1,9 +1,12 @@
-import { eachCarIndex } from './cars';
-
 const GARAGE_PREFIX = 'garage-';
 
-export const buildGarageName = cars => `${GARAGE_PREFIX}${cars.filter(car => !!car)
-  .map(car => car.model.name).join('/')}`;
+export const buildGarageName = cars => {
+  const garageSuffix = cars
+    .filter(car => !!car)
+    .map(car => car.model.name)
+    .join('/');
+  return `${GARAGE_PREFIX}${garageSuffix}`
+};
 
 export const getSavedGarages = () => {
   const savedGarages = [];

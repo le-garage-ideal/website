@@ -54,8 +54,10 @@ export const Layout = ({
     menuButtonClass.push(layoutStyles.menuExpanded);
   }
 
+  const windowLocation = (typeof window !== 'undefined' && window).location?.href;
+
   const onShareCopyClick = () => {
-    copyToClipboard(window.location.href).then(() => {
+    copyToClipboard(windowLocation).then(() => {
       setShareCopySuccessMessage(intl.formatMessage({ id: 'components.layout.link_clipboard_ok' }));
       setTimeout(() => setShareCopySuccessMessage(null), 5000);
     }, () => {
@@ -113,7 +115,7 @@ export const Layout = ({
               <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Facebook' })}>
                 <FacebookShareButton
                   quote={intl.formatMessage({ id: 'components.layout.share_title' })}
-                  url={window.location.href}
+                  url={windowLocation}
                   quote={title}
                 >
                   <FacebookIcon size={BUTTON_HEIGHT} />
@@ -122,7 +124,7 @@ export const Layout = ({
               <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Twitter' })}>
                 <TwitterShareButton
                   title={intl.formatMessage({ id: 'components.layout.share_title' })}
-                  url={window.location.href}
+                  url={windowLocation}
                 >
                   <TwitterIcon size={BUTTON_HEIGHT} />
                 </TwitterShareButton>
@@ -130,7 +132,7 @@ export const Layout = ({
               <div title={intl.formatMessage({ id: 'components.layout.share_with' }, { network: 'Reddit' })}>
                 <RedditShareButton
                   title={intl.formatMessage({ id: 'components.layout.share_title' })}
-                  url={window.location.href}
+                  url={windowLocation}
                 >
                   <RedditIcon size={BUTTON_HEIGHT} />
                 </RedditShareButton>
@@ -157,7 +159,7 @@ export const Layout = ({
                   type="text"
                   name="share-link"
                   id="share-link"
-                  value={window.location.href}
+                  value={windowLocation}
                   className="input is-primary"
                   readOnly
                 />

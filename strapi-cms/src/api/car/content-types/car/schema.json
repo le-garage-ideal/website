@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cars",
+  "info": {
+    "singularName": "car",
+    "pluralName": "cars",
+    "displayName": "Car"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "variant": {
+      "type": "string",
+      "required": true
+    },
+    "weight": {
+      "type": "integer"
+    },
+    "officialWeight": {
+      "type": "integer"
+    },
+    "power": {
+      "type": "integer"
+    },
+    "options": {
+      "type": "string"
+    },
+    "startYear": {
+      "type": "string",
+      "maxLength": 4,
+      "regex": "[0-9]+"
+    },
+    "endYear": {
+      "type": "string",
+      "maxLength": 4,
+      "regex": "[0-9]+"
+    },
+    "imageFile": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "selectedFavcarsUrl": {
+      "type": "string"
+    },
+    "selectedFavcarsVariant": {
+      "type": "string"
+    },
+    "model": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::model.model",
+      "inversedBy": "cars"
+    }
+  }
+}

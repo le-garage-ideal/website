@@ -4,7 +4,8 @@
   "info": {
     "singularName": "car",
     "pluralName": "cars",
-    "displayName": "Car"
+    "displayName": "Car",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -37,9 +38,6 @@
       "maxLength": 4,
       "regex": "[0-9]+"
     },
-    "imageFile": {
-      "type": "string"
-    },
     "imageUrl": {
       "type": "string"
     },
@@ -54,6 +52,16 @@
       "relation": "manyToOne",
       "target": "api::model.model",
       "inversedBy": "cars"
+    },
+    "imageFile": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

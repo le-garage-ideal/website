@@ -4,7 +4,8 @@
   "info": {
     "singularName": "model",
     "pluralName": "models",
-    "displayName": "model"
+    "displayName": "Model",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true

@@ -1,0 +1,82 @@
+$cardHeight: 30vw;
+$labelHeight: 5vw;
+$cardMaxHeight: 80vh;
+
+.card {
+    width: $cardHeight;
+    max-width: 30vw;
+    max-height: $cardMaxHeight;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    align-items: flex-end;
+}
+
+.cardWithCar {
+    height: $cardHeight + $labelHeight;
+}
+
+.cardWithoutCar {
+    height: $cardHeight;
+}
+
+.marginCard {
+    margin-top: 70px;
+}
+
+.iconButtonContainer {
+    margin-bottom: -48px;
+    z-index: 1;
+    opacity: 0; // changed to 1 when cars are ready
+}
+
+.iconButton {
+    padding: 2px 5px 5px 5px;
+    background-color: var(--dark-opaque);
+}
+
+.carLabelContainer {
+    height: $labelHeight;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.carLabel {
+    color: var(--text-bright);
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top: 5px;
+    padding-right: 50px;
+    padding-bottom: 5px;
+    padding-left: 50px;
+    border-radius: 10px;
+    font-weight: bold;
+    width: 100%;
+    display: flex;
+}
+
+.carLabelEdit {
+    padding-right: 10px;
+}
+
+@media (orientation: portrait) {
+ 
+    .card {
+        max-width: 100%;
+        width: 100%;
+        max-height: none;
+        height: 90vw;
+        margin: 0;
+    }
+
+    .marginCard {
+        margin-top: 0px;
+    }
+    
+    .carLabelContainer {
+        margin-top: -100px;
+    }
+}

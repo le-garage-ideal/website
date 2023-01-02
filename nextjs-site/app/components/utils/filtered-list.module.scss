@@ -1,0 +1,45 @@
+.list, .listHeader {
+  background-color: var(--dark-transparent);
+}
+
+.listHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0px!important;
+  padding: 30px 120px 20px 120px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  max-width: 100%;
+  width: 100%;
+  overflow: auto;
+  padding: 20px;
+  li {
+    margin-right: 15px;
+  }
+}
+
+.searchInput {
+  ////// else it is hidden by header
+  z-index: 2; 
+  position: relative;
+  //////
+  width: auto; 
+}
+
+@media (orientation: portrait) {
+
+  .listHeader {
+    z-index: 0; // else it hides menu 
+    flex-direction: column;
+    padding: 10px 20px 0px 20px;
+    h1 {
+      text-align: right;
+    }
+  }
+
+}

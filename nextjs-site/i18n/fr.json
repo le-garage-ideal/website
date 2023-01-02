@@ -1,0 +1,82 @@
+{
+  "pages": {
+    "index": {
+      "garage_saved": "Garage Sauvegardé",
+      "meta": {
+        "title": "Le Garage Idéal",
+        "description": "Créez et partagez votre Garage Idéal en 3 voitures de sport"    
+      }
+    },
+    "cars": {
+      "add_to_garage_tooltip": "Ajouter au garage",
+      "meta": {
+        "title": "Toutes les voitures sportives",
+        "description": "Liste de toutes les voitures sportives disponibles"
+      },
+      "list_title": "voitures de sport disponibles!"
+    },
+    "browse": {
+      "meta": {
+        "title": "Marques",
+        "description": "Liste des marques"
+      },
+      "list_title": "Sélectionnez une marque de voiture"
+    },
+    "about": {
+      "meta": {
+        "title": "A propos",
+        "description": "A propos du site"
+      },
+      "first_chapter": "Ce site vous permet de créer votre garage idéal en choisissant vos 3 voitures de sport préférées et de les partager sur les réseaux sociaux.",
+      "second_chapter": "Pourquoi seulement trois ? Pour se contraindre à faire des choix. Vous pouvez cependant créer sauvegarder plusieurs garages que vous retrouverez dans le menu.",
+      "third_chapter": "J&apos;ai créé ce site car je suis passionné de sport automobile. Il n&apos;y aura jamais aucune pub, aucun profit liée à ce site. Si vous l&apos;aimez, n&apos;hésitez pas à le faire connaître!",
+      "fourth_chapter": "Enfin, si vous avez des suggestions, vous pouvez me contacter par mail :"
+    }
+  },
+  "components": {
+    "spec": {
+      "power": "Puissance",
+      "hp": "ch",
+      "observed_weight": "Poids constaté",
+      "official_weight": "Poids officiel",
+      "ratio": "Rapport poids/puissance"
+    },
+    "title": {
+      "title": "Le Garage Idéal",
+      "subtitle": "Votre Garage Idéal en 3 Voitures de Sport"
+    },
+    "menu": {
+      "garages": "Les Garages",
+      "saved_garages": "Garages sauvegardés",
+      "current_garage": "Garage en cours de création",
+      "the_garage": "Le Garage",
+      "cars": "Les Voitures",
+      "about": "A Propos du Site"
+    },
+    "layout": {
+      "link_clipboard_ok": "Lien copié dans le presse-papier",
+      "link_clipboard_ko": "Impossible! Copier le lien manuellement",
+      "link_share_it": "Partagez ce lien : ",
+      "saved_button_tooltip_ok": "Garage déjà sauvegardé",
+      "saved_button_tooltip_ko": "Sauvegarder le garage, il apparaitra dans le menu",
+      "first_footer": "Site hébergé par ",
+      "second_footer": ". Aucun cookie ni aucune donnée personnelle ne sont utilisés.",
+      "share_link": "Partager le lien vers ce garage",
+      "share_with": "Partager avec {network}",
+      "share_title": "Mon garage idéal"
+    }
+  },
+  "templates": {
+    "cars": {
+      "title": "Variantes de {brand} {model}",
+      "description": "Faites votre choix parmi toutes les variantes de {brand} {model} disponibles"
+    },
+    "models": {
+      "title": "Modèles {brand}",
+      "description": "Faites votre choix parmi tous les modèles de {brand} disponibles"
+    }
+  },
+  "label_1": "#1 - Daily",
+  "label_2": "#2 - Collector",
+  "label_3": "#3 - Performances"
+}

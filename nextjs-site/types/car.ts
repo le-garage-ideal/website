@@ -1,7 +1,9 @@
+import { Image } from "./image";
 import { Model } from "./model";
 
 export type Car = {
   id: number;
+
   variant: string;
   power: number;
   officialWeight: number;
@@ -9,7 +11,7 @@ export type Car = {
   options: string;
   startYear: string;
   endYear: string;
-  imageUrl: string;
+  imageFile: Image;
   selectedFavcarsUrl: string;
   model: Model;
 

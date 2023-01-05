@@ -3,30 +3,36 @@ import React, { useState } from 'react';
 
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useIntl, navigate } from 'gatsby-plugin-react-intl';
-import FilteredList from '../components/utils/filtered-list';
-import ListItem from '../components/utils/list-item';
-import { Layout } from '../components/layout';
-import { SEO } from '../components/seo/seo';
+import FilteredList from '../app/components/utils/filtered-list';
+import ListItem from '../app/components/utils/list-item';
+import { Layout } from '../app/components/layout';
+import { SEO } from '../app/components/seo/seo';
 import { sortCars } from '../functions/sort';
 import { extractRelativePathWithParams } from '../functions/url';
 import carsStyles from './cars.module.scss';
+import { useLocation } from '../app/hooks/useLocation';
+import { Car } from '../types/car';
+import { useRouter } from 'next/router';
 
-const Cars = ({ data, location }) => {
-  const i18n = useContext(I18nContext);
+type CarsProps = {
+  i18n: any;
+  cars: Array<Car>;
+};
+const Cars = ({ i18n, cars }: CarsProps) => {
+  const location = useLocation();
+  const uri = new Uri(location);
+  const { push } = useRouter();
 
-  const uri = new Uri(location.href);
-
-  const completeCarList = data.allMongodbBmbu7Ynqra11RqiCars.edges.map(({ node }) => node).sort(sortCars);
-  const [filteredCars, setFilteredCars] = useState([...completeCarList]);
+  const completeCarList = cars.sort(sortCars);
+  const [filteredCars, setFilteredCars] = useState(completeCarList);
   filteredCars.splice(0, filteredCars.length - 20);
 
-  const [selectedCar, setSelectedCar] = useState(null);
+  const [selectedCar, setSelectedCar] = useState<number>();
 
-  const validateCar = (index, id) => {
+  const validateCar = (index: number, id: number | string) => {
     uri.replaceQueryParam(`car${index}`, id);
     uri.setPath('/');
-    navigate(extractRelativePathWithParams(uri));
+    push(extractRelativePathWithParams(uri));
   };
 
   const carComponents = filteredCars.map(car => {
@@ -84,18 +90,20 @@ const Cars = ({ data, location }) => {
     );
   });
 
-  const search = value => {
-    const regex = new RegExp(value, 'i');
-    const filtered = completeCarList.filter(car => car.variant.match(regex) || car.model.brand.name.match(regex));
-    setFilteredCars(filtered);
+  const search = (value: string | undefined) => {
+    if (value) {
+      const regex = new RegExp(value, 'i');
+      const filtered = completeCarList.filter(car => car.variant.match(regex) || car.model.brand.name.match(regex));
+      setFilteredCars(filtered);
+    }
   };
 
+  const title = i18n['pages.cars.meta.title'];
   return (
-    <Layout uri={uri.toString()}>
+    <Layout uri={uri.toString()} title={title}>
       <SEO
-        uri={location.href}
-        location={location.pathname}
-        title={i18n['pages.cars.meta.title']}
+        uri={location}
+        title={title}
         description={i18n['pages.cars.meta.description']}
       />
       <FilteredList
@@ -108,49 +116,4 @@ const Cars = ({ data, location }) => {
   );
 };
 
-Cars.propTypes = {
-  data: PropTypes.shape({
-    allMongodbBmbu7Ynqra11RqiCars: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            id: string;
-            variant: string;
-            startYear?: string;
-            model: PropTypes.shape({
-              brand: PropTypes.shape({
-                name: string;
-              }),
-              name: string;
-            }).isRequired,
-          }).isRequired,
-        }).isRequired,
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-  location: PropTypes.shape({
-    href: string;
-    pathname: string;
-  }).isRequired,
-};
-
 export default Cars;
-
-export const query = graphql`
-    query {
-        allMongodbBmbu7Ynqra11RqiCars {
-        edges {
-          node {
-              id,
-              variant,
-              startYear,
-              model {
-                  brand {
-                      name
-                  }
-                 name
-              }
-          }
-        }
-      }
-    }`;

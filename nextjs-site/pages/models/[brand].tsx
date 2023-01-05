@@ -6,18 +6,31 @@ import ListItem from '../../app/components/utils/list-item';
 import { Layout } from '../../app/components/layout';
 import { SEO } from '../../app/components/seo/seo';
 import { extractRelativePathWithParams } from '../../functions/url';
-import { I18nContext } from '../../functions/i18n';
+import { getMessages, I18nContext } from '../../functions/i18n';
+import { Car } from '../../types/car';
+import { useLocation } from '../../app/hooks/useLocation';
+import { useRouter } from 'next/router';
+import { fetchStrapi } from '../../functions/api';
+import { Brand } from '../../types/brand';
 
-const Models = ({ data, pageContext, location }) => {
-  const i18n = useContext(I18nContext);
+type ModelsProps = {
+  i18n: any;
+  brand: Brand;
+  cars: Array<Car>;
+};
+const Models = ({ i18n, brand, cars }: ModelsProps) => {
+  const { push } = useRouter();
+  const location = useLocation();
 
-  const uri = new Uri(location.href);
-  const listName = data.allMongodbBmbu7Ynqra11RqiCars.edges
-    .map(({ node }) => node)
+  const uri = new Uri(location);
+  const listName: Array<Car> = cars
     .sort((a, b) => sortModels(a.model, b.model))
     .reduce((acc, el) => (
-      acc[acc.length - 1] && acc[acc.length - 1].model.name === el.model.name ? acc : [...acc, el]
-    ), []);
+      acc[acc.length - 1] && acc[acc.length - 1].model.name === el.model.name ?
+        acc
+        :
+        [...acc, el]
+    ), new Array<Car>());
   const [filteredModels, setFilteredModels] = useState(listName);
 
   const modelComponents = filteredModels.map(car => (
@@ -29,80 +42,55 @@ const Models = ({ data, pageContext, location }) => {
         big
         onClick={() => {
           uri.setPath(`/cars/${car.model.brand.name}/${car.model.name}`);
-          navigate(extractRelativePathWithParams(uri));
+          push(extractRelativePathWithParams(uri));
         }}
       />
     </li>
   ));
 
-  const search = value => {
-    const filtered = listName.filter(car => car.model.name.match(new RegExp(value, 'i')));
-    setFilteredModels(filtered);
+  const search = (value: string | undefined) => {
+    if (value) {
+      const filtered = listName.filter(car => car.model.name.match(new RegExp(value, 'i')));
+      setFilteredModels(filtered);
+    }
   };
 
-  const title = i18n['templates.models.title' }, { brand: pageContext.brand });
+  const title = i18n['templates.models.title']
+    .replace('{brand}', brand.name);
 
-  const description = i18n['templates.models.description' }, { brand: pageContext.brand });
+  const description = i18n['templates.models.description']
+    .replace('{brand}', brand.name);
 
   return (
-    <Layout>
-      <SEO
-        uri={location.href}
-        location={location.pathname}
-        title={title}
-        description={description}
-      />
-      <FilteredList title={title} filter={search}>
-        {modelComponents}
-      </FilteredList>
-    </Layout>
+    <I18nContext.Provider value={ i18n }>
+      <Layout title={title} uri={location}>
+        <SEO
+          uri={location}
+          title={title}
+          description={description}
+        />
+        <FilteredList title={title} filter={search}>
+          {modelComponents}
+        </FilteredList>
+      </Layout>
+    </I18nContext.Provider>
   );
 };
 
-Models.propTypes = {
-  data: PropTypes.shape({
-    allMongodbBmbu7Ynqra11RqiCars: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            id: string;
-            model: PropTypes.shape({
-              id: string;
-              brand: PropTypes.shape({
-                name: string;
-              }),
-              name: string;
-            }).isRequired,
-          }).isRequired,
-        }).isRequired,
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-  location: PropTypes.shape({
-    href: string;
-    pathname: string;
-  }).isRequired,
-  pageContext: PropTypes.shape({
-    brand: string;
-  }).isRequired,
-};
+export async function getStaticProps({ locale, params }: { locale: string, params: any }) {
+  const i18n = getMessages(locale);
+  const model = await fetchStrapi("GET", `models/?filters[name][$eqi]=${params.model}`).then(res => res ? res.json() : undefined);
+  if (!model?.data?.id) {
+    throw new Error(`No model for [model] param ${params.model}`);
+  }
+  const cars = await fetchStrapi("GET", `cars?filters[model.id][$eq]=${model.data.id}`).then(res => res ? res.json() : []);
+  return {
+    props: {
+      i18n,
+      model,
+      cars,
+    },
+  }
+}
 
 export default Models;
-
-export const query = graphql`
-  query ModelByBrand($brand: String) {
-    allMongodbBmbu7Ynqra11RqiCars(filter: {model: {brand: {name: {eq: $brand}}}}) {
-        edges {
-            node {
-                id,
-                model {
-                    name,
-                    brand {
-                        name
-                    }
-                }
-            }
-        }
-    }
-  }
-`;

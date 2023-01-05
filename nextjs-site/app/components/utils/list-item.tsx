@@ -4,10 +4,10 @@ import React from 'react';
 import listItemStyles from './list-item.module.scss';
 
 type ListItemProps = {
-  id: number;
+  id: number | string;
   name: string;
   image: string;
-  onClick: (id: number) => void;
+  onClick: (id: number | string) => void;
   selected?: boolean;
   big?: boolean;
 };

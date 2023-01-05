@@ -18,9 +18,15 @@ export const sortField = (a: any, b: any, field: string) => {
 };
 
 export const sortCars = (x: Car, y: Car) => (
-  sortField(x, y, 'startYear') === 0 ? sortField(x, y, 'variant') : sortField(x, y, 'startYear')
+  sortField(x, y, 'startYear') === 0 ?
+    sortField(x, y, 'variant')
+    :
+    sortField(x, y, 'startYear')
 );
 
 export const sortModels = (x: Model, y: Model) => (
-  sortField(x.brand, y.brand, 'name') === 0 ? sortField(x, y, 'name') : sortField(x.brand, y.brand, 'name')
+  sortField(x.brand, y.brand, 'name') === 0 ?
+    sortField(x, y, 'name')
+    :
+    sortField(x.brand, y.brand, 'name')
 );

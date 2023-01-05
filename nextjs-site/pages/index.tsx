@@ -12,25 +12,33 @@ import {
   extractRelativePathWithParams
 } from '../functions/url';
 import indexStyles from '../styles/Home.module.css';
-import { carLabels } from '../app/constants';
 import { Card } from '../app/components/utils/card';
 import { Title } from '../app/components/title/title';
 import { Layout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { Car } from '../types/car';
-import { getMessages, I18nContext } from '../functions/i18n';
+import { carLabels, getMessages, I18nContext } from '../functions/i18n';
+import { useLocation } from '../app/hooks/useLocation';
+import { useRouter } from 'next/router';
+import { Car as CarComponent } from '../app/components/car/car';
 
-type IndexPageType = { i18n: any };
-const IndexPage = ({ i18n }: IndexPageType) => {
+type IndexPageProps = {
+  i18n: any;
+  carsProps: Array<Car>;
+};
+const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car>>([]);
 
-  const initUri = new Uri(extractRelativePathWithParams(new Uri(location.href)));
+  const location = useLocation();
+  const initUri = new Uri(extractRelativePathWithParams(new Uri(location)));
   const [uri, setUri] = useState(initUri);
+
+  const { push } = useRouter();
 
   // if edit=X parameter, save car to carX parameter
   const hasEditParams = processEditParams(uri);
-  const [saveState, setSaveState] = useState({
-    saveMessage: null,
+  const [saveState, setSaveState] = useState<{saveMessage: string | undefined; saveOk: boolean;}>({
+    saveMessage: undefined,
     saveOk: !hasEditParams,
   });
   const contextValue = useMemo(() => [cars, setCars], [cars, setCars])
@@ -38,7 +46,7 @@ const IndexPage = ({ i18n }: IndexPageType) => {
   useEffect(() => {
     // add missing params + save state
     const windowGlobal = typeof window !== 'undefined' && window;
-    const newCars = [...cars];
+    const newCars: Array<Car | undefined> = [...cars];
     if (windowGlobal) {
       // Priority to URL if user copy paste shared garage
       const carParams = getCarParams(uri);
@@ -49,12 +57,12 @@ const IndexPage = ({ i18n }: IndexPageType) => {
           const { carId, carLabel } = param;
 
           if (carId) {
-            const foundNode = data.allMongodbBmbu7Ynqra11RqiCars.edges
-              .find(({ node: car }) => car.id === carId);
+            const foundNode = carsProps
+              .find((car) => car.id === carId) as Car;
 
             if (foundNode) {
               newCars[idx] = foundNode;
-              newCars[idx].label = carLabel ? carLabel : carLabels(idx + 1, intl);
+              newCars[idx].label = carLabel ? carLabel : carLabel(idx + 1);
             }
           }
         }
@@ -81,27 +89,27 @@ const IndexPage = ({ i18n }: IndexPageType) => {
   }, []);
 
   // Click on edit button on a car's card 
-  const editCar = index => {
+  const editCar = (index: number) => {
     const newUri = new Uri(uri.toString());
     newUri.setPath('/browse');
     newUri.addQueryParam('edit', index);
-    navigate(extractRelativePathWithParams(newUri));
+    push(extractRelativePathWithParams(newUri));
   };
 
   // Click on save button of a car's card label
-  const editCardLabel = (index, newLabel) => {
+  const editCardLabel = (index: number, newLabel: string) => {
     const newCars = [...cars];
     newCars[index].label = newLabel;
     const newUri = addCarsToParams(newCars, uri);
     setCars(newCars);
-    setSaveState({ saveOk: !shouldSave(cars) });
+    setSaveState({ saveOk: !shouldSave(cars), saveMessage: null });
     setUri(newUri);
     history.pushState({ foo: 'bar' }, '', newUri.path());
   };
 
-  const transform = (car, index) => {
+  const transform = (car: Car, index: number) => {
     const thumbnail = car ? (
-      <Car
+      <CarComponent
         id={carComponentId(index)}
         className={indexStyles.carComponent}
         car={car}
@@ -117,11 +125,11 @@ const IndexPage = ({ i18n }: IndexPageType) => {
         marginCard={index === 2}
         empty={!car}
         index={index}
-        label={car ? car.label : carLabels(index, intl)}
+        label={car ? car.label : carLabels(i18n, index)}
         edit={editCar}
         render={() => (thumbnail)}
         editButtonId={editButtonId(index)}
-        onLabelChanged={car ? newLabel => editCardLabel(index - 1, newLabel) : null}
+        onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : null}
       />
     );
   };
@@ -136,7 +144,7 @@ const IndexPage = ({ i18n }: IndexPageType) => {
       const savedMessage = i18n['pages.index.garage_saved'];
       setSaveState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"` });
       setUri(newUri);
-      setTimeout(() => setSaveState({ saveMessage: null }), 2000); // message will be displayed during 2s
+      setTimeout(() => setSaveState({ saveOk: true, saveMessage: undefined }), 2000); // message will be displayed during 2s
     }
   };
 
@@ -147,7 +155,7 @@ const IndexPage = ({ i18n }: IndexPageType) => {
   return (
     <I18nContext.Provider value={ i18n }>
       <Head>
-        <Seo title="Home" />
+        <SEO title="Home" uri={''} description={''} />
       </Head>
       <main>
         <CarsContext.Provider value={contextValue}>

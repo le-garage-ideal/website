@@ -6,7 +6,12 @@ import { fullname } from '../../../functions/cars';
 import carStyles from './car.module.scss';
 import { Car as CarType } from '../../../types/car';
 
-export const Car = ({ car }: { car: CarType }) => {
+type CarProps = {
+  car: CarType;
+  id: string;
+  className: string;
+};
+export const Car = ({ car, id, className }: CarProps) => {
   const carFullname = fullname(car);
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -44,9 +49,9 @@ export const Car = ({ car }: { car: CarType }) => {
   }
 
   return (
-    <article className={carStyles.card}>
+    <article className={`${carStyles.card} ${className}`}>
 
-      <a href={car.imageUrl} className={carStyles.imageContainer}>
+      <a href={car.imageFile.url} className={carStyles.imageContainer}>
         { divContent }
       </a>
 

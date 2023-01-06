@@ -33,9 +33,9 @@ export const addProtocolAndHostToUri = (fullUri: string, relativeUri: string | U
 
 export const extractRelativePathWithParams = (uri: Uri) => {
   const uriClone = uri.clone();
-  uriClone.setHost(null);
-  uriClone.setProtocol(null);
-  uriClone.setPort(null);
+  uriClone.setHost('');
+  uriClone.setProtocol('');
+  uriClone.setPort(0);
   return uriClone.toString();
 };
 
@@ -63,12 +63,13 @@ export const getCarParams = (uri: Uri) => eachCar(carKey => ({
   }))
   .map(element => element.carId ? element : null);
 
-export const addCarsToParams = (cars: Array<Car>, uri: Uri) => {
+export const addCarsToParams = (cars: Array<Car | undefined>, uri: Uri) => {
   const newUri = uri.clone();
   eachCar((carKey, idx) => {
-    if (cars[idx]) {
-      newUri.replaceQueryParam(carKey, cars[idx].id);
-      newUri.replaceQueryParam(labelKey(carKey), cars[idx].label);
+    const car = cars[idx];
+    if (car) {
+      newUri.replaceQueryParam(carKey, car.id);
+      newUri.replaceQueryParam(labelKey(carKey), car.label);
     }
   });
   return newUri;

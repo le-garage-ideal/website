@@ -2,10 +2,10 @@ import { Car } from "../types/car";
 
 const GARAGE_PREFIX = 'garage-';
 
-export const buildGarageName = (cars: Array<Car>) => {
+export const buildGarageName = (cars: Array<Car | undefined>) => {
   const garageSuffix = cars
     .filter(car => !!car)
-    .map(car => car.model.name)
+    .map((car) => car!.model.name)
     .join('/');
   return `${GARAGE_PREFIX}${garageSuffix}`
 };
@@ -25,14 +25,14 @@ export const getSavedGarages = () => {
   return savedGarages;
 };
 
-export const save = (cars: Array<Car>) => {
+export const save = (cars: Array<Car | undefined>) => {
   const garageName = buildGarageName(cars);
   const serialized = JSON.stringify(cars);
   localStorage.setItem(garageName, serialized);
   return garageName;
 };
 
-export const shouldSave = (cars: Array<Car>) => {
+export const shouldSave = (cars: Array<Car | undefined>) => {
   if (cars && cars.length > 0 && cars.some(car => !!car)) {
     const garageName = buildGarageName(cars);
     const garageJson = localStorage.getItem(garageName);

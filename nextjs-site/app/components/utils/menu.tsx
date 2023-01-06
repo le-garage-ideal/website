@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 
 import Uri from 'jsuri';
 import { motion } from 'framer-motion';
@@ -8,10 +8,14 @@ import { extractRelativePathWithParams } from '../../../functions/url';
 import menuStyles from './menu.module.scss';
 import { I18nContext } from '../../../functions/i18n';
 import Link from 'next/link';
+import { Car } from '../../../types/car';
+import { useRouter } from 'next/router';
 
 const Menu = ({ uri }: { uri: string }) => {
   const i18n = useContext(I18nContext);
-  const setCars = useContext(CarsContext)[1];
+  const setCars = useContext(CarsContext)[1] as Dispatch<SetStateAction<(Car | undefined)[]>>;
+
+  const { push } = useRouter();
 
   const uriObj = new Uri(uri);
   const carsUri = extractRelativePathWithParams(uriObj.setPath('/cars'));
@@ -35,7 +39,7 @@ const Menu = ({ uri }: { uri: string }) => {
       });
       const onClick = () => {
         setCars(garage);
-        navigate(extractRelativePathWithParams(savedGarageUri));
+        push(extractRelativePathWithParams(savedGarageUri));
       }
       garageElements.push(<li key={garageName}><a href="#" onClick={onClick}>{garageName}</a></li>);
     });

@@ -22,11 +22,10 @@ import {
   RedditIcon,
 } from 'react-share';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useIntl } from 'gatsby-plugin-react-intl';
 import layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
-import { copyToClipboard } from '../functions/clipboard';
+import { copyToClipboard } from '../../functions/clipboard';
 import { I18nContext } from '../../functions/i18n';
 
 library.add(faSearch);
@@ -69,7 +68,7 @@ export const Layout = ({
     menuButtonClass.push(layoutStyles.menuExpanded);
   }
 
-  const windowLocation = (typeof window !== 'undefined' && window).location?.href;
+  const windowLocation = window.location?.href;
 
   const onShareCopyClick = () => {
     copyToClipboard(windowLocation).then(() => {
@@ -133,7 +132,6 @@ export const Layout = ({
                 <FacebookShareButton
                   quote={i18n['components.layout.share_title']}
                   url={windowLocation}
-                  quote={title}
                 >
                   <FacebookIcon size={BUTTON_HEIGHT} />
                 </FacebookShareButton>

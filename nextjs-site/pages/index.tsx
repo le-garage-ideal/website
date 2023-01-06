@@ -27,7 +27,7 @@ type IndexPageProps = {
   carsProps: Array<Car>;
 };
 const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
-  const [cars, setCars] = useState<Array<Car>>([]);
+  const [cars, setCars] = useState<Array<Car | undefined>>([]);
 
   const location = useLocation();
   const initUri = new Uri(extractRelativePathWithParams(new Uri(location)));
@@ -55,14 +55,14 @@ const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
 
         if (param) {
           const { carId, carLabel } = param;
-
-          if (carId) {
+          const carIdNumber = parseInt(carId);
+          if (!isNaN(carIdNumber)) {
             const foundNode = carsProps
-              .find((car) => car.id === carId) as Car;
+              .find((car) => car.id === carIdNumber) as Car;
 
             if (foundNode) {
+              foundNode.label = carLabel ? carLabel : carLabels(i18n, idx + 1);
               newCars[idx] = foundNode;
-              newCars[idx].label = carLabel ? carLabel : carLabel(idx + 1);
             }
           }
         }
@@ -79,14 +79,14 @@ const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
       history.pushState({ foo: 'bar' }, '', uri.path());
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
-          const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`);
+          const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`) as HTMLElement;
           if (editButton) {
             editButton.style.opacity = '1';
           }
         });
       }, 200);
     }
-  }, []);
+  }, [cars, carsProps, i18n, saveState, uri]);
 
   // Click on edit button on a car's card 
   const editCar = (index: number) => {
@@ -98,23 +98,23 @@ const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
 
   // Click on save button of a car's card label
   const editCardLabel = (index: number, newLabel: string) => {
-    const newCars = [...cars];
-    newCars[index].label = newLabel;
-    const newUri = addCarsToParams(newCars, uri);
-    setCars(newCars);
-    setSaveState({ saveOk: !shouldSave(cars), saveMessage: null });
-    setUri(newUri);
-    history.pushState({ foo: 'bar' }, '', newUri.path());
+    const newCar = cars[index];
+    if (newCar) {
+      newCar.label = newLabel;
+      const newUri = addCarsToParams(cars, uri);
+      setCars(cars);
+      setSaveState({ saveOk: !shouldSave(cars), saveMessage: undefined });
+      setUri(newUri);
+      history.pushState({ foo: 'bar' }, '', newUri.path());
+    }
   };
 
-  const transform = (car: Car, index: number) => {
+  const transform = (car: Car | undefined, index: number) => {
     const thumbnail = car ? (
       <CarComponent
         id={carComponentId(index)}
         className={indexStyles.carComponent}
         car={car}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
       />
     ) : (
       <div className={indexStyles.noCarThumbnail}>?</div>
@@ -160,7 +160,6 @@ const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
       <main>
         <CarsContext.Provider value={contextValue}>
           <Layout
-            location={uri.toString()}
             save={onSave}
             title={title}
             uri={uri.toString()}
@@ -169,7 +168,6 @@ const IndexPage = ({ i18n, carsProps }: IndexPageProps) => {
             showButtons
           >
             <SEO
-              location={location.pathname}
               title={title}
               uri={uri.toString()}
               description={i18n['pages.index.meta.description']}
@@ -194,5 +192,7 @@ export async function getStaticProps({ locale }: { locale: string }) {
   }
 }
 
+const carComponentId = (index: number) => `car-${index}`;
+const editButtonId = (index: number) => `edit-${index}`;
 
 export default IndexPage;

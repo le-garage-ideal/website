@@ -39,7 +39,7 @@ const Spec = ({
   };
 
   const imageUri = new Uri(imageUrl);
-  const imageOrigin = extractHostname(imageUri.uriParts.host);
+  const imageOrigin = imageUri.host;
 
   const powerUnit = i18n['components.spec.hp'];
 
@@ -73,7 +73,7 @@ const Spec = ({
           Source :&nbsp;
           <a href="http://weightcars-fr.com">weightcars-fr.com</a>
         </legend>
-        {imageOrigin && (
+        {typeof imageOrigin === 'string' && (
           <legend>
             Photo :&nbsp;
             <a href={`http://${imageOrigin}`}>{imageOrigin}</a>

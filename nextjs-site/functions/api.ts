@@ -1,4 +1,4 @@
-export const fetchStrapi = (method: string, path: string, body?: any) => fetch(
+export const fetchStrapi = <T> (method: string, path: string, body?: any): Promise<T> => fetch(
   `${process.env.STRAPI_BASE_API_URL}/${path}`,
   {
     method,
@@ -7,7 +7,13 @@ export const fetchStrapi = (method: string, path: string, body?: any) => fetch(
   },
 })
 .then((res) => res.json())
-.then(({ data }) => data)
+.then(({ data }) => {
+  if (Array.isArray(data)) {
+    return data.map(formatStrapiObjects);
+  } else {
+    return formatStrapiObjects(data);
+  }
+})
 .catch((err) => {
   if (err.isAxiosError) {
     console.error(err?.response?.data?.error?.message);
@@ -15,3 +21,27 @@ export const fetchStrapi = (method: string, path: string, body?: any) => fetch(
     console.error(`Error`, err);
   }
 });
+
+export const formatStrapiObjects = (strapiObject: any) => {
+  let res = {...strapiObject};
+  if (res.attributes) {
+    const attributesCopy = res.attributes;
+    delete res.attributes;
+    res = {...res, ...attributesCopy};
+  }
+  if (res.data) {
+    const dataCopy = res.data;
+    delete res.data;
+    res = {...res, ...dataCopy};
+  }
+  if (res.attributes || res.data) {
+    res = formatStrapiObjects(res);
+  } else {
+    Object.keys(res).forEach((key) => {
+      if (res[key]?.attributes || res[key]?.data) {
+        res[key] = formatStrapiObjects(res[key])
+      }
+    });
+  }
+  return res;
+};

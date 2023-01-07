@@ -63,13 +63,15 @@ export const getCarParams = (uri: Uri) => eachCar(carKey => ({
   }))
   .map(element => element.carId ? element : null);
 
-export const addCarsToParams = (cars: Array<Car | undefined>, uri: Uri) => {
+export const addCarsToParams = (cars: Array<{ id: string | number; label?: string } | undefined>, uri: Uri) => {
   const newUri = uri.clone();
   eachCar((carKey, idx) => {
     const car = cars[idx];
     if (car) {
       newUri.replaceQueryParam(carKey, car.id);
-      newUri.replaceQueryParam(labelKey(carKey), car.label);
+      if (car.label) {
+        newUri.replaceQueryParam(labelKey(carKey), car.label);
+      }
     }
   });
   return newUri;

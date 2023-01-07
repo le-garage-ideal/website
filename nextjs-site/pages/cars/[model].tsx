@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react';
+import { useState } from 'react';
 import Uri from 'jsuri';
+import { useTranslation} from 'next-export-i18n';
+
 import FilteredList from '../../app/components/utils/filtered-list';
 import ListItem from '../../app/components/utils/list-item';
 import { FullLayout } from '../../app/components/layout';
 import { SEO } from '../../app/components/seo/seo';
 import { sortCars } from '../../functions/sort';
 import { extractRelativePathWithParams } from '../../functions/url';
-import { getMessages, I18nContext } from '../../functions/i18n';
 import { useRouter } from 'next/router';
 import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
@@ -14,13 +15,13 @@ import { fetchStrapi } from '../../functions/api';
 import { Model } from '../../types/model';
 
 type CarsProps = {
-  i18n: any;
   model: Model;
   cars: Array<Car>;
 };
-const Cars = ({ i18n, model, cars }: CarsProps) => {
+const Cars = ({ model, cars }: CarsProps) => {
   const { push } = useRouter();
   const location = useLocation();
+  const { t: i18n } = useTranslation();
 
   const uri = new Uri(location);
   const completeCarList: Array<Car> = cars.sort(sortCars);
@@ -51,41 +52,45 @@ const Cars = ({ i18n, model, cars }: CarsProps) => {
     }
   };
 
-  const title = i18n['templates.cars.title']
+  const title = i18n('templates.cars.title')
     .replace('{brand}', model.brand.name)
     .replace('{model}', model.name);
 
-  const description = i18n['templates.cars.description']
+  const description = i18n('templates.cars.description')
     .replace('{brand}', model.brand.name)
     .replace('{model}', model.name);
 
   return (
-    <I18nContext.Provider value={ i18n }>
-      <FullLayout title={title} uri={location}>
-        <SEO
-          uri={location}
-          title={title}
-          description={description}
-        />
-        <FilteredList title={title} filter={search}>
-          {carComponents}
-        </FilteredList>
-      </FullLayout>
-    </I18nContext.Provider>
+    <FullLayout title={title} uri={location}>
+      <SEO
+        uri={location}
+        title={title}
+        description={description}
+      />
+      <FilteredList title={title} filter={search}>
+        {carComponents}
+      </FilteredList>
+    </FullLayout>
   );
 };
 
+export async function getStaticPaths() {
+  const models = await fetchStrapi<Array<Model>>('models');
+  return {
+    paths: models.map(model => ({ params: { model: `${model.id}` } })),
+    fallback: false, // can also be true or 'blocking'
+  }
+}
+
 export async function getStaticProps({ locale, params }: { locale: string, params: any }) {
-  const i18n = getMessages(locale);
-  const models = await fetchStrapi<Array<Model>>("GET", `models/?filters[name][$eqi]=${params.model}`);
-  if (models.length === 0) {
+  const model = await fetchStrapi<Model>(`models/${params.model}?populate=*`);
+  if (!model) {
     throw new Error(`No model for [model] param ${params.model}`);
   }
-  const cars = await fetchStrapi<Array<Car>>("GET", `cars?filters[model.id][$eq]=${models[0]?.id}`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?populate[model][populate][0]=brand&populate[0]=imageFile&filters[model][id][$eqi]=${params.model}`);
   return {
     props: {
-      i18n,
-      model: models[0],
+      model,
       cars,
     },
   }

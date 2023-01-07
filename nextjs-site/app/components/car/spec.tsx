@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import Uri from 'jsuri';
+import { useTranslation} from 'next-export-i18n';
 import specStyles from './spec.module.scss';
-import { extractHostname } from '../../../functions/url';
-import { I18nContext } from '../../../functions/i18n';
 const POWER_MAX = 1200; // max 1200hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 20; // max 1kg/hp else overflow
@@ -16,13 +15,13 @@ type SpecProps = {
 const Spec = ({
   power, weight, officialWeight, imageUrl
 }: SpecProps) => {
-  const i18n = useContext(I18nContext);
+  const { t: i18n } = useTranslation();
 
   const theWeight = weight || officialWeight;
 
   const theWeightLabel = weight
-    ? i18n['components.spec.observed_weight']
-    : i18n['components.spec.official_weight'];
+    ? i18n('components.spec.observed_weight')
+    : i18n('components.spec.official_weight');
 
   const ratio = theWeight && power ? Math.round((theWeight * 10) / power) / 10 : undefined;
 
@@ -41,12 +40,12 @@ const Spec = ({
   const imageUri = new Uri(imageUrl);
   const imageOrigin = imageUri?.host;
 
-  const powerUnit = i18n['components.spec.hp'];
+  const powerUnit = i18n('components.spec.hp');
 
   return (
       <section className={specStyles.specContainer}>
         <div className={specStyles.barTitle}>
-          <legend>{ i18n['components.spec.power'] }</legend>
+          <legend>{ i18n('components.spec.power') }</legend>
           <span>
             <span>{power}</span>
             { powerUnit }
@@ -62,7 +61,7 @@ const Spec = ({
         </div>
         <div className={[specStyles.bar, specStyles.barWeight].join(' ')} style={barWeightStyle} />
         <div className={specStyles.barTitle}>
-          <legend>{ i18n['components.spec.ratio'] }</legend>
+          <legend>{ i18n('components.spec.ratio') }</legend>
           <span>
             <span>{ratio}</span>
             { `kg/${powerUnit}` }

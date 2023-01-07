@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import Image from 'next/image';
-
 import Uri from 'jsuri';
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useTranslation} from 'next-export-i18n';
 import { eachCarIndex, fullname, CarsContext } from '../functions/cars';
 import { save, shouldSave } from '../functions/storage';
 import {
@@ -17,19 +16,17 @@ import { Title } from '../app/components/title/title';
 import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { Car } from '../types/car';
-import { carLabels, getMessages, I18nContext } from '../functions/i18n';
 import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Car as CarComponent } from '../app/components/car/car';
 import { fetchStrapi } from '../functions/api';
 
 type IndexPageProps = {
-  i18n: any;
   allCars: Array<Car>;
 };
-const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
+const IndexPage = ({ allCars }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
-
+  const { t: i18n } = useTranslation();
   const location = useLocation();
   const initUri = new Uri(extractRelativePathWithParams(new Uri(location)));
   const [uri, setUri] = useState(initUri);
@@ -94,7 +91,7 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
   // Click on edit button on a car's card 
   const editCar = (index: number) => {
     const newUri = new Uri(uri.toString());
-    newUri.setPath('/browse');
+    newUri.setPath('/brands');
     newUri.addQueryParam('edit', index);
     push(extractRelativePathWithParams(newUri));
   };
@@ -132,7 +129,7 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
         edit={editCar}
         render={() => (thumbnail)}
         editButtonId={editButtonId(index)}
-        onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : null}
+        onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : (s: string) => {}}
       />
     );
   };
@@ -144,7 +141,7 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
     if (cars && !saveOk) {
       const garageName = save(cars);
       const newUri = addCarsToParams(cars, uri);
-      const savedMessage = i18n['pages.index.garage_saved'];
+      const savedMessage = i18n('pages.index.garage_saved');
       setSaveState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"` });
       setUri(newUri);
       setTimeout(() => setSaveState({ saveOk: true, saveMessage: undefined }), 2000); // message will be displayed during 2s
@@ -156,7 +153,7 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
     ?.join('\n') ?? '';
   
   return (
-    <I18nContext.Provider value={ i18n }>
+    <>
       <Head>
         <SEO title="Home" uri={''} description={''} />
       </Head>
@@ -173,7 +170,7 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
             <SEO
               title={title}
               uri={uri.toString()}
-              description={i18n['pages.index.meta.description']}
+              description={i18n('pages.index.meta.description')}
             />
             <Title />
             <article className={indexStyles.carsContainer}>
@@ -182,20 +179,20 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
           </FullLayout>
         </CarsContext.Provider>
       </main>
-    </I18nContext.Provider>
+    </>
   );
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const i18n = getMessages(locale);
-  const allCars = await fetchStrapi<Array<Car>>("GET", `cars`);
+  const allCars = await fetchStrapi<Array<Car>>(`cars?populate[model][populate][0]=brand&populate[0]=imageFile`);
   return {
     props: {
-      i18n,
       allCars,
     },
   }
 }
+
+export const carLabels = (file: any, index: any): any => file[`label_${index}`];
 
 const carComponentId = (index: number) => `car-${index}`;
 const editButtonId = (index: number) => `edit-${index}`;

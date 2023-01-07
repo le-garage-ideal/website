@@ -2,9 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 type SEOProps = {
-  uri: string;
-  title: string;
-  description: string;
+  uri: string | undefined;
+  title: string | undefined;
+  description: string | undefined;
 };
 export const SEO = ({
   uri,

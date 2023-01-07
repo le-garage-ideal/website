@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-
+import { useTranslation} from 'next-export-i18n';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FilteredList from '../app/components/utils/filtered-list';
@@ -13,17 +12,16 @@ import carsStyles from './cars.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { Car } from '../types/car';
 import { useRouter } from 'next/router';
-import { getMessages } from '../functions/i18n';
 import { fetchStrapi } from '../functions/api';
 
 type CarsProps = {
-  i18n: any;
   cars: Array<Car>;
 };
-const Cars = ({ i18n, cars }: CarsProps) => {
+const Cars = ({ cars }: CarsProps) => {
   const location = useLocation();
   const uri = new Uri(location);
   const { push } = useRouter();
+  const { t: i18n } = useTranslation();
 
   const completeCarList = cars.sort(sortCars);
   const [filteredCars, setFilteredCars] = useState(completeCarList);
@@ -57,7 +55,7 @@ const Cars = ({ i18n, cars }: CarsProps) => {
               type="button"
               className={`${carsStyles.iconButton} icon-button`}
               onClick={() => setSelectedCar(car.id)}
-              title={i18n['pages.cars.add_to_garage_tooltip']}
+              title={i18n('pages.cars.add_to_garage_tooltip')}
             >
               <FontAwesomeIcon icon="plus" />
             </button>
@@ -99,16 +97,16 @@ const Cars = ({ i18n, cars }: CarsProps) => {
     }
   };
 
-  const title = i18n['pages.cars.meta.title'];
+  const title = i18n('pages.cars.meta.title');
   return (
     <FullLayout uri={uri.toString()} title={title}>
       <SEO
         uri={location}
         title={title}
-        description={i18n['pages.cars.meta.description']}
+        description={i18n('pages.cars.meta.description')}
       />
       <FilteredList
-        title={`${completeCarList.length} ${i18n['pages.cars.list_title']}`}
+        title={`${completeCarList.length} ${i18n('pages.cars.list_title')}`}
         filter={search}
       >
         {carComponents}
@@ -118,11 +116,9 @@ const Cars = ({ i18n, cars }: CarsProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const i18n = getMessages(locale);
-  const cars = await fetchStrapi<Array<Car>>("GET", `cars`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?populate[model][populate][0]=brand&populate[0]=imageFile`);
   return {
     props: {
-      i18n,
       cars,
     },
   }

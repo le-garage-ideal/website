@@ -1,7 +1,7 @@
-export const fetchStrapi = <T> (method: string, path: string, body?: any): Promise<T> => fetch(
+export const fetchStrapi = <T> (path: string, body?: any): Promise<T> => fetch(
   `${process.env.STRAPI_BASE_API_URL}/${path}`,
   {
-    method,
+    method: 'GET',
     headers: {Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
     body,
   },

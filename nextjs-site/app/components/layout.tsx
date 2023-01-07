@@ -1,6 +1,7 @@
 'use client';
-import React, { PropsWithChildren, useContext, useState } from 'react';
 
+import React, { PropsWithChildren, useContext, useState } from 'react';
+import { useTranslation} from 'next-export-i18n';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSearch,
@@ -27,7 +28,7 @@ import layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
 import { copyToClipboard } from '../../functions/clipboard';
-import { I18nContext } from '../../functions/i18n';
+
 import { useLocation } from '../hooks/useLocation';
 
 library.add(faSearch);
@@ -45,7 +46,7 @@ const BUTTON_HEIGHT = '40px';
 
 type LayoutProps = {
   title: string;
-  uri: string;
+  uri: string | undefined;
   save?: () => void;
   saveDisabled?: boolean;
   saveMessage?: string;
@@ -60,7 +61,7 @@ export const FullLayout = ({
   saveMessage,
   showButtons = false,
 }: PropsWithChildren<LayoutProps>) => {
-  const i18n = useContext(I18nContext);
+  const { t: i18n } = useTranslation();
   const [showMenu, setShowMenu] = useState(false);
   const [shareModalState, setShareModalState] = useState('');
   const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState(null);
@@ -75,28 +76,30 @@ export const FullLayout = ({
   const onShareCopyClick = () => {
     if (windowLocation) {
       copyToClipboard(windowLocation).then(() => {
-        setShareCopySuccessMessage(i18n['components.layout.link_clipboard_ok']);
+        setShareCopySuccessMessage(i18n('components.layout.link_clipboard_ok'));
         setTimeout(() => setShareCopySuccessMessage(null), 5000);
       }, () => {
-        setShareCopyErrorMessage(i18n['components.layout.link_clipboard_ko']);
+        setShareCopyErrorMessage(i18n('components.layout.link_clipboard_ko'));
         setTimeout(() => setShareCopyErrorMessage(null), 5000);
       });
     }
   };
 
   const savedButtonTooltip = saveDisabled
-    ? i18n['components.layout.saved_button_tooltip_ok']
-    : i18n['components.layout.saved_button_tooltip_ko'];
+    ? i18n('components.layout.saved_button_tooltip_ok')
+    : i18n('components.layout.saved_button_tooltip_ko');
 
   const footer = (
     <footer className={layoutStyles.appFooter}>
-      <span>{i18n['components.layout.first_footer']}</span>
+      <span>{i18n('components.layout.first_footer')}</span>
       <a href="https://o2switch.fr">o2switch.fr</a>
-      <span>{i18n['components.layout.second_footer']}</span>
+      <span>{i18n('components.layout.second_footer')}</span>
     </footer>
   );
 
-  const shareWithLabel = i18n['components.layout.share_with'] as string;
+  const shareWithLabelFacebook = i18n('components.layout.share_with', { network: 'Facebook' }) as string;
+  const shareWithLabelTwitter = i18n('components.layout.share_with', { network: 'Twitter' }) as string;
+  const shareWithLabelReddit = i18n('components.layout.share_with', { network: 'Reddit' }) as string;
 
   return (
     <>
@@ -125,32 +128,32 @@ export const FullLayout = ({
               </button>
               <button
                 type="button"
-                title={i18n['components.layout.share_link']}
+                title={i18n('components.layout.share_link')}
                 className={['icon-button', layoutStyles.customShareButton].join(' ')}
                 onClick={() => { setShareModalState('is-active'); }}
                 style={{ height: BUTTON_HEIGHT }}
               >
                 <FontAwesomeIcon icon="share-square" />
               </button>
-              <div title={shareWithLabel.replace('{network}', 'Facebook')}>
+              <div title={shareWithLabelFacebook}>
                 <FacebookShareButton
-                  quote={i18n['components.layout.share_title']}
+                  quote={i18n('components.layout.share_title')}
                   url={windowLocation ?? ''}
                 >
                   <FacebookIcon size={BUTTON_HEIGHT} />
                 </FacebookShareButton>
               </div>
-              <div title={shareWithLabel.replace('{network}', 'Twitter')}>
+              <div title={shareWithLabelTwitter}>
                 <TwitterShareButton
-                  title={i18n['components.layout.share_title']}
+                  title={i18n('components.layout.share_title')}
                   url={windowLocation ?? ''}
                 >
                   <TwitterIcon size={BUTTON_HEIGHT} />
                 </TwitterShareButton>
               </div>
-              <div title={shareWithLabel.replace('{network}', 'Reddit')}>
+              <div title={shareWithLabelReddit}>
                 <RedditShareButton
-                  title={i18n['components.layout.share_title']}
+                  title={i18n('components.layout.share_title')}
                   url={windowLocation ?? ''}
                 >
                   <RedditIcon size={BUTTON_HEIGHT} />
@@ -171,7 +174,7 @@ export const FullLayout = ({
           <div className="modal-content">
             <div className="field is-vertical">
               <label className="label has-text-light" htmlFor="share-link">
-                { i18n['components.layout.link_share_it']}
+                { i18n('components.layout.link_share_it')}
               </label>
               <p className="control">
                 <input

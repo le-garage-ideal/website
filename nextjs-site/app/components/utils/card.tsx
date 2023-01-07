@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,14 +9,14 @@ type CardProps = {
   marginCard?: boolean;
   empty?: boolean;
   index: number;
-  edit: () => void;
+  edit: (i: number) => void;
   render: () => void;
   editButtonId: string;
-  onLabelChanged?: () => void;
+  onLabelChanged?: (s: string) => void;
 };
 export const Card = ({
   empty, marginCard, index, edit, render, editButtonId, label, onLabelChanged,
-}: any) => {
+}: CardProps) => {
   const classCard = [cardStyles.card];
   if (marginCard) {
     classCard.push(cardStyles.marginCard);
@@ -34,7 +35,9 @@ export const Card = ({
   };
   const saveLabel = () => {
     setEditModeLabel(false);
-    onLabelChanged(editedLabel);
+    if (onLabelChanged) {
+      onLabelChanged(editedLabel);
+    }
   };
   const cancelEditModeLabel = () => {
     setEditedLabel(label);
@@ -53,7 +56,7 @@ export const Card = ({
           <FontAwesomeIcon icon="edit" />
         </button>
       </div>
-      {render()}
+      <>{render()}</>
       <div className={[cardStyles.carLabelContainer, 'container', 'is-fluid'].join(' ')}>
         <div className={carLabelClasses.join(' ')}>
           {

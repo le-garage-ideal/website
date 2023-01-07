@@ -1,3 +1,4 @@
+'use client';
 import React, { PropsWithChildren, useContext, useState } from 'react';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -27,6 +28,7 @@ import Menu from './utils/menu';
 import { Toast } from './utils/toast';
 import { copyToClipboard } from '../../functions/clipboard';
 import { I18nContext } from '../../functions/i18n';
+import { useLocation } from '../hooks/useLocation';
 
 library.add(faSearch);
 library.add(faEdit);
@@ -49,7 +51,7 @@ type LayoutProps = {
   saveMessage?: string;
   showButtons?: boolean;
 };
-export const Layout = ({
+export const FullLayout = ({
   title = '',
   uri,
   children,
@@ -68,16 +70,18 @@ export const Layout = ({
     menuButtonClass.push(layoutStyles.menuExpanded);
   }
 
-  const windowLocation = window.location?.href;
+  const windowLocation = useLocation();
 
   const onShareCopyClick = () => {
-    copyToClipboard(windowLocation).then(() => {
-      setShareCopySuccessMessage(i18n['components.layout.link_clipboard_ok']);
-      setTimeout(() => setShareCopySuccessMessage(null), 5000);
-    }, () => {
-      setShareCopyErrorMessage(i18n['components.layout.link_clipboard_ko']);
-      setTimeout(() => setShareCopyErrorMessage(null), 5000);
-    });
+    if (windowLocation) {
+      copyToClipboard(windowLocation).then(() => {
+        setShareCopySuccessMessage(i18n['components.layout.link_clipboard_ok']);
+        setTimeout(() => setShareCopySuccessMessage(null), 5000);
+      }, () => {
+        setShareCopyErrorMessage(i18n['components.layout.link_clipboard_ko']);
+        setTimeout(() => setShareCopyErrorMessage(null), 5000);
+      });
+    }
   };
 
   const savedButtonTooltip = saveDisabled
@@ -131,7 +135,7 @@ export const Layout = ({
               <div title={shareWithLabel.replace('{network}', 'Facebook')}>
                 <FacebookShareButton
                   quote={i18n['components.layout.share_title']}
-                  url={windowLocation}
+                  url={windowLocation ?? ''}
                 >
                   <FacebookIcon size={BUTTON_HEIGHT} />
                 </FacebookShareButton>
@@ -139,7 +143,7 @@ export const Layout = ({
               <div title={shareWithLabel.replace('{network}', 'Twitter')}>
                 <TwitterShareButton
                   title={i18n['components.layout.share_title']}
-                  url={windowLocation}
+                  url={windowLocation ?? ''}
                 >
                   <TwitterIcon size={BUTTON_HEIGHT} />
                 </TwitterShareButton>
@@ -147,7 +151,7 @@ export const Layout = ({
               <div title={shareWithLabel.replace('{network}', 'Reddit')}>
                 <RedditShareButton
                   title={i18n['components.layout.share_title']}
-                  url={windowLocation}
+                  url={windowLocation ?? ''}
                 >
                   <RedditIcon size={BUTTON_HEIGHT} />
                 </RedditShareButton>
@@ -174,7 +178,7 @@ export const Layout = ({
                   type="text"
                   name="share-link"
                   id="share-link"
-                  value={windowLocation}
+                  value={windowLocation ?? ''}
                   className="input is-primary"
                   readOnly
                 />

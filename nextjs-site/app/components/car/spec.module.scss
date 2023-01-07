@@ -6,7 +6,7 @@
   align-items: center;
   border-radius: 5px;
   border-width: 3px;
-  border-color: var(--text-medium);
+  border-color: $text-medium;
   border-style: solid;
   box-sizing: border-box;
   width: 100%;
@@ -33,11 +33,11 @@
 }
 
 .specContainer legend {
-  color: var(--text-medium);
+  color: $text-medium;
 }
 
 .specContainer span {
-  color: var(--text-extra-bright);
+  color: $text-extra-bright;
 }
 
 .bar {

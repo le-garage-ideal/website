@@ -1,15 +1,15 @@
 @import '../../../styles/theme.scss';
 
 .menuContainer {
-    background-color: var(--dark-opaque);
+    background-color: $dark-opaque;
     padding: 10px;
     position: absolute;
     ul {
         li {
             a {
-                color: var(--text-bright)!important;
+                color: $text-bright!important;
                 &:hover {
-                    color: var(--text-dark)!important;
+                    color: $text-dark!important;
                 }
             }
         }

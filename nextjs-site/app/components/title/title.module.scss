@@ -1,3 +1,4 @@
+@import '../../../styles/theme.scss';
 
 .titleContainer {
     width: auto;
@@ -26,7 +27,7 @@
 }
 
 .subTitle {
-    color: var(--text-bright);
+    color: $text-bright;
     padding: 0px 10px;
 }
 

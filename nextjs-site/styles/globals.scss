@@ -1,3 +1,8 @@
+@charset "utf-8";
+
+// If need, change your variables before importing Bulma
+$title-color: #ff0000;
+@import "~bulma/bulma.sass";
 @import "./theme.scss";
 
 body {
@@ -6,8 +11,8 @@ body {
 }
 
 .badge, .paragraph {
-  background-color: var(--dark-opaque);
-  color: var(--text-bright);
+  background-color: $dark-opaque;
+  color: $text-bright;
 }
 
 .badge {
@@ -15,13 +20,13 @@ body {
   text-align: center;
   border-width: 3px;
   border-style: solid;
-  border-color: var(--text-medium);
+  border-color: $text-medium;
 }
 
 .icon-button {
   font-size: 20px;
-  background-color: var(--element-selected);
-  color: var(--element-selected-bright);
+  background-color: $element-selected;
+  color: $element-selected-bright;
   width: auto;
   height: auto;
   padding: 10px;
@@ -29,17 +34,18 @@ body {
   border: none;
 
   &:hover {
-      background-color: var(--element-hover);
-      color: var(--element-hover-bright);
+      background-color: $element-hover;
+      color: $element-hover-bright;
   }
   &:disabled {
     cursor: initial;
-    color: var(--text-medium-dark);
+    color: $text-medium-dark;
     &:hover {
-      background-color: var(--element-selected);
-      color: var(--text-medium-dark);
+      background-color: $element-selected;
+      color: $text-medium-dark;
     }
   }
   
 }
+
 

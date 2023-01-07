@@ -10,7 +10,7 @@ $small: 5em;
   overflow: hidden;
   background: none!important;
   padding: 5px;
-  color: var(--text-bright);
+  color: $text-bright;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -34,11 +34,11 @@ $small: 5em;
 .logoLink:hover {
   box-sizing: border-box;
   background: initial;
-  background-color: var(--element-hover-bright)!important;
+  background-color: $element-hover-bright!important;
 }
 
 .selected, .logoLink:hover.selected {
-  background-color: var(--element-selected-bright)!important;
+  background-color: $element-selected-bright!important;
 }
 
 

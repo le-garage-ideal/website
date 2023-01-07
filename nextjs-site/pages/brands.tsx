@@ -7,7 +7,7 @@ import ListItem from '../app/components/utils/list-item';
 import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { extractRelativePathWithParams } from '../functions/url';
-import './bulma-theme.scss';
+import './bulma-globals.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { getMessages, I18nContext } from '../functions/i18n';
 import { useRouter } from 'next/router';

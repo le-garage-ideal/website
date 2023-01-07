@@ -1,3 +1,5 @@
+@import '../styles/theme.scss';
+
 .carContent {
     align-self: center;
     align-items: flex-start;
@@ -9,7 +11,7 @@
 }
 
 .iconButton, .carSelectionBox {
-    color: var(--text-bright);
+    color: $text-bright;
     margin-top: 5px;
 }
 
@@ -23,11 +25,11 @@
 }
 
 .radioLabel:hover {
-    color: var(--text-extra-bright)!important;
+    color: $text-extra-bright!important;
 }
 
 .iconButton {
-    background-color: var(--dark-opaque);
+    background-color: $dark-opaque;
     padding: 2px 8px 5px 8px;
     border-radius: 50%;
 }

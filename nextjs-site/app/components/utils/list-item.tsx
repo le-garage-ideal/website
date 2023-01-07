@@ -28,7 +28,10 @@ const ListItem = ({
   return (
     <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
       <figure>
-        { image && <Image src={image} alt={name} /> }
+        { image &&
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={image} alt={name} />
+        }
         <figcaption>{name}</figcaption>
       </figure>
     </button>

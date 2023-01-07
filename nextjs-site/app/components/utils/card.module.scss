@@ -1,3 +1,5 @@
+@import '../../../styles/theme.scss';
+
 $cardHeight: 30vw;
 $labelHeight: 5vw;
 $cardMaxHeight: 80vh;
@@ -33,7 +35,7 @@ $cardMaxHeight: 80vh;
 
 .iconButton {
     padding: 2px 5px 5px 5px;
-    background-color: var(--dark-opaque);
+    background-color: $dark-opaque;
 }
 
 .carLabelContainer {
@@ -45,7 +47,7 @@ $cardMaxHeight: 80vh;
 }
 
 .carLabel {
-    color: var(--text-bright);
+    color: $text-bright;
     font-size: 1.2rem;
     text-align: center;
     padding-top: 5px;

@@ -1,5 +1,7 @@
+@import '../../../styles/theme.scss';
+
 .list, .listHeader {
-  background-color: var(--dark-transparent);
+  background-color: $dark-transparent;
 }
 
 .listHeader {

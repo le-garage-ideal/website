@@ -11,7 +11,7 @@ import {
   addCarsToParams,
   extractRelativePathWithParams
 } from '../functions/url';
-import indexStyles from '../styles/Home.module.css';
+import indexStyles from './index.module.scss';
 import { Card } from '../app/components/utils/card';
 import { Title } from '../app/components/title/title';
 import { FullLayout } from '../app/components/layout';
@@ -44,6 +44,7 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
   });
   const contextValue = useMemo(() => [cars, setCars], [cars, setCars])
   const { saveOk, saveMessage } = saveState;
+  
   useEffect(() => {
     const clientMode = typeof window !== 'undefined' && window;
     const carsInit: Array<Car | undefined> = [];
@@ -71,12 +72,11 @@ const IndexPage = ({ i18n, allCars }: IndexPageProps) => {
         });
 
         setCars(carsInit);
+        
+        // Save button enabled?
+        setSaveState({ ...saveState, saveOk: !(clientMode && shouldSave(carsInit)) });
       }
     }
-
-    // Save button enabled?
-    setSaveState({ ...saveState, saveOk: !(clientMode && shouldSave(carsInit)) });
-
 
     if (clientMode) {
       history.pushState({ foo: 'bar' }, '', uri.path());

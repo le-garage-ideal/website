@@ -16,8 +16,6 @@ export const Car = ({ car, id, className }: CarProps) => {
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-  const imageUrl = `/images/${car.id}-resized.jpg`;
-
   const clickLeft = () => {
     setCurrentPageIndex(currentPageIndex - 1);
   };
@@ -30,7 +28,7 @@ export const Car = ({ car, id, className }: CarProps) => {
   if (currentPageIndex === 0) {
     divContent = (
       <motion.img
-        src={imageUrl}
+        src={car.imageFile?.url}
         className={carStyles.image}
         alt={carFullname}
         initial={{ opacity: 0 }}

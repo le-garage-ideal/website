@@ -27,13 +27,12 @@ const Cars = ({ i18n, model, cars }: CarsProps) => {
   const [filteredCars, setFilteredCars] = useState(completeCarList);
 
   const carComponents = filteredCars.map(car => {
-    const imageUrl = `/images/${car.id}-resized.jpg`;
     return (
       <li key={car.id}>
         <ListItem
           id={car.id}
           name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
-          image={imageUrl}
+          image={car.imageFile?.url}
           big
           onClick={() => {
             uri.addQueryParam('car', car.id);

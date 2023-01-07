@@ -1,3 +1,5 @@
+@import '../styles/theme.scss';
+
 .carsContainer {
     align-self: center;
     align-items: flex-start;
@@ -13,8 +15,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--dark-transparent);
-    color: var(--text-medium-dark);
+    background-color: $dark-transparent;
+    color: $text-medium-dark;
     font-size: 8rem;
     margin-bottom: 30px;
 }

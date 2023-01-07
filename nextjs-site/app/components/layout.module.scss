@@ -1,3 +1,5 @@
+@import '../../styles/theme.scss';
+
 $headerHeight: 60px;
 $headerPadding: 10px;
 $footerHeight: 60px;
@@ -21,7 +23,7 @@ $footerHeight: 60px;
 }
 
 .overlay {
-    background-color: var(--dark-extra-transparent);
+    background-color: $dark-extra-transparent;
     z-index: -2;
 }
   
@@ -48,9 +50,9 @@ $footerHeight: 60px;
 }
 
 .menuButton {
-    background-color: var(--dark-opaque);
+    background-color: $dark-opaque;
     &:hover {
-        background-color: var(--dark-transparent);
+        background-color: $dark-transparent;
     }
 }
 
@@ -110,7 +112,7 @@ $footerHeight: 60px;
     position: absolute;
     bottom: 0px;
     z-index: -1; // else it hides last cars selection buttons
-    color: var(--text-medium-dark);
+    color: $text-medium-dark;
 }
 
 

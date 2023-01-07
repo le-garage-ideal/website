@@ -39,14 +39,13 @@ const Cars = ({ i18n, cars }: CarsProps) => {
 
   const carComponents = filteredCars.map(car => {
     const isSelected = selectedCar === car.id;
-    const imageUrl = `/images/${car.id}-resized.jpg`;
     const radioClassNames = ['radio', carsStyles.radioLabel].join(' ');
     return (
       <li key={`carItem${car.id}`}>
         <ListItem
           id={car.id}
           name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
-          image={imageUrl}
+          image={car.imageFile?.url}
           big
           selected={false}
           onClick={() => setSelectedCar(car.id)}

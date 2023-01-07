@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { Layout } from '../app/components/layout';
+import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import aboutStyles from './about.module.scss';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ const About = ({ i18n }: AboutProps) => {
   const title = i18n['pages.about.meta.title'];
   return (
     <I18nContext.Provider value={ i18n }>
-      <Layout uri={location} title={title}>
+      <FullLayout uri={location} title={title}>
         <SEO
           uri={location}
           title={title}
@@ -43,7 +43,7 @@ const About = ({ i18n }: AboutProps) => {
             <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a>
           </p>
         </section>
-      </Layout>
+      </FullLayout>
     </I18nContext.Provider>
   );
 };

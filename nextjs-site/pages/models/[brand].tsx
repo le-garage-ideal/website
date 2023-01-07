@@ -3,7 +3,7 @@ import Uri from 'jsuri';
 import { sortModels } from '../../functions/sort';
 import FilteredList from '../../app/components/utils/filtered-list';
 import ListItem from '../../app/components/utils/list-item';
-import { Layout } from '../../app/components/layout';
+import { FullLayout } from '../../app/components/layout';
 import { SEO } from '../../app/components/seo/seo';
 import { extractRelativePathWithParams } from '../../functions/url';
 import { getMessages, I18nContext } from '../../functions/i18n';
@@ -12,6 +12,7 @@ import { useLocation } from '../../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { fetchStrapi } from '../../functions/api';
 import { Brand } from '../../types/brand';
+import { Model } from '../../types/model';
 
 type ModelsProps = {
   i18n: any;
@@ -63,7 +64,7 @@ const Models = ({ i18n, brand, cars }: ModelsProps) => {
 
   return (
     <I18nContext.Provider value={ i18n }>
-      <Layout title={title} uri={location}>
+      <FullLayout title={title} uri={location}>
         <SEO
           uri={location}
           title={title}
@@ -72,18 +73,19 @@ const Models = ({ i18n, brand, cars }: ModelsProps) => {
         <FilteredList title={title} filter={search}>
           {modelComponents}
         </FilteredList>
-      </Layout>
+      </FullLayout>
     </I18nContext.Provider>
   );
 };
 
 export async function getStaticProps({ locale, params }: { locale: string, params: any }) {
   const i18n = getMessages(locale);
-  const model = await fetchStrapi("GET", `models/?filters[name][$eqi]=${params.model}`).then(res => res ? res.json() : undefined);
-  if (!model?.data?.id) {
+  const models = await fetchStrapi<Array<Model>>("GET", `models/?filters[name][$eqi]=${params.model}`);
+  if (models.length === 0) {
     throw new Error(`No model for [model] param ${params.model}`);
   }
-  const cars = await fetchStrapi("GET", `cars?filters[model.id][$eq]=${model.data.id}`).then(res => res ? res.json() : []);
+  const model = models[0];
+  const cars = await fetchStrapi<Array<Car>>("GET", `cars?filters[model.id][$eq]=${model.id}`);
   return {
     props: {
       i18n,

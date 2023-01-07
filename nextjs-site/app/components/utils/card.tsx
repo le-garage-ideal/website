@@ -65,7 +65,7 @@ export const Card = ({
                   onChange={labelChanged}
                   className="input"
                   style={{ flex: 1 }}
-                  value={editedLabel}
+                  value={editedLabel ?? ''}
                 />
                 <button type="button" className={`${cardStyles.iconButton} icon-button`} onClick={cancelEditModeLabel}>
                   <FontAwesomeIcon icon="times" />

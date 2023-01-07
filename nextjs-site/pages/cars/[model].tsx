@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import Uri from 'jsuri';
 import FilteredList from '../../app/components/utils/filtered-list';
 import ListItem from '../../app/components/utils/list-item';
-import { Layout } from '../../app/components/layout';
+import { FullLayout } from '../../app/components/layout';
 import { SEO } from '../../app/components/seo/seo';
 import { sortCars } from '../../functions/sort';
 import { extractRelativePathWithParams } from '../../functions/url';
@@ -62,7 +62,7 @@ const Cars = ({ i18n, model, cars }: CarsProps) => {
 
   return (
     <I18nContext.Provider value={ i18n }>
-      <Layout title={title} uri={location}>
+      <FullLayout title={title} uri={location}>
         <SEO
           uri={location}
           title={title}
@@ -71,22 +71,22 @@ const Cars = ({ i18n, model, cars }: CarsProps) => {
         <FilteredList title={title} filter={search}>
           {carComponents}
         </FilteredList>
-      </Layout>
+      </FullLayout>
     </I18nContext.Provider>
   );
 };
 
 export async function getStaticProps({ locale, params }: { locale: string, params: any }) {
   const i18n = getMessages(locale);
-  const model = await fetchStrapi("GET", `models/?filters[name][$eqi]=${params.model}`).then(res => res ? res.json() : undefined);
-  if (!model?.data?.id) {
+  const models = await fetchStrapi<Array<Model>>("GET", `models/?filters[name][$eqi]=${params.model}`);
+  if (models.length === 0) {
     throw new Error(`No model for [model] param ${params.model}`);
   }
-  const cars = await fetchStrapi("GET", `cars?filters[model.id][$eq]=${model.data.id}`).then(res => res ? res.json() : []);
+  const cars = await fetchStrapi<Array<Car>>("GET", `cars?filters[model.id][$eq]=${models[0]?.id}`);
   return {
     props: {
       i18n,
-      model,
+      model: models[0],
       cars,
     },
   }

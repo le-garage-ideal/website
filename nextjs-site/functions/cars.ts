@@ -1,8 +1,8 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { Car } from '../types/car';
 
-export type CarsType = Array<Car | undefined>;
-export type CarsContextType = Array<(CarsType | Dispatch<SetStateAction<(Car | undefined)[]>>)>;
+export type CarsType = Array<Car | undefined> | undefined;
+export type CarsContextType = Array<(CarsType | Dispatch<SetStateAction<CarsType>>)>;
 export const CarsContext = createContext<CarsContextType>([[], () => {}]);
 
 type EachCarIndexParam<T> = (i: number) => T;

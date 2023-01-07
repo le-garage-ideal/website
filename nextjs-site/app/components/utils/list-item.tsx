@@ -6,7 +6,7 @@ import listItemStyles from './list-item.module.scss';
 type ListItemProps = {
   id: number | string;
   name: string;
-  image: string;
+  image?: string;
   onClick: (id: number | string) => void;
   selected?: boolean;
   big?: boolean;
@@ -28,7 +28,7 @@ const ListItem = ({
   return (
     <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
       <figure>
-        <Image src={image} alt={name} />
+        { image && <Image src={image} alt={name} /> }
         <figcaption>{name}</figcaption>
       </figure>
     </button>

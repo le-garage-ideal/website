@@ -5,7 +5,7 @@ import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FilteredList from '../app/components/utils/filtered-list';
 import ListItem from '../app/components/utils/list-item';
-import { Layout } from '../app/components/layout';
+import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { sortCars } from '../functions/sort';
 import { extractRelativePathWithParams } from '../functions/url';
@@ -13,6 +13,8 @@ import carsStyles from './cars.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { Car } from '../types/car';
 import { useRouter } from 'next/router';
+import { getMessages } from '../functions/i18n';
+import { fetchStrapi } from '../functions/api';
 
 type CarsProps = {
   i18n: any;
@@ -100,7 +102,7 @@ const Cars = ({ i18n, cars }: CarsProps) => {
 
   const title = i18n['pages.cars.meta.title'];
   return (
-    <Layout uri={uri.toString()} title={title}>
+    <FullLayout uri={uri.toString()} title={title}>
       <SEO
         uri={location}
         title={title}
@@ -112,8 +114,19 @@ const Cars = ({ i18n, cars }: CarsProps) => {
       >
         {carComponents}
       </FilteredList>
-    </Layout>
+    </FullLayout>
   );
 };
+
+export async function getStaticProps({ locale }: { locale: string }) {
+  const i18n = getMessages(locale);
+  const cars = await fetchStrapi<Array<Car>>("GET", `cars`);
+  return {
+    props: {
+      i18n,
+      cars,
+    },
+  }
+}
 
 export default Cars;

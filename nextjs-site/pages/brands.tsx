@@ -4,7 +4,7 @@ import Uri from 'jsuri';
 
 import FilteredList from '../app/components/utils/filtered-list';
 import ListItem from '../app/components/utils/list-item';
-import { Layout } from '../app/components/layout';
+import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { extractRelativePathWithParams } from '../functions/url';
 import './bulma-theme.scss';
@@ -37,7 +37,7 @@ const Brands = ({ i18n, brands }: BrandsProps) => {
         <ListItem
           id={brand.id}
           name={brand.name}
-          image={brand.image.url}
+          image={brand.image?.url}
           onClick={() => onBrandSelect(brand.name)}
         />
       </li>
@@ -54,7 +54,7 @@ const Brands = ({ i18n, brands }: BrandsProps) => {
   const title = i18n['pages.browse.meta.title'];
   return (
     <I18nContext.Provider value={i18n}>
-      <Layout uri={uri.toString()} title={title}>
+      <FullLayout uri={uri.toString()} title={title}>
         <SEO
           uri={location}
           title={title}
@@ -66,14 +66,14 @@ const Brands = ({ i18n, brands }: BrandsProps) => {
         >
           {brandComponents}
         </FilteredList>
-      </Layout>
+      </FullLayout>
     </I18nContext.Provider>
   );
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
   const i18n = getMessages(locale);
-  const brands = await fetchStrapi("GET", `brands`).then(res => res ? res.json() : []);
+  const brands = await fetchStrapi<Array<Brand>>("GET", `brands`);
   return {
     props: {
       i18n,

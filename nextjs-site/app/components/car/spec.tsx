@@ -8,10 +8,10 @@ const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 20; // max 1kg/hp else overflow
 
 type SpecProps = {
-  power: number;
-  weight: number;
-  officialWeight: number;
-  imageUrl: string;
+  power?: number;
+  weight?: number;
+  officialWeight?: number;
+  imageUrl?: string;
 };
 const Spec = ({
   power, weight, officialWeight, imageUrl
@@ -24,22 +24,22 @@ const Spec = ({
     ? i18n['components.spec.observed_weight']
     : i18n['components.spec.official_weight'];
 
-  const ratio = Math.round((theWeight * 10) / power) / 10;
+  const ratio = theWeight && power ? Math.round((theWeight * 10) / power) / 10 : undefined;
 
-  const barPowerStyle = {
+  const barPowerStyle = power ? {
     width: `${(power * 100) / POWER_MAX}%`,
-  };
+  } : undefined;
 
-  const barWeightStyle = {
+  const barWeightStyle = theWeight ? {
     width: `${(theWeight * 100) / WEIGHT_MAX}%`,
-  };
+  } : undefined;
 
-  const barRatioStyle = {
+  const barRatioStyle = ratio ? {
     width: `${(ratio * 100) / RATIO_MAX}%`,
-  };
+  } : undefined;
 
   const imageUri = new Uri(imageUrl);
-  const imageOrigin = imageUri.host;
+  const imageOrigin = imageUri?.host;
 
   const powerUnit = i18n['components.spec.hp'];
 

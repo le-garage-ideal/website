@@ -51,7 +51,7 @@ export const Car = ({ car, id, className }: CarProps) => {
   return (
     <article className={`${carStyles.card} ${className}`}>
 
-      <a href={car.imageFile.url} className={carStyles.imageContainer}>
+      <a href={car.imageFile?.url} className={carStyles.imageContainer}>
         { divContent }
       </a>
 

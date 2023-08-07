@@ -1,26 +1,29 @@
-export const fetchStrapi = <T> (path: string, body?: any): Promise<T> => fetch(
-  `${process.env.STRAPI_BASE_API_URL}/${path}`,
-  {
-    method: 'GET',
-    headers: {Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
-    body,
-  },
-})
-.then((res) => res.json())
-.then(({ data }) => {
-  if (Array.isArray(data)) {
-    return data.map(formatStrapiObjects);
-  } else {
-    return formatStrapiObjects(data);
-  }
-})
-.catch((err) => {
-  if (err.isAxiosError) {
-    console.error(err?.response?.data?.error?.message);
-  } else {
-    console.error(`Error`, err);
-  }
-});
+export const fetchStrapi = <T> (path: string, body?: any): Promise<T> => {
+  const url = `${process.env.STRAPI_BASE_API_URL}/${path}`;
+  return fetch(
+    url,
+    {
+      method: 'GET',
+      headers: {Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+      body,
+    },
+  })
+  .then((res) => res.json())
+  .then(({ data }) => {
+    if (Array.isArray(data)) {
+      return data.map(formatStrapiObjects);
+    } else {
+      return formatStrapiObjects(data);
+    }
+  })
+  .catch((err) => {
+    if (err.isAxiosError) {
+      console.error(`Error ${url} ${process.env.STRAPI_TOKEN}`, err?.response?.data?.error?.message);
+    } else {
+      console.error(`Error ${url} ${process.env.STRAPI_TOKEN}`, err);
+    }
+  });
+}
 
 export const formatStrapiObjects = (strapiObject: any) => {
   let res = {...strapiObject};
@@ -45,3 +48,5 @@ export const formatStrapiObjects = (strapiObject: any) => {
   }
   return res;
 };
+
+export const POPULATE_CARS_PARAMS = 'populate[model][populate][0]=brand&populate[0]=imageFile';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FilteredList from '../app/components/utils/filtered-list';
@@ -12,7 +12,8 @@ import carsStyles from './cars.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { Car } from '../types/car';
 import { useRouter } from 'next/router';
-import { fetchStrapi } from '../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS } from '../functions/api';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type CarsProps = {
   cars: Array<Car>;
@@ -116,9 +117,10 @@ const Cars = ({ cars }: CarsProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const cars = await fetchStrapi<Array<Car>>(`cars?populate[model][populate][0]=brand&populate[0]=imageFile`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}`);
   return {
     props: {
+      ...(await serverSideTranslations(locale, ["common"])),
       cars,
     },
   }

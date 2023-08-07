@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Uri from 'jsuri';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import FilteredList from '../../app/components/utils/filtered-list';
 import ListItem from '../../app/components/utils/list-item';
@@ -11,7 +12,7 @@ import { extractRelativePathWithParams } from '../../functions/url';
 import { useRouter } from 'next/router';
 import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
-import { fetchStrapi } from '../../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS } from '../../functions/api';
 import { Model } from '../../types/model';
 
 type CarsProps = {
@@ -77,7 +78,10 @@ const Cars = ({ model, cars }: CarsProps) => {
 export async function getStaticPaths() {
   const models = await fetchStrapi<Array<Model>>('models');
   return {
-    paths: models.map(model => ({ params: { model: `${model.id}` } })),
+    paths: models.flatMap(model => ([
+      { params: { model: `${model.id}` }, locale: 'en' },
+      { params: { model: `${model.id}` }, locale: 'fr' },
+    ])),
     fallback: false, // can also be true or 'blocking'
   }
 }
@@ -87,11 +91,15 @@ export async function getStaticProps({ locale, params }: { locale: string, param
   if (!model) {
     throw new Error(`No model for [model] param ${params.model}`);
   }
-  const cars = await fetchStrapi<Array<Car>>(`cars?populate[model][populate][0]=brand&populate[0]=imageFile&filters[model][id][$eqi]=${params.model}`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][id][$eqi]=${params.model}`);
+  if (!model) {
+    throw new Error(`No car for [model] param ${params.model}`);
+  }
   return {
     props: {
       model,
       cars,
+      ...(await serverSideTranslations(locale, ["common"])),
     },
   }
 }

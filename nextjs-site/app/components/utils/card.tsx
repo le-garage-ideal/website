@@ -61,7 +61,7 @@ export const Card = ({
         <div className={carLabelClasses.join(' ')}>
           {
             editModeLabel && (
-              <p className="control has-text-dark" style={{ display: 'flex' }}>
+              <div className="control has-text-dark" style={{ display: 'flex' }}>
                 <input
                   id="search-input"
                   type="text"
@@ -76,7 +76,7 @@ export const Card = ({
                 <button type="button" className={`${cardStyles.iconButton} icon-button`} onClick={saveLabel}>
                   <FontAwesomeIcon icon="check" />
                 </button>
-              </p>
+              </div>
             )
           }
           {

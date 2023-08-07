@@ -1,5 +1,13 @@
 @import '../styles/theme.scss';
 
+.main {
+    /* 
+        to allow background to be 100% even in position absolute 
+        (when content is more than 100vh)
+    */
+    position: relative;
+}
+
 .carsContainer {
     align-self: center;
     align-items: flex-start;

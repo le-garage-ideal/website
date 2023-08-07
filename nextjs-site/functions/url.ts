@@ -55,7 +55,7 @@ export const processEditParams = (uri: Uri) => {
   return false;
 };
 
-const labelKey = (carKey: string) => `${carKey}-label`;
+export const labelKey = (carKey: string) => `${carKey}-label`;
 
 export const getCarParams = (uri: Uri) => eachCar(carKey => ({
     carId: uri.getQueryParamValue(carKey),

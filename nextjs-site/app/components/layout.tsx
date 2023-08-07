@@ -1,7 +1,7 @@
 'use client';
 
 import React, { PropsWithChildren, useContext, useState } from 'react';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSearch,
@@ -91,9 +91,9 @@ export const FullLayout = ({
 
   const footer = (
     <footer className={layoutStyles.appFooter}>
-      <span>{i18n('components.layout.first_footer')}</span>
+      <span suppressHydrationWarning>{i18n('components.layout.first_footer')}</span>
       <a href="https://o2switch.fr">o2switch.fr</a>
-      <span>{i18n('components.layout.second_footer')}</span>
+      <span suppressHydrationWarning>{i18n('components.layout.second_footer')}</span>
     </footer>
   );
 
@@ -173,10 +173,10 @@ export const FullLayout = ({
           <div className="modal-background" />
           <div className="modal-content">
             <div className="field is-vertical">
-              <label className="label has-text-light" htmlFor="share-link">
+              <label suppressHydrationWarning className="label has-text-light" htmlFor="share-link">
                 { i18n('components.layout.link_share_it')}
               </label>
-              <p className="control">
+              <div className="control">
                 <input
                   type="text"
                   name="share-link"
@@ -185,7 +185,7 @@ export const FullLayout = ({
                   className="input is-primary"
                   readOnly
                 />
-              </p>
+              </div>
             </div>
             <div style={{
               display: 'flex', flexWrap: 'wrap', marginTop: '20px', height: '80px',

@@ -1,4 +1,4 @@
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import aboutStyles from './about.module.scss';
@@ -29,13 +29,13 @@ const About = () => {
           padding: '30px',
         }}
       >
-        <p className={aboutStyles.sentence}>{ i18n('pages.about.first_chapter')}</p>
-        <p className={aboutStyles.sentence}>{ i18n('pages.about.second_chapter')}</p>
-        <p className={aboutStyles.sentence}>{ i18n('pages.about.third_chapter')}</p>
-        <p className={aboutStyles.sentence}>
+        <div className={aboutStyles.sentence}>{ i18n('pages.about.first_chapter')}</div>
+        <div className={aboutStyles.sentence}>{ i18n('pages.about.second_chapter')}</div>
+        <div className={aboutStyles.sentence}>{ i18n('pages.about.third_chapter')}</div>
+        <div className={aboutStyles.sentence}>
           { i18n('pages.about.fourth_chapter') }
           <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a>
-        </p>
+        </div>
       </section>
     </FullLayout>
   );

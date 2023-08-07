@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Uri from 'jsuri';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 import specStyles from './spec.module.scss';
 const POWER_MAX = 1200; // max 1200hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow

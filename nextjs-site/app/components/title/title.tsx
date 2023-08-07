@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import titleStyles from './title.module.scss';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 
 export const Title = () => {
   const { t: i18n } = useTranslation();

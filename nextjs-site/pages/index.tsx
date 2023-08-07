@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Uri from 'jsuri';
 import { useEffect, useState, useMemo } from 'react';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 import { eachCarIndex, fullname, CarsContext } from '../functions/cars';
 import { save, shouldSave } from '../functions/storage';
 import {
@@ -19,7 +19,9 @@ import { Car } from '../types/car';
 import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Car as CarComponent } from '../app/components/car/car';
-import { fetchStrapi } from '../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS } from '../functions/api';
+import { useIsClient } from '../app/hooks/useIsClient';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type IndexPageProps = {
   allCars: Array<Car>;
@@ -30,8 +32,9 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   const location = useLocation();
   const initUri = new Uri(extractRelativePathWithParams(new Uri(location)));
   const [uri, setUri] = useState(initUri);
+  const languageParam = i18n.language;
 
-  const { push } = useRouter();
+  const { push, query } = useRouter();
 
   // if edit=X parameter, save car to carX parameter
   const hasEditParams = processEditParams(uri);
@@ -41,13 +44,12 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   });
   const contextValue = useMemo(() => [cars, setCars], [cars, setCars])
   const { saveOk, saveMessage } = saveState;
-  
+  const isClient = useIsClient();
   useEffect(() => {
-    const clientMode = typeof window !== 'undefined' && window;
     const carsInit: Array<Car | undefined> = [];
     if (!cars) {
       // add missing params + save state
-      if (clientMode) {
+      if (isClient) {
         // Priority to URL if user copy paste shared garage
         const carParams = getCarParams(uri);
         carParams.forEach((param, idx) => {
@@ -71,11 +73,11 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         setCars(carsInit);
         
         // Save button enabled?
-        setSaveState({ ...saveState, saveOk: !(clientMode && shouldSave(carsInit)) });
+        setSaveState({ ...saveState, saveOk: !(isClient && shouldSave(carsInit)) });
       }
     }
 
-    if (clientMode) {
+    if (isClient) {
       history.pushState({ foo: 'bar' }, '', uri.path());
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
@@ -86,14 +88,11 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         });
       }, 200);
     }
-  }, [cars, allCars, i18n, saveState, uri]);
+  }, [isClient, cars, allCars, i18n, saveState, uri]);
 
   // Click on edit button on a car's card 
   const editCar = (index: number) => {
-    const newUri = new Uri(uri.toString());
-    newUri.setPath('/brands');
-    newUri.addQueryParam('edit', index);
-    push(extractRelativePathWithParams(newUri));
+    push({ pathname: '/brands', query: { edit: index, ...languageParam, ...query }});
   };
 
   // Click on save button of a car's card label
@@ -157,7 +156,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
       <Head>
         <SEO title="Home" uri={''} description={''} />
       </Head>
-      <main>
+      <main className={indexStyles.main}>
         <CarsContext.Provider value={contextValue}>
           <FullLayout
             save={onSave}
@@ -184,9 +183,10 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const allCars = await fetchStrapi<Array<Car>>(`cars?populate[model][populate][0]=brand&populate[0]=imageFile`);
+  const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}`);
   return {
     props: {
+      ...(await serverSideTranslations(locale, ["common"])),
       allCars,
     },
   }

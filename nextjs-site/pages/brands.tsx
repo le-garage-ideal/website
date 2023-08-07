@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Uri from 'jsuri';
-import { useTranslation} from 'next-export-i18n';
+import { useTranslation} from 'next-i18next';
 import FilteredList from '../app/components/utils/filtered-list';
 import ListItem from '../app/components/utils/list-item';
 import { FullLayout } from '../app/components/layout';
@@ -11,6 +11,7 @@ import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Brand } from '../types/brand';
 import { fetchStrapi } from '../functions/api';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type BrandsProps = {
   brands: Array<Brand>
@@ -71,6 +72,7 @@ export async function getStaticProps({ locale }: { locale: string }) {
   const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*`);
   return {
     props: {
+      ...(await serverSideTranslations(locale, ["common"])),
       brands,
     },
   }

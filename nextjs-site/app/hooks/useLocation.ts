@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useIsClient } from "./useIsClient";
 
 export const useLocation = () => {
   const { asPath, locale } = useRouter();
-  const hasWindow = typeof window !== 'undefined';
+  const isClient = useIsClient();
   const [location, setLocation] = useState<string>();
   useEffect(() => {
-    if (hasWindow) {
+    if (isClient) {
       setLocation(`${window.location.origin}/${locale}/${asPath}`)
     }
-  }, [hasWindow, asPath, locale])
+  }, [isClient, asPath, locale])
   return location;
 };

@@ -19,21 +19,34 @@ const ListItem = ({
     classNames.push(listItemStyles.selected);
   }
 
-  if (big) {
-    classNames.push(listItemStyles.logoLinkBig);
-  } else {
-    classNames.push(listItemStyles.logoLinkSmall);
-  }
+  const style = {
+    width: big ? '22.5em' : '7.5em',
+    height: big ? '15em' : '7.5em',
+  } as React.CSSProperties;
 
   return (
-    <button type="button" className={classNames.join(' ')} onClick={() => onClick(id)}>
-      <figure>
-        { image &&
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={image} alt={name} />
-        }
-        <figcaption>{name}</figcaption>
-      </figure>
+    <button type="button" className={classNames.join(' ')} style={style} onClick={() => onClick(id)}>
+      <div style={{position: 'relative', width: '100%', height: '100%'}}>
+      { image && (
+          big ? (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_IMG_URL}${image}`}
+              alt={name}
+              style={{objectFit: 'contain'}}
+              fill
+            />
+          ) : (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_IMG_URL}${image}`}
+              alt={name}
+              style={{objectFit: 'contain'}}
+              fill
+            />
+          )
+        )
+      }
+      </div>
+      <div>{name}</div>
     </button>
   );
 };

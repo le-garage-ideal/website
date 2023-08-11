@@ -91,9 +91,7 @@ export const FullLayout = ({
 
   const footer = (
     <footer className={layoutStyles.appFooter}>
-      <span suppressHydrationWarning>{i18n('components.layout.first_footer')}</span>
-      <a href="https://o2switch.fr">o2switch.fr</a>
-      <span suppressHydrationWarning>{i18n('components.layout.second_footer')}</span>
+      <span suppressHydrationWarning>{i18n('components.layout.footer')}</span>
     </footer>
   );
 

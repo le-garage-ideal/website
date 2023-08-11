@@ -1,40 +1,20 @@
 @import '../../../styles/theme.scss';
 
-$big: 15em;
-$small: 5em;
-
 .logoLink {
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0);
-  text-align: center;
-  overflow: hidden;
   background: none!important;
   padding: 5px;
   color: $text-bright;
   text-transform: uppercase;
-  cursor: pointer;
-}
-
-.logoLinkSmall {
-  width: calc(#{$small} * 1.5);
-  max-height: $small;
-  img {
-    height: calc(#{$small} - 2em); // leave space for caption
-  }
-}
-
-.logoLinkBig {
-  width: calc(#{$big} * 1.5);
-  max-height: $big;
-  img {
-    height: calc(#{$big} - 2em); // leave space for caption
-  }
+  display: flex;
+  flex-direction: column;
 }
 
 .logoLink:hover {
   box-sizing: border-box;
   background: initial;
-  background-color: $element-hover-bright!important;
+  background-color: $element-hover!important;
 }
 
 .selected, .logoLink:hover.selected {

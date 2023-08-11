@@ -59,8 +59,7 @@
       "link_share_it": "Share this link : ",
       "saved_button_tooltip_ok": "This garage is already saved",
       "saved_button_tooltip_ko": "Save your garage, you'll find it in the menu",
-      "first_footer": "Site hosted by ",
-      "second_footer": ". No cookie and no personal data are used by this website.",
+      "footer": ". No cookie and no personal data are used by this website.",
       "share_link": "Share the link for to this garage",
       "share_with": "Share with {{network}}",
       "share_title": "My Perfect Garage"

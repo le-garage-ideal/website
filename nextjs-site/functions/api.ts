@@ -49,4 +49,4 @@ export const formatStrapiObjects = (strapiObject: any) => {
   return res;
 };
 
-export const POPULATE_CARS_PARAMS = 'populate[model][populate][0]=brand&populate[0]=imageFile';
+export const POPULATE_CARS_PARAMS = 'populate=deep';

@@ -30,28 +30,34 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
   const { t: i18n } = useTranslation();
   const location = useLocation();
-  const initUri = new Uri(extractRelativePathWithParams(new Uri(location)));
-  const [uri, setUri] = useState(initUri);
+  const [uri, setUri] = useState<Uri>(new Uri(location));
   const languageParam = i18n.language;
 
   const { push, query } = useRouter();
 
-  // if edit=X parameter, save car to carX parameter
-  const hasEditParams = processEditParams(uri);
   const [saveState, setSaveState] = useState<{saveMessage: string | undefined; saveOk: boolean;}>({
     saveMessage: undefined,
-    saveOk: !hasEditParams,
+    saveOk: true,
   });
   const contextValue = useMemo(() => [cars, setCars], [cars, setCars])
   const { saveOk, saveMessage } = saveState;
   const isClient = useIsClient();
   useEffect(() => {
     const carsInit: Array<Car | undefined> = [];
-    if (!cars) {
-      // add missing params + save state
-      if (isClient) {
+    if (isClient) {
+      const tmpUri = new Uri(window.location.toString());
+      const relativePathWithParams = extractRelativePathWithParams(tmpUri);
+      const initUri = new Uri(relativePathWithParams);
+      // if edit=X parameter, save car to carX parameter
+      const hasEditParams = processEditParams(initUri);
+      setSaveState({
+        saveMessage: undefined,
+        saveOk: !hasEditParams,
+      });
+      if (!cars) {
+        // add missing params + save state
         // Priority to URL if user copy paste shared garage
-        const carParams = getCarParams(uri);
+        const carParams = getCarParams(initUri);
         carParams.forEach((param, idx) => {
           carsInit[idx] = undefined;
 
@@ -70,15 +76,16 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
           }
         });
 
-        setCars(carsInit);
+        if (carsInit.length > 0) {
+          setCars(carsInit);
+        }
         
         // Save button enabled?
-        setSaveState({ ...saveState, saveOk: !(isClient && shouldSave(carsInit)) });
+        setSaveState({ saveMessage: undefined, saveOk: !shouldSave(carsInit) });
       }
-    }
 
-    if (isClient) {
-      history.pushState({ foo: 'bar' }, '', uri.path());
+      //history.pushState({ foo: 'bar' }, '', initUri.path());
+      setUri(initUri);
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
           const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`) as HTMLElement;
@@ -88,7 +95,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         });
       }, 200);
     }
-  }, [isClient, cars, allCars, i18n, saveState, uri]);
+  }, [isClient, cars, allCars, i18n, setUri]);
 
   // Click on edit button on a car's card 
   const editCar = (index: number) => {
@@ -111,7 +118,6 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   const transform = (car: Car | undefined, index: number) => {
     const thumbnail = car ? (
       <CarComponent
-        id={carComponentId(index)}
         className={indexStyles.carComponent}
         car={car}
       />

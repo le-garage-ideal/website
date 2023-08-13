@@ -9,10 +9,9 @@ import { Car as CarType } from '../../../types/car';
 
 type CarProps = {
   car: CarType;
-  id: string;
   className: string;
 };
-export const Car = ({ car, id, className }: CarProps) => {
+export const Car = ({ car, className }: CarProps) => {
   const carFullname = fullname(car);
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -29,7 +28,7 @@ export const Car = ({ car, id, className }: CarProps) => {
   if (currentPageIndex === 0) {
     divContent = (
       <motion.img
-        src={car.imageFile?.url}
+        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_IMG_URL}${car.imageFile?.url}`}
         className={carStyles.image}
         alt={carFullname}
         initial={{ opacity: 0 }}

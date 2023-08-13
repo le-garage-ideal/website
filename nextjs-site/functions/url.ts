@@ -57,10 +57,13 @@ export const processEditParams = (uri: Uri) => {
 
 export const labelKey = (carKey: string) => `${carKey}-label`;
 
-export const getCarParams = (uri: Uri) => eachCar(carKey => ({
-    carId: uri.getQueryParamValue(carKey),
-    carLabel: uri.getQueryParamValue(labelKey(carKey)),
-  }))
+export const getCarParams = (uri: Uri) => eachCar(carKey => {
+    const result = {
+      carId: uri.getQueryParamValue(carKey),
+      carLabel: uri.getQueryParamValue(labelKey(carKey)),
+    };
+    return result;
+  })
   .map(element => element.carId ? element : null);
 
 export const addCarsToParams = (cars: Array<{ id: string | number; label?: string } | undefined>, uri: Uri) => {

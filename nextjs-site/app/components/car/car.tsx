@@ -25,6 +25,7 @@ export const Car = ({ car, className }: CarProps) => {
   };
 
   let divContent = null;
+  const containerClassnames = [carStyles.commonContainer];
   if (currentPageIndex === 0) {
     divContent = (
       <motion.img
@@ -35,6 +36,7 @@ export const Car = ({ car, className }: CarProps) => {
         animate={{ opacity: 1 }}
       />
     );
+    containerClassnames.push(carStyles.imageContainer)
   } else {
     divContent = (
       <Spec
@@ -44,12 +46,13 @@ export const Car = ({ car, className }: CarProps) => {
         imageUrl={car.selectedFavcarsUrl}
       />
     );
+    containerClassnames.push(carStyles.specContainer)
   }
 
   return (
     <article className={`${carStyles.card} ${className}`}>
 
-      <a href={car.imageFile?.url} className={carStyles.imageContainer}>
+      <a href={car.imageFile?.url} className={containerClassnames.join(' ')}>
         { divContent }
       </a>
 

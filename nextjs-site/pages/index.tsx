@@ -30,7 +30,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
   const { t: i18n } = useTranslation();
   const location = useLocation();
-  const [uri, setUri] = useState<Uri>(new Uri(location));
+  const [uri, setUri] = useState<Uri | undefined>();
   const languageParam = i18n.language;
 
   const { push, query } = useRouter();
@@ -42,26 +42,39 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   const contextValue = useMemo(() => [cars, setCars], [cars, setCars])
   const { saveOk, saveMessage } = saveState;
   const isClient = useIsClient();
+
+  useEffect(() => {
+    if (isClient) {
+      if (!uri) {
+        const tmpUri = new Uri(window.location.toString());
+        const relativePathWithParams = extractRelativePathWithParams(tmpUri);
+        const initUri = new Uri(relativePathWithParams);
+        // if edit=X parameter, save car to carX parameter
+        const hasEditParams = processEditParams(initUri);
+        if (hasEditParams) {
+          push(initUri.toString(), undefined, { shallow: true });
+        }
+        setUri(initUri);
+        setSaveState({
+          saveMessage: undefined,
+          saveOk: !hasEditParams,
+        });
+      }
+    }
+  }, [isClient, uri, setUri, push, setSaveState]);
+
   useEffect(() => {
     const carsInit: Array<Car | undefined> = [];
     if (isClient) {
-      const tmpUri = new Uri(window.location.toString());
-      const relativePathWithParams = extractRelativePathWithParams(tmpUri);
-      const initUri = new Uri(relativePathWithParams);
-      // if edit=X parameter, save car to carX parameter
-      const hasEditParams = processEditParams(initUri);
-      setSaveState({
-        saveMessage: undefined,
-        saveOk: !hasEditParams,
-      });
-      if (!cars) {
+      const carParams = getCarParams(uri);
+      if (carParams.length > 0) {
         // add missing params + save state
         // Priority to URL if user copy paste shared garage
-        const carParams = getCarParams(initUri);
+        const carParams = getCarParams(uri);
         carParams.forEach((param, idx) => {
           carsInit[idx] = undefined;
 
-          if (param) {
+          if (param?.carId) {
             const { carId, carLabel } = param;
             const carIdNumber = parseInt(carId);
             if (!isNaN(carIdNumber)) {
@@ -84,8 +97,6 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         setSaveState({ saveMessage: undefined, saveOk: !shouldSave(carsInit) });
       }
 
-      //history.pushState({ foo: 'bar' }, '', initUri.path());
-      setUri(initUri);
       setTimeout(() => {
         eachCarIndex(editButtonIdx => {
           const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`) as HTMLElement;
@@ -95,7 +106,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         });
       }, 200);
     }
-  }, [isClient, cars, allCars, i18n, setUri]);
+  }, [isClient, allCars, i18n, uri]);
 
   // Click on edit button on a car's card 
   const editCar = (index: number) => {
@@ -105,7 +116,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   // Click on save button of a car's card label
   const editCardLabel = (index: number, newLabel: string) => {
     const newCar = cars?.[index];
-    if (newCar) {
+    if (newCar && uri) {
       newCar.label = newLabel;
       const newUri = addCarsToParams(cars, uri);
       setCars(cars);
@@ -143,7 +154,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
 
   // Click on garage save button
   const onSave = () => {
-    if (cars && !saveOk) {
+    if (cars && uri && !saveOk) {
       const garageName = save(cars);
       const newUri = addCarsToParams(cars, uri);
       const savedMessage = i18n('pages.index.garage_saved');
@@ -167,14 +178,14 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
           <FullLayout
             save={onSave}
             title={title}
-            uri={uri.toString()}
+            uri={uri?.toString()}
             saveDisabled={saveOk}
             saveMessage={saveMessage}
             showButtons
           >
             <SEO
               title={title}
-              uri={uri.toString()}
+              uri={uri?.toString()}
               description={i18n('pages.index.meta.description')}
             />
             <Title />

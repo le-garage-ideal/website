@@ -1,5 +1,4 @@
 import Uri from 'jsuri';
-import { Car } from '../types/car';
 import { eachCar } from './cars';
 
 export const extractHostname = (fullHost: string) => {
@@ -57,10 +56,10 @@ export const processEditParams = (uri: Uri) => {
 
 export const labelKey = (carKey: string) => `${carKey}-label`;
 
-export const getCarParams = (uri: Uri) => eachCar(carKey => {
+export const getCarParams = (uri: Uri | undefined) => eachCar(carKey => {
     const result = {
-      carId: uri.getQueryParamValue(carKey),
-      carLabel: uri.getQueryParamValue(labelKey(carKey)),
+      carId: uri?.getQueryParamValue(carKey),
+      carLabel: uri?.getQueryParamValue(labelKey(carKey)),
     };
     return result;
   })

@@ -8,15 +8,9 @@ export const useLocation = () => {
   const isClient = useIsClient();
   const [location, setLocation] = useState<string>();
   useEffect(() => {
-    if (isClient) {
-      let queryParams = "";
-      let separator = "?";
-      for (const key in query) {
-        queryParams += `${key}=${query[key]}`;
-        separator = "&";
-      }
-      setLocation(`${window.location.origin}/${locale}${asPath}${queryParams}`)
+    if (isClient && !location) {
+      setLocation(`${window.location.origin}/${locale}${asPath}`)
     }
-  }, [isClient, asPath, locale, query])
+  }, [isClient, asPath, locale, query, location])
   return location;
 };

@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { useTranslation,  } from 'next-i18next';
+import qs from 'qs';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { buildGarageName, getSavedGarages } from '../../../functions/storage';
 import { CarsContext, eachCar } from '../../../functions/cars';
 import { labelKey } from '../../../functions/url';
 import menuStyles from './menu.module.scss';
-import Link from 'next/link';
 import { Car as CarsType } from '../../../types/car';
-import { useRouter } from 'next/router';
 
 const Menu = ({ uri }: { uri: string | undefined }) => {
   const { t: i18n } = useTranslation();
@@ -33,7 +34,7 @@ const Menu = ({ uri }: { uri: string | undefined }) => {
       });
       const onClick = () => {
         setCars(garage);
-        push("/", {...languageParam, ...garageParams});
+        push(`?${qs.stringify({...languageParam, ...garageParams})}`);
       }
       garageElements.push((
         <li key={garageName}>
@@ -44,9 +45,9 @@ const Menu = ({ uri }: { uri: string | undefined }) => {
 
     garageMenuItems = (
       <>
-        <Link href={{ pathname: '/cars', query: { ...query, ...languageParam } }}>{ i18n('components.menu.garages') }</Link>
+        <Link href={{ pathname: '/', query: { ...query, ...languageParam } }}>{ i18n('components.menu.garages') }</Link>
         <ul>
-          <li><Link href={{ pathname: '/cars', query: { ...query, ...languageParam } }}>{ i18n('components.menu.current_garage') }</Link></li>
+          <li><Link href={{ pathname: '/', query: { ...query, ...languageParam } }}>{ i18n('components.menu.current_garage') }</Link></li>
           { garageElements }
         </ul>
       </>

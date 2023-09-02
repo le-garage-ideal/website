@@ -19,12 +19,12 @@ import { Car } from '../types/car';
 import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Car as CarComponent } from '../app/components/car/car';
-import { fetchStrapi, POPULATE_CARS_PARAMS } from '../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { useIsClient } from '../app/hooks/useIsClient';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type IndexPageProps = {
-  allCars: Array<Car>;
+  allCars: StrapiResponseType<Array<Car>>;
 };
 const IndexPage = ({ allCars }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
@@ -78,7 +78,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
             const { carId, carLabel } = param;
             const carIdNumber = parseInt(carId);
             if (!isNaN(carIdNumber)) {
-              const foundNode = allCars
+              const foundNode = allCars.data
                 .find((car) => car.id === carIdNumber) as Car;
 
               if (foundNode) {

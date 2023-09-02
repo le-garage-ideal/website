@@ -10,11 +10,11 @@ import { extractRelativePathWithParams } from '../functions/url';
 import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Brand } from '../types/brand';
-import { fetchStrapi } from '../functions/api';
+import { fetchStrapi, StrapiResponseType } from '../functions/api';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type BrandsProps = {
-  brands: Array<Brand>
+  brands: StrapiResponseType<Array<Brand>>;
 };
 const Brands = ({ brands }: BrandsProps) => {
   const { t: i18n } = useTranslation();
@@ -27,7 +27,7 @@ const Brands = ({ brands }: BrandsProps) => {
     push(extractRelativePathWithParams(uri));
   };
 
-  const [filteredBrands, setFilteredBrands] = useState(brands);
+  const [filteredBrands, setFilteredBrands] = useState(brands.data);
 
   const brandComponents = filteredBrands
     .sort((brand1, brand2) => (brand1.name > brand2.name ? 1 : -1))
@@ -45,6 +45,7 @@ const Brands = ({ brands }: BrandsProps) => {
   const search = (value: string | undefined) => {
     if (value) {
       const filtered = brands
+        .data
         .filter((brand) => brand.name.match(new RegExp(value, 'i')));
       setFilteredBrands(filtered);
     }
@@ -69,7 +70,7 @@ const Brands = ({ brands }: BrandsProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*`);
+  const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*&pagination[limit]=200`);
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

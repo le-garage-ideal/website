@@ -11,14 +11,14 @@ import { extractRelativePathWithParams } from '../../functions/url';
 import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
 import { useRouter } from 'next/router';
-import { fetchStrapi, POPULATE_CARS_PARAMS } from '../../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
 import { Brand } from '../../types/brand';
 import { Model } from '../../types/model';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type ModelsProps = {
-  brand: Brand;
-  cars: Array<Car>;
+  brand: StrapiResponseType<Brand>;
+  cars: StrapiResponseType<Array<Car>>;
 };
 const Models = ({ brand, cars }: ModelsProps) => {
   const { t: i18n } = useTranslation();
@@ -27,6 +27,7 @@ const Models = ({ brand, cars }: ModelsProps) => {
 
   const uri = new Uri(location);
   const listName: Array<Car> = cars
+    .data
     .sort((a, b) => sortModels(a.model, b.model))
     .reduce((acc, el) => (
       acc[acc.length - 1] && acc[acc.length - 1].model.name === el.model.name ?
@@ -59,10 +60,10 @@ const Models = ({ brand, cars }: ModelsProps) => {
   };
 
   const title = i18n('templates.models.title')
-    .replace('{brand}', brand.name);
+    .replace('{brand}', brand.data.name);
 
   const description = i18n('templates.models.description')
-    .replace('{brand}', brand.name);
+    .replace('{brand}', brand.data.name);
 
   return (
     <FullLayout title={title} uri={location}>
@@ -81,7 +82,7 @@ const Models = ({ brand, cars }: ModelsProps) => {
 export async function getStaticPaths() {
   const brands = await fetchStrapi<Array<Model>>('brands');
   return {
-    paths: brands.flatMap(brand => ([
+    paths: brands?.data.flatMap(brand => ([
       { params: { brand: `${brand.id}` }, locale: 'en' },
       { params: { brand: `${brand.id}` }, locale: 'fr' },
     ])),
@@ -94,8 +95,8 @@ export async function getStaticProps({ locale, params }: { locale: string, param
   if (!brand) {
     throw new Error(`No brand for [brand] param ${params.brand}`);
   }
-  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][brand][id][$eq]=${brand.id}`);
-  if (!cars?.length) {
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][brand][id][$eq]=${brand.data.id}`);
+  if (!cars?.data.length) {
     throw new Error(`No cars for [brand] param ${params.brand}`);
   }
   return {

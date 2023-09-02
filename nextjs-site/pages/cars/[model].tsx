@@ -12,12 +12,12 @@ import { extractRelativePathWithParams } from '../../functions/url';
 import { useRouter } from 'next/router';
 import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
-import { fetchStrapi, POPULATE_CARS_PARAMS } from '../../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
 import { Model } from '../../types/model';
 
 type CarsProps = {
-  model: Model;
-  cars: Array<Car>;
+  model: StrapiResponseType<Model>;
+  cars: StrapiResponseType<Array<Car>>;
 };
 const Cars = ({ model, cars }: CarsProps) => {
   const { push } = useRouter();
@@ -25,7 +25,7 @@ const Cars = ({ model, cars }: CarsProps) => {
   const { t: i18n } = useTranslation();
 
   const uri = new Uri(location);
-  const completeCarList: Array<Car> = cars.sort(sortCars);
+  const completeCarList: Array<Car> = cars.data.sort(sortCars);
   const [filteredCars, setFilteredCars] = useState(completeCarList);
 
   const carComponents = filteredCars.map(car => {
@@ -54,12 +54,12 @@ const Cars = ({ model, cars }: CarsProps) => {
   };
 
   const title = i18n('templates.cars.title')
-    .replace('{brand}', model.brand.name)
-    .replace('{model}', model.name);
+    .replace('{brand}', model.data.brand.name)
+    .replace('{model}', model.data.name);
 
   const description = i18n('templates.cars.description')
-    .replace('{brand}', model.brand.name)
-    .replace('{model}', model.name);
+    .replace('{brand}', model.data.brand.name)
+    .replace('{model}', model.data.name);
 
   return (
     <FullLayout title={title} uri={location}>
@@ -78,7 +78,7 @@ const Cars = ({ model, cars }: CarsProps) => {
 export async function getStaticPaths() {
   const models = await fetchStrapi<Array<Model>>('models');
   return {
-    paths: models.flatMap(model => ([
+    paths: models?.data.flatMap(model => ([
       { params: { model: `${model.id}` }, locale: 'en' },
       { params: { model: `${model.id}` }, locale: 'fr' },
     ])),

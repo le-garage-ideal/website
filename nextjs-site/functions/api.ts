@@ -1,4 +1,13 @@
-export const fetchStrapi = <T> (path: string, body?: any): Promise<T> => {
+type MetaType = {
+  pagination: {
+      page: number,
+      pageSize: number,
+      pageCount: number,
+      total: number,
+  },
+};
+export type StrapiResponseType<T> = { data: T, meta: MetaType };
+export const fetchStrapi = <T> (path: string, body?: any): Promise<void | StrapiResponseType<T>> => {
   const url = `${process.env.STRAPI_BASE_API_URL}/${path}`;
   return fetch(
     url,
@@ -9,11 +18,17 @@ export const fetchStrapi = <T> (path: string, body?: any): Promise<T> => {
     },
   })
   .then((res) => res.json())
-  .then(({ data }) => {
+  .then(({ data, meta }) => {
     if (Array.isArray(data)) {
-      return data.map(formatStrapiObjects);
+      return {
+        data: data.map(formatStrapiObjects),
+        meta,
+      } as any as StrapiResponseType<T>;
     } else {
-      return formatStrapiObjects(data);
+      return {
+        data: formatStrapiObjects(data),
+        meta,
+      } as any as StrapiResponseType<T>;
     }
   })
   .catch((err) => {
@@ -25,7 +40,7 @@ export const fetchStrapi = <T> (path: string, body?: any): Promise<T> => {
   });
 }
 
-export const formatStrapiObjects = (strapiObject: any) => {
+export const formatStrapiObjects = <T> (strapiObject: any): T => {
   let res = {...strapiObject};
   if (res.attributes) {
     const attributesCopy = res.attributes;

@@ -12,11 +12,12 @@ import carsStyles from './cars.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { Car } from '../types/car';
 import { useRouter } from 'next/router';
-import { fetchStrapi, POPULATE_CARS_PARAMS } from '../functions/api';
+import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type CarsProps = {
-  cars: Array<Car>;
+  cars: StrapiResponseType<Array<Car>>;
+  count: number;
 };
 const Cars = ({ cars }: CarsProps) => {
   const location = useLocation();
@@ -24,7 +25,7 @@ const Cars = ({ cars }: CarsProps) => {
   const { push } = useRouter();
   const { t: i18n } = useTranslation();
 
-  const completeCarList = cars.sort(sortCars);
+  const completeCarList = cars.data.sort(sortCars);
   const [filteredCars, setFilteredCars] = useState(completeCarList);
   filteredCars.splice(0, filteredCars.length - 20);
 
@@ -107,7 +108,7 @@ const Cars = ({ cars }: CarsProps) => {
         description={i18n('pages.cars.meta.description')}
       />
       <FilteredList
-        title={`${completeCarList.length} ${i18n('pages.cars.list_title')}`}
+        title={`${cars.meta.pagination.total} ${i18n('pages.cars.list_title')}`}
         filter={search}
       >
         {carComponents}

@@ -10,7 +10,7 @@ import { extractRelativePathWithParams } from '../functions/url';
 import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Brand } from '../types/brand';
-import { fetchStrapi, StrapiResponseType } from '../functions/api';
+import { fetchStrapi, LIMIT_BRANDS_PARAMS, StrapiResponseType } from '../functions/api';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type BrandsProps = {
@@ -70,7 +70,7 @@ const Brands = ({ brands }: BrandsProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*&pagination[limit]=200`);
+  const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*&${LIMIT_BRANDS_PARAMS}`);
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

@@ -12,7 +12,7 @@ import { extractRelativePathWithParams } from '../../functions/url';
 import { useRouter } from 'next/router';
 import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
-import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
+import { fetchStrapi, LIMIT_CARS_PER_MODEL_PARAMS, LIMIT_MODELS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
 import { Model } from '../../types/model';
 
 type CarsProps = {
@@ -76,7 +76,7 @@ const Cars = ({ model, cars }: CarsProps) => {
 };
 
 export async function getStaticPaths() {
-  const models = await fetchStrapi<Array<Model>>('models');
+  const models = await fetchStrapi<Array<Model>>(`models?${LIMIT_MODELS_PARAMS}`);
   return {
     paths: models?.data.flatMap(model => ([
       { params: { model: `${model.id}` }, locale: 'en' },
@@ -91,7 +91,7 @@ export async function getStaticProps({ locale, params }: { locale: string, param
   if (!model) {
     throw new Error(`No model for [model] param ${params.model}`);
   }
-  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][id][$eqi]=${params.model}`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][id][$eqi]=${params.model}&${LIMIT_CARS_PER_MODEL_PARAMS}`);
   if (!model) {
     throw new Error(`No car for [model] param ${params.model}`);
   }

@@ -11,7 +11,7 @@ import { extractRelativePathWithParams } from '../../functions/url';
 import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
 import { useRouter } from 'next/router';
-import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
+import { fetchStrapi, LIMIT_BRANDS_PARAMS, LIMIT_MODELS_PER_BRAND_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
 import { Brand } from '../../types/brand';
 import { Model } from '../../types/model';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -80,7 +80,7 @@ const Models = ({ brand, cars }: ModelsProps) => {
 };
 
 export async function getStaticPaths() {
-  const brands = await fetchStrapi<Array<Model>>('brands');
+  const brands = await fetchStrapi<Array<Model>>(`brands?${LIMIT_BRANDS_PARAMS}`);
   return {
     paths: brands?.data.flatMap(brand => ([
       { params: { brand: `${brand.id}` }, locale: 'en' },
@@ -95,7 +95,7 @@ export async function getStaticProps({ locale, params }: { locale: string, param
   if (!brand) {
     throw new Error(`No brand for [brand] param ${params.brand}`);
   }
-  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][brand][id][$eq]=${brand.data.id}`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][brand][id][$eq]=${brand.data.id}&${LIMIT_MODELS_PER_BRAND_PARAMS}`);
   if (!cars?.data.length) {
     throw new Error(`No cars for [brand] param ${params.brand}`);
   }

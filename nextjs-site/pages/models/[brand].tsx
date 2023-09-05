@@ -42,7 +42,7 @@ const Models = ({ brand, cars }: ModelsProps) => {
       <ListItem
         id={car.model.name}
         name={car.model.name}
-        image={car.imageFile?.url}
+        image={car.imageFile?.formats?.thumbnail?.url ?? car.imageFile?.url}
         big
         onClick={() => {
           uri.setPath(`/cars/${car.model.id}`);

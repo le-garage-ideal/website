@@ -9,4 +9,28 @@ export type Image = {
   mime: string;
   size: number;
   url: string;
+  formats: {
+    small: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path: string;
+        size: number;
+        width: number;
+        height: number;
+    };
+    thumbnail: {
+        ext: string;
+        url: string;
+        hash: string;
+        mime: string;
+        name: string;
+        path: string;
+        size: number;
+        width: number;
+        height: number;
+    }
+  };
 };

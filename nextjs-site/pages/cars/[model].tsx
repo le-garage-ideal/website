@@ -34,7 +34,7 @@ const Cars = ({ model, cars }: CarsProps) => {
         <ListItem
           id={car.id}
           name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
-          image={car.imageFile?.url}
+          image={car.imageFile?.formats?.thumbnail?.url ?? car.imageFile?.url}
           big
           onClick={() => {
             uri.addQueryParam('car', car.id);

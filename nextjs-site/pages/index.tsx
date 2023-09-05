@@ -19,7 +19,7 @@ import { Car } from '../types/car';
 import { useLocation } from '../app/hooks/useLocation';
 import { useRouter } from 'next/router';
 import { Car as CarComponent } from '../app/components/car/car';
-import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
+import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { useIsClient } from '../app/hooks/useIsClient';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -200,7 +200,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}`);
+  const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

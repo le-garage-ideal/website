@@ -67,5 +67,6 @@ export const formatStrapiObjects = <T> (strapiObject: any): T => {
 export const POPULATE_CARS_PARAMS = 'populate=deep';
 export const LIMIT_BRANDS_PARAMS = 'pagination[limit]=200';
 export const LIMIT_MODELS_PARAMS = 'pagination[limit]=1000';
+export const LIMIT_CARS_PARAMS = 'pagination[limit]=5000';
 export const LIMIT_MODELS_PER_BRAND_PARAMS = 'pagination[limit]=200';
 export const LIMIT_CARS_PER_MODEL_PARAMS = 'pagination[limit]=200';

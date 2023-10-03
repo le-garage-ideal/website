@@ -5,7 +5,7 @@ services:
 
   db:
     image: postgres
-    restart: always
+    restart: no
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin

@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet';
 
 type SEOProps = {
   uri: string | undefined;
-  title: string | undefined;
-  description: string | undefined;
+  title: string;
+  description: string;
 };
 export const SEO = ({
   uri,
@@ -18,6 +18,7 @@ export const SEO = ({
 
   return (
     <Helmet title={seo.title} titleTemplate="%s">
+      <meta charSet="UTF-8" />
       <meta name="description" content={seo.description} />
 
       {uri && <meta property="og:url" content={uri} />}

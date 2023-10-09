@@ -24,6 +24,7 @@
 
 .imageContainer {
   object-position: center;
+  background-color: transparent;
 }
 
 .specContainer {
@@ -32,19 +33,26 @@
   align-items: center;
 }
 
+.iconButton {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  padding: 2px 5px 5px 5px;
+  background-color: $dark-opaque;
+  opacity: 0; // changed to 1 on hover
+}
+
+.iconButton:hover {
+  opacity: 1;
+}
+
 .switchButtons {
   display: flex;
   height: 100%;
   justify-content: flex-start;
   align-items: center;
   margin-right: 15px;
-}
-
-.iconButton {
-  display: flex;
-  font-size: 12px;
-  min-width: 35px;
-  min-height: 35px;
 }
 
 .carCaption {  

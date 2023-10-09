@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cardStyles from './card.module.scss';
@@ -8,15 +8,11 @@ type CardProps = {
   label: string;
   marginCard?: boolean;
   empty?: boolean;
-  index: number;
-  edit: (i: number) => void;
-  render: () => void;
-  editButtonId: string;
   onLabelChanged?: (s: string) => void;
 };
 export const Card = ({
-  empty, marginCard, index, edit, render, editButtonId, label, onLabelChanged,
-}: CardProps) => {
+  empty, marginCard, label, onLabelChanged, children,
+}: PropsWithChildren<CardProps>) => {
   const classCard = [cardStyles.card];
   if (marginCard) {
     classCard.push(cardStyles.marginCard);
@@ -51,12 +47,7 @@ export const Card = ({
 
   return (
     <div className={classCard.join(' ')}>
-      <div id={editButtonId} className={cardStyles.iconButtonContainer}>
-        <button type="button" className={`${cardStyles.iconButton} icon-button`} onClick={() => edit(index)}>
-          <FontAwesomeIcon icon="edit" />
-        </button>
-      </div>
-      <>{render()}</>
+      {children}
       <div className={[cardStyles.carLabelContainer, 'container', 'is-fluid'].join(' ')}>
         <div className={carLabelClasses.join(' ')}>
           {

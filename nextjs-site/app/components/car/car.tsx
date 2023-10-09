@@ -8,11 +8,13 @@ import carStyles from './car.module.scss';
 import { Car as CarType } from '../../../types/car';
 
 type CarProps = {
-  car: CarType;
+  car: CarType | undefined;
   className: string;
+  index: number;
+  edit?: (index: number) => void;
 };
-export const Car = ({ car, className }: CarProps) => {
-  const carFullname = fullname(car);
+export const Car = ({ car, className, index, edit }: CarProps) => {
+  const carFullname = car ? fullname(car) : '';
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
@@ -24,63 +26,55 @@ export const Car = ({ car, className }: CarProps) => {
     setCurrentPageIndex(currentPageIndex + 1);
   };
 
+  const onEdit = () => {
+    if (edit) {
+      edit(index);
+    }
+  };
+
   let divContent = null;
   const containerClassnames = [carStyles.commonContainer];
-  if (currentPageIndex === 0) {
-    divContent = (
-      <motion.img
-        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_IMG_URL}${car.imageFile?.url}`}
-        className={carStyles.image}
-        alt={carFullname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      />
-    );
-    containerClassnames.push(carStyles.imageContainer)
+  if (car) {
+    if (currentPageIndex === 0) {
+      divContent = (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={carStyles.imageContainer}
+        >
+          <img
+            src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_IMG_URL}${car.imageFile?.url}`}
+            className={carStyles.image}
+            alt={carFullname}
+          />        
+        </motion.div>
+      );
+      containerClassnames.push(carStyles.imageContainer)
+    } else {
+      divContent = (
+        <Spec
+          power={car.power}
+          weight={car.weight}
+          officialWeight={car.officialWeight}
+          imageUrl={car.selectedFavcarsUrl}
+        />
+      );
+      containerClassnames.push(carStyles.specContainer)
+    }
   } else {
     divContent = (
-      <Spec
-        power={car.power}
-        weight={car.weight}
-        officialWeight={car.officialWeight}
-        imageUrl={car.selectedFavcarsUrl}
-      />
+      <></>
     );
-    containerClassnames.push(carStyles.specContainer)
   }
 
   return (
     <article className={`${carStyles.card} ${className}`}>
-
-      <a href={car.imageFile?.url} className={containerClassnames.join(' ')}>
+      <a href={car?.imageFile?.url} className={containerClassnames.join(' ')} title={`${carFullname} - ${car.startYear}`}>
+        <button type="button" className={`${carStyles.iconButton} icon-button`} onClick={onEdit}>
+          <FontAwesomeIcon icon="edit" />
+        </button>
         { divContent }
       </a>
-
-      <div className={carStyles.carCaption}>
-        <div className={carStyles.switchButtons}>
-          {
-            currentPageIndex === 1
-            && (
-              <button type="button" className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
-                <FontAwesomeIcon icon="image" size="2x" onClick={clickLeft} />
-              </button>
-            )
-          }
-          {
-            currentPageIndex === 0
-            && (
-            <button type="button" className={['icon-button', 'icon', carStyles.iconButton].join(' ')}>
-              <FontAwesomeIcon icon="exchange-alt" size="2x" onClick={clickRight} />
-            </button>
-            )
-          }
-        </div>
-        <div className={carStyles.carTitle}>
-          <h3 className={carStyles.carLongLabel} title={carFullname}>{carFullname}</h3>
-        </div>
-        <div className={carStyles.carYear}>{car.startYear}</div>
-      </div>
-
     </article>
   );
 };

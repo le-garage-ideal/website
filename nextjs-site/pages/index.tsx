@@ -96,15 +96,6 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         // Save button enabled?
         setSaveState({ saveMessage: undefined, saveOk: !shouldSave(carsInit) });
       }
-
-      setTimeout(() => {
-        eachCarIndex(editButtonIdx => {
-          const editButton = document.querySelector(`#${editButtonId(editButtonIdx + 1)}`) as HTMLElement;
-          if (editButton) {
-            editButton.style.opacity = '1';
-          }
-        });
-      }, 200);
     }
   }, [isClient, allCars, i18n, uri]);
 
@@ -127,26 +118,21 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
   };
 
   const transform = (car: Car | undefined, index: number) => {
-    const thumbnail = car ? (
-      <CarComponent
-        className={indexStyles.carComponent}
-        car={car}
-      />
-    ) : (
-      <div className={indexStyles.noCarThumbnail}>?</div>
-    );
     return (
       <Card
         key={`card-${car ? car.id : index}`}
         marginCard={index === 2}
         empty={!car}
-        index={index}
         label={car ? car.label : carLabels(i18n, index)}
-        edit={editCar}
-        render={() => (thumbnail)}
-        editButtonId={editButtonId(index)}
         onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : (s: string) => {}}
-      />
+      >
+        <CarComponent
+          className={indexStyles.carComponent}
+          car={car}
+          index={index}
+          edit={editCar}
+        />
+      </Card>
     );
   };
 
@@ -210,8 +196,5 @@ export async function getStaticProps({ locale }: { locale: string }) {
 }
 
 export const carLabels = (file: any, index: any): any => file[`label_${index}`];
-
-const carComponentId = (index: number) => `car-${index}`;
-const editButtonId = (index: number) => `edit-${index}`;
 
 export default IndexPage;

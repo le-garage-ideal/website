@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Spec from './spec';
@@ -16,26 +16,26 @@ type CarProps = {
 export const Car = ({ car, className, index, edit }: CarProps) => {
   const carFullname = car ? fullname(car) : '';
 
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [imageView, setImageView] = useState(true);
 
-  const clickLeft = () => {
-    setCurrentPageIndex(currentPageIndex - 1);
+  const switchView = (e: MouseEvent) => {
+    e.preventDefault();
+    setImageView(!imageView);
   };
 
-  const clickRight = () => {
-    setCurrentPageIndex(currentPageIndex + 1);
-  };
-
-  const onEdit = () => {
+  const onEdit = (e: MouseEvent) => {
+    e.preventDefault();
     if (edit) {
       edit(index);
     }
   };
 
   let divContent = null;
+  const cardClassnames = [carStyles.card];
   const containerClassnames = [carStyles.commonContainer];
+  const buttonClassnames = [carStyles.iconButton];
   if (car) {
-    if (currentPageIndex === 0) {
+    if (imageView) {
       divContent = (
         <motion.div
           initial={{ opacity: 0 }}
@@ -49,7 +49,7 @@ export const Car = ({ car, className, index, edit }: CarProps) => {
           />        
         </motion.div>
       );
-      containerClassnames.push(carStyles.imageContainer)
+      containerClassnames.push(carStyles.imageContainer);
     } else {
       divContent = (
         <Spec
@@ -61,18 +61,50 @@ export const Car = ({ car, className, index, edit }: CarProps) => {
       );
       containerClassnames.push(carStyles.specContainer)
     }
+    cardClassnames.push(carStyles.cardWithCar);
   } else {
     divContent = (
       <></>
     );
+    cardClassnames.push(carStyles.emptyCard);
+    containerClassnames.push(carStyles.emptyContainer);
   }
 
+  const editButton = (
+    <button
+      type="button"
+      className={`${buttonClassnames.join(' ')} icon-button`}
+      onClick={onEdit}
+    >
+      <FontAwesomeIcon icon="edit" />
+    </button>
+  );
+
   return (
-    <article className={`${carStyles.card} ${className}`}>
-      <a href={car?.imageFile?.url} className={containerClassnames.join(' ')} title={`${carFullname} - ${car.startYear}`}>
-        <button type="button" className={`${carStyles.iconButton} icon-button`} onClick={onEdit}>
-          <FontAwesomeIcon icon="edit" />
-        </button>
+    <article className={`${cardClassnames.join(' ')} ${className}`}>
+      <a
+        href={car?.imageFile?.url}
+        className={containerClassnames.join(' ')}
+        title={`${carFullname} - ${car?.startYear}`}
+        onClick={(e) => {
+          if (!car) {
+            onEdit(e);
+          };
+        }}
+      >
+        { car ? (
+          <div style={{ display: 'flex', position: 'absolute' }}>
+            <button
+              type="button"
+              className={`${buttonClassnames.join(' ')} icon-button`}
+              onClick={switchView}
+            >
+              <FontAwesomeIcon icon="exchange-alt" />
+            </button>
+            { editButton }
+          </div>
+        ) : editButton}
+
         { divContent }
       </a>
     </article>

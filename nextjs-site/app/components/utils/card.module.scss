@@ -53,6 +53,11 @@ $cardMaxHeight: 80vh;
     padding-right: 10px;
 }
 
+.iconButton {
+    padding: 6px 9px 7px 9px;
+    background-color: transparent;
+}
+
 @media (orientation: portrait) {
  
     .card {

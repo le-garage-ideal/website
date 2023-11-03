@@ -18,7 +18,7 @@ type BrandsProps = {
 };
 const Brands = ({ brands }: BrandsProps) => {
   const { t: i18n } = useTranslation();
-  const location = useLocation();
+  const {location} = useLocation();
   const uri = new Uri(location);
   const { push } = useRouter();
 

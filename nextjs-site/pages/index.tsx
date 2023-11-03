@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Uri from 'jsuri';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useTranslation} from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
@@ -22,15 +22,17 @@ import { Car } from '../types/car';
 import { Car as CarComponent } from '../app/components/car/car';
 import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { useIsClient } from '../app/hooks/useIsClient';
+import { useLocation } from '../app/hooks/useLocation';
 
 type IndexPageProps = {
   allCars: StrapiResponseType<Array<Car>>;
+  locale: string;
 };
 const IndexPage = ({ allCars }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
   const { t: i18n } = useTranslation();
   const [uri, setUri] = useState<Uri | undefined>();
-  const languageParam = i18n.language;
+  const {location} = useLocation();
 
   const { push, query } = useRouter();
 
@@ -44,30 +46,29 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
 
   useEffect(() => {
     if (isClient) {
-      if (!uri) {
-        const tmpUri = new Uri(window.location.toString());
+      // Retrieve URL params and set uri state, push new params to browser location
+      if (!uri && location) {
+        const tmpUri = new Uri(location);
         const relativePathWithParams = extractRelativePathWithParams(tmpUri);
         const initUri = new Uri(relativePathWithParams);
         // if edit=X parameter, save car to carX parameter
-        const hasEditParams = processEditParams(initUri);
-        if (hasEditParams) {
-          push({
-            pathname: initUri.path(),
-            query: initUri.query(),
-          }, initUri.toString(), { shallow: true });
+        const paramsChanged = processEditParams(initUri);
+        if (paramsChanged) {
+          let query = initUri.query();
+          if (query.charAt(0) === '?') {
+            query = query.slice(1);
+          }
+          push({ query }, undefined, { shallow: true });
         }
         setUri(initUri);
         setSaveState({
           saveMessage: undefined,
-          saveOk: !hasEditParams,
+          saveOk: !paramsChanged,
         });
       }
-    }
-  }, [isClient, uri, setUri, push, setSaveState]);
 
-  useEffect(() => {
-    const carsInit: Array<Car | undefined> = [];
-    if (isClient) {
+      // Retrieve cars data and set cars state
+      const carsInit: Array<Car | undefined> = [];
       const carParams = getCarParams(uri);
       if (carParams.length > 0) {
         // add missing params + save state
@@ -99,11 +100,11 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         setSaveState({ saveMessage: undefined, saveOk: !shouldSave(carsInit) });
       }
     }
-  }, [isClient, allCars, i18n, uri]);
+  }, [isClient, uri, setUri, push, setSaveState, location, allCars.data]);
 
   // Click on edit button on a car's card 
   const editCar = (index: number) => {
-    push({ pathname: '/brands', query: { edit: index, ...languageParam, ...query }});
+    push({ pathname: 'brands', query: { edit: index, ...query }});
   };
 
   // Click on save button of a car's card label

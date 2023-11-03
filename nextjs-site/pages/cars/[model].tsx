@@ -21,7 +21,7 @@ type CarsProps = {
 };
 const Cars = ({ model, cars }: CarsProps) => {
   const { push } = useRouter();
-  const location = useLocation();
+  const {location} = useLocation();
   const { t: i18n } = useTranslation();
 
   const uri = new Uri(location);
@@ -54,8 +54,8 @@ const Cars = ({ model, cars }: CarsProps) => {
   };
 
   const title = i18n('templates.cars.title')
-    .replace('{brand}', model.data.brand.name)
-    .replace('{model}', model.data.name);
+    .replace('{brand}', model.data.brand.name.toUpperCase())
+    .replace('{model}', model.data.name.toUpperCase());
 
   const description = i18n('templates.cars.description')
     .replace('{brand}', model.data.brand.name)

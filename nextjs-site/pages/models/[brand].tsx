@@ -23,7 +23,7 @@ type ModelsProps = {
 const Models = ({ brand, cars }: ModelsProps) => {
   const { t: i18n } = useTranslation();
   const { push } = useRouter();
-  const location = useLocation();
+  const {location} = useLocation();
 
   const uri = new Uri(location);
   const listName: Array<Car> = cars

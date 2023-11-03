@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from "react";
 import { useIsClient } from "./useIsClient";
 
@@ -8,9 +7,10 @@ export const useLocation = () => {
   const isClient = useIsClient();
   const [location, setLocation] = useState<string>();
   useEffect(() => {
-    if (isClient && !location) {
-      setLocation(`${window.location.origin}/${locale}${asPath}`)
+    if (isClient) {
+      const newLocation = `${window.location.origin}/${locale}${asPath}`;
+      setLocation(newLocation);
     }
   }, [isClient, asPath, locale, query, location])
-  return location;
+  return {location};
 };

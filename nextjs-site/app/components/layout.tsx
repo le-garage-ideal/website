@@ -71,11 +71,11 @@ export const FullLayout = ({
     menuButtonClass.push(layoutStyles.menuExpanded);
   }
 
-  const windowLocation = useLocation();
+  const {location} = useLocation();
 
   const onShareCopyClick = () => {
-    if (windowLocation) {
-      copyToClipboard(windowLocation).then(() => {
+    if (location) {
+      copyToClipboard(location).then(() => {
         setShareCopySuccessMessage(i18n('components.layout.link_clipboard_ok'));
         setTimeout(() => setShareCopySuccessMessage(null), 5000);
       }, () => {
@@ -136,7 +136,7 @@ export const FullLayout = ({
               <div title={shareWithLabelFacebook}>
                 <FacebookShareButton
                   quote={i18n('components.layout.share_title')}
-                  url={windowLocation ?? ''}
+                  url={location ?? ''}
                 >
                   <FacebookIcon size={BUTTON_HEIGHT} />
                 </FacebookShareButton>
@@ -144,7 +144,7 @@ export const FullLayout = ({
               <div title={shareWithLabelTwitter}>
                 <TwitterShareButton
                   title={i18n('components.layout.share_title')}
-                  url={windowLocation ?? ''}
+                  url={location ?? ''}
                 >
                   <TwitterIcon size={BUTTON_HEIGHT} />
                 </TwitterShareButton>
@@ -152,7 +152,7 @@ export const FullLayout = ({
               <div title={shareWithLabelReddit}>
                 <RedditShareButton
                   title={i18n('components.layout.share_title')}
-                  url={windowLocation ?? ''}
+                  url={location ?? ''}
                 >
                   <RedditIcon size={BUTTON_HEIGHT} />
                 </RedditShareButton>
@@ -179,7 +179,7 @@ export const FullLayout = ({
                   type="text"
                   name="share-link"
                   id="share-link"
-                  value={windowLocation ?? ''}
+                  value={location ?? ''}
                   className="input is-primary"
                   readOnly
                 />

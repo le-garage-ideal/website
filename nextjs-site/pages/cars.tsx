@@ -20,7 +20,7 @@ type CarsProps = {
   count: number;
 };
 const Cars = ({ cars }: CarsProps) => {
-  const location = useLocation();
+  const {location} = useLocation();
   const uri = new Uri(location);
   const { push } = useRouter();
   const { t: i18n } = useTranslation();

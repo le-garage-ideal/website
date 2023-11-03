@@ -75,8 +75,5 @@
       "title": "Modèles {brand}",
       "description": "Faites votre choix parmi tous les modèles de {brand} disponibles"
     }
-  },
-  "label_1": "#1 - Daily",
-  "label_2": "#2 - Collector",
-  "label_3": "#3 - Performances"
+  }
 }

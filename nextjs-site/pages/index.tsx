@@ -2,7 +2,10 @@ import Head from 'next/head';
 import Uri from 'jsuri';
 import { useEffect, useState, useMemo } from 'react';
 import { useTranslation} from 'next-i18next';
-import { eachCarIndex, fullname, CarsContext } from '../functions/cars';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
+
+import { fullname, CarsContext } from '../functions/cars';
 import { save, shouldSave } from '../functions/storage';
 import {
   processEditParams,
@@ -16,12 +19,9 @@ import { Title } from '../app/components/title/title';
 import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { Car } from '../types/car';
-import { useLocation } from '../app/hooks/useLocation';
-import { useRouter } from 'next/router';
 import { Car as CarComponent } from '../app/components/car/car';
 import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { useIsClient } from '../app/hooks/useIsClient';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type IndexPageProps = {
   allCars: StrapiResponseType<Array<Car>>;
@@ -29,7 +29,6 @@ type IndexPageProps = {
 const IndexPage = ({ allCars }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
   const { t: i18n } = useTranslation();
-  const location = useLocation();
   const [uri, setUri] = useState<Uri | undefined>();
   const languageParam = i18n.language;
 
@@ -52,7 +51,10 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         // if edit=X parameter, save car to carX parameter
         const hasEditParams = processEditParams(initUri);
         if (hasEditParams) {
-          push(initUri.toString(), undefined, { shallow: true });
+          push({
+            pathname: initUri.path(),
+            query: initUri.query(),
+          }, initUri.toString(), { shallow: true });
         }
         setUri(initUri);
         setSaveState({
@@ -78,12 +80,12 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
             const { carId, carLabel } = param;
             const carIdNumber = parseInt(carId);
             if (!isNaN(carIdNumber)) {
-              const foundNode = allCars.data
+              const foundCar = allCars.data
                 .find((car) => car.id === carIdNumber) as Car;
 
-              if (foundNode) {
-                foundNode.label = carLabel ? carLabel : carLabels(i18n, idx + 1);
-                carsInit[idx] = foundNode;
+              if (foundCar) {
+                foundCar.label = carLabel ? carLabel : fullname(foundCar);
+                carsInit[idx] = foundCar;
               }
             }
           }
@@ -123,7 +125,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         key={`card-${car ? car.id : index}`}
         marginCard={index === 2}
         empty={!car}
-        label={car ? car.label : carLabels(i18n, index)}
+        label={car?.label ?? car ? fullname(car) : ''}
         onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : (s: string) => {}}
       >
         <CarComponent
@@ -195,6 +197,5 @@ export async function getStaticProps({ locale }: { locale: string }) {
   }
 }
 
-export const carLabels = (file: any, index: any): any => file[`label_${index}`];
 
 export default IndexPage;

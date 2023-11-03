@@ -4,7 +4,6 @@ import { SEO } from '../app/components/seo/seo';
 import aboutStyles from './about.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-export const carLabels = (file: any, index: any): any => file[`label_${index}`];
 const About = () => {
   const location = useLocation();
   const { t: i18n } = useTranslation();

@@ -74,8 +74,5 @@
       "title": "{brand} models",
       "description": "Pick a {brand} model"
     }
-  },
-  "label_1": "#1 - Daily",
-  "label_2": "#2 - Collector",
-  "label_3": "#3 - Fast"
+  }
 }

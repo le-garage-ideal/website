@@ -73,7 +73,7 @@ export const Card = ({
           {
             !editModeLabel && (
               <>
-                <div style={{ flex: 1 }}>{label}</div>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>{label}</div>
                 {
                   onLabelChanged && (
                     <button

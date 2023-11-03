@@ -85,7 +85,6 @@ export const Car = ({ car, className, index, edit }: CarProps) => {
       <a
         href={car?.imageFile?.url}
         className={containerClassnames.join(' ')}
-        title={`${carFullname} - ${car?.startYear}`}
         onClick={(e) => {
           if (!car) {
             onEdit(e);

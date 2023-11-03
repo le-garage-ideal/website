@@ -18,4 +18,4 @@ type EachCarParam<T> = (keyParam: string, i: number) => T;
 export const eachCar = <T> (fn: EachCarParam<T>): Array<T> => eachCarIndex(i => fn(`car${i + 1}`, i));
 
 export const fullname = (car: Car) =>
-  `${car.model.brand.name} ${car.variant}`;
+  [`${car?.model?.brand?.name} ${car?.variant}`, car?.startYear].filter(Boolean).join(' - ');

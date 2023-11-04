@@ -14,12 +14,11 @@ import {
   extractRelativePathWithParams
 } from '../functions/url';
 import indexStyles from './index.module.scss';
-import { Card } from '../app/components/utils/card';
+import { Card } from '../app/components/car/card';
 import { Title } from '../app/components/title/title';
 import { FullLayout } from '../app/components/layout';
 import { SEO } from '../app/components/seo/seo';
 import { Car } from '../types/car';
-import { Car as CarComponent } from '../app/components/car/car';
 import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { useIsClient } from '../app/hooks/useIsClient';
 import { useLocation } from '../app/hooks/useLocation';
@@ -125,17 +124,12 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
       <Card
         key={`card-${car ? car.id : index}`}
         marginCard={index === 2}
-        empty={!car}
+        car={car}
+        index={index}
         label={car?.label ?? car ? fullname(car) : ''}
+        OnCardEdit={editCar}
         onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : (s: string) => {}}
-      >
-        <CarComponent
-          className={indexStyles.carComponent}
-          car={car}
-          index={index}
-          edit={editCar}
-        />
-      </Card>
+      />
     );
   };
 

@@ -32,6 +32,9 @@ body {
   padding: 10px;
   cursor: pointer;
   border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
       background-color: $element-hover;

@@ -1,0 +1,177 @@
+@import '../../../styles/theme.scss';
+
+$cardWith: 30vw;
+$cardHeight: calc($cardWith * 0.6);
+$labelHeight: 5vw;
+$cardMaxHeight: 80vh;
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    align-items: center;
+}
+
+.marginCard {
+    margin-top: 70px;
+}
+
+.carLabelContainer {
+    height: $labelHeight;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.carLabel {
+    color: $text-bright;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 5px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.carLabelEdit {
+    padding-right: 10px;
+}
+
+.image {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.commonContainer {
+    box-sizing: border-box;
+    height: $cardHeight;
+    width: $cardWith;
+    background-color: $dark-transparent;
+    margin: 15px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.imageContainer {
+    object-position: center;
+    background-color: transparent;
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.specContainer {
+    object-position: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.emptyContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carButtons {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.iconButton {
+    z-index: 1;
+    padding: 3px 5px 5px 5px;
+    background-color: $dark-opaque;
+    opacity: 0; // changed to 1 on hover
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.emptyContainer .iconButton {
+    opacity: 1;
+}
+
+.labelEditButton {
+    display: flex;
+    align-items: center;
+}
+
+.commonContainer:hover .iconButton, .carLabel:hover .labelEditButton {
+    opacity: 1;
+    background-color: $dark-transparent;
+    cursor: pointer;
+}
+
+.switchButtons {
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.carCaption {
+    color: $text-bright;
+    background-color: $dark-transparent;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-weight: normal;
+    padding: 0px 20px 0px 20px;
+}
+
+.carYear {
+    text-align: right;
+    font-weight: bold;
+}
+
+.carTitle {
+    flex: 1;
+    height: 100%;
+    min-width: 0; // to allow element to shrink when page is smaller
+}
+
+.carLongLabel {
+    /* Long labels */
+    max-width: 100%;
+    /* do not reduce summary arrow */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+@media (orientation: portrait) {
+    .card {
+        max-width: 100%;
+        width: 100%;
+        max-height: none;
+        height: 90vw;
+        margin: 0;
+    }
+
+    .marginCard {
+        margin-top: 0px;
+    }
+
+    .carLabelContainer {
+        margin-top: -100px;
+    }
+
+    .imageContainer {
+        height: auto;
+        max-height: none;
+    }
+}

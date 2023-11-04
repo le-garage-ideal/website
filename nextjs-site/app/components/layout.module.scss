@@ -76,11 +76,11 @@ $footerHeight: 60px;
 .saveButton, .customShareButton {
     padding: 0px 10px!important;
     margin: 0px 0px 0px 10px;
+    width: 40px;
 }
 
 .customShareButton {
     background-color: darkblue;
-    max-width: 40px;
 }
 
 .saveButton:not([disabled]) {

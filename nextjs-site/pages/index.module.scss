@@ -17,22 +17,6 @@
     margin: -20px 30px 0 30px;
 }
 
-.noCarThumbnail {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: $dark-transparent;
-    color: $text-medium-dark;
-    font-size: 8rem;
-    margin-bottom: 30px;
-}
-
-.carComponent {
-    flex: 8;
-    width: 100%;
-}
 
 @media (orientation: portrait) {
     

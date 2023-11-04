@@ -166,7 +166,6 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         <CarsContext.Provider value={contextValue}>
           <FullLayout
             save={onSave}
-            title={title}
             uri={uri?.toString()}
             saveDisabled={saveOk}
             saveMessage={saveMessage}

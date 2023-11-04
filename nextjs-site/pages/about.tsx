@@ -9,7 +9,7 @@ const About = () => {
   const { t: i18n } = useTranslation();
   const title = i18n('pages.about.meta.title');
   return (
-    <FullLayout uri={location} title={title}>
+    <FullLayout uri={location}>
       <SEO
         uri={location}
         title={title}

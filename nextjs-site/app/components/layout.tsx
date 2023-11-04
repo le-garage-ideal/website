@@ -45,7 +45,6 @@ library.add(faTimes);
 const BUTTON_HEIGHT = '40px';
 
 type LayoutProps = {
-  title: string;
   uri: string | undefined;
   save?: () => void;
   saveDisabled?: boolean;
@@ -53,7 +52,6 @@ type LayoutProps = {
   showButtons?: boolean;
 };
 export const FullLayout = ({
-  title = '',
   uri,
   children,
   save,

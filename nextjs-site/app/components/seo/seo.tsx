@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 
 type SEOProps = {
   uri: string | undefined;
@@ -11,33 +10,30 @@ export const SEO = ({
   title,
   description,
 }: SEOProps) => {
-  const seo = {
-    title,
-    description,
-  };
 
   return (
-    <Helmet title={seo.title} titleTemplate="%s">
+    <>
+      <title>{title}</title>
       <meta charSet="UTF-8" />
-      <meta name="description" content={seo.description} />
+      <meta name="description" content={description} />
 
       {uri && <meta property="og:url" content={uri} />}
 
       <meta property="og:type" content="website" />
 
-      {seo.title && <meta property="og:title" content={seo.title} />}
+      {title && <meta property="og:title" content={title} />}
 
-      {seo.description && (
-        <meta property="og:description" content={seo.description} />
+      {description && (
+        <meta property="og:description" content={description} />
       )}
 
-      {seo.title && <meta name="twitter:title" content={seo.title} />}
+      {title && <meta name="twitter:title" content={title} />}
 
-      {seo.description && (
-        <meta name="twitter:description" content={seo.description} />
+      {description && (
+        <meta name="twitter:description" content={description} />
       )}
 
       <link rel="icon" type="image/png" href="/logo.png" />
-    </Helmet>
+    </>
   );
 };

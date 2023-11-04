@@ -53,7 +53,7 @@ const Brands = ({ brands }: BrandsProps) => {
 
   const title = i18n('pages.brands.meta.title');
   return (
-    <FullLayout uri={uri.toString()} title={title}>
+    <FullLayout uri={uri.toString()}>
       <SEO
         uri={location}
         title={title}

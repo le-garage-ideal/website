@@ -62,7 +62,7 @@ const Cars = ({ model, cars }: CarsProps) => {
     .replace('{model}', model.data.name);
 
   return (
-    <FullLayout title={title} uri={location}>
+    <FullLayout uri={location}>
       <SEO
         uri={location}
         title={title}

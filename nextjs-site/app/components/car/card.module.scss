@@ -1,10 +1,5 @@
 @import '../../../styles/theme.scss';
 
-$cardWith: 30vw;
-$cardHeight: calc($cardWith * 0.6);
-$labelHeight: 5vw;
-$cardMaxHeight: 80vh;
-
 .card {
     display: flex;
     flex-direction: column;
@@ -18,7 +13,7 @@ $cardMaxHeight: 80vh;
 }
 
 .carLabelContainer {
-    height: $labelHeight;
+    height: 5vw;
     flex-grow: 0;
     display: flex;
     align-items: center;
@@ -47,9 +42,10 @@ $cardMaxHeight: 80vh;
     height: 100%;
 }
 
+$cardWith: 30vw;
 .commonContainer {
     box-sizing: border-box;
-    height: $cardHeight;
+    height: calc($cardWith * 0.6);;
     width: $cardWith;
     background-color: $dark-transparent;
     margin: 15px 0px;
@@ -158,20 +154,23 @@ $cardMaxHeight: 80vh;
         max-width: 100%;
         width: 100%;
         max-height: none;
-        height: 90vw;
+        height: 40vh;
         margin: 0;
     }
 
     .marginCard {
-        margin-top: 0px;
+        margin-top: 30px;
     }
 
-    .carLabelContainer {
-        margin-top: -100px;
+    .commonContainer {
+        height: 100%;
+        width: 100%;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
-    .imageContainer {
-        height: auto;
-        max-height: none;
+    .iconButton {
+        height: 15vw;
+        width: 15vw;
     }
 }

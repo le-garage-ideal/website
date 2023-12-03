@@ -10,15 +10,13 @@ import Spec from './spec';
 import { fullname } from '../../../functions/cars';
 
 type CardProps = {
-  label: string;
   marginCard?: boolean;
   car?: Car;
   index: number;
   OnCardEdit?: (index: number) => void;
-  onLabelChanged?: (s: string) => void;
 };
 export const Card = ({
-  car, index, marginCard, label, onLabelChanged, OnCardEdit, children,
+  car, index, marginCard, OnCardEdit,
 }: PropsWithChildren<CardProps>) => {
   const classCard = [cardStyles.card];
   if (marginCard) {
@@ -31,27 +29,7 @@ export const Card = ({
     classCard.push(cardStyles.cardWithoutCar);
   }
 
-  const [editedLabel, setEditedLabel] = useState(label);
-  const [editModeLabel, setEditModeLabel] = useState(false);
-  const labelChanged = ({ target: { value: newLabel } }: any) => setEditedLabel(newLabel);
-  const enableEditModeLabel = () => {
-    setEditModeLabel(true);
-  };
-  const saveLabel = () => {
-    setEditModeLabel(false);
-    if (onLabelChanged) {
-      onLabelChanged(editedLabel);
-    }
-  };
-  const cancelEditModeLabel = () => {
-    setEditedLabel(label);
-    setEditModeLabel(false);
-  };
-
   const carLabelClasses = [cardStyles.carLabel, 'badge'];
-  if (onLabelChanged) { // if function is not null, it's because a car was selected so we can show "edit label" button
-    carLabelClasses.push(cardStyles.carLabelEdit);
-  }
 
   const carFullname = car ? fullname(car) : '';
 
@@ -125,62 +103,25 @@ export const Card = ({
           };
         }}
       >
-        { car ? (
-          <div className={cardStyles.carButtons}>
-            <button
-              type="button"
-              className={`${cardStyles.iconButton} icon-button`}
-              onClick={switchView}
-            >
-              <FontAwesomeIcon icon="exchange-alt" />
-            </button>
-            { editButton }
-          </div>
-        ) : editButton}
-
+        { !car && editButton }
         { divContent }
       </a>
 
       <div className={[cardStyles.carLabelContainer, 'container', 'is-fluid'].join(' ')}>
         <div className={carLabelClasses.join(' ')}>
-          {
-            editModeLabel && (
-              <div className="control has-text-dark" style={{ display: 'flex' }}>
-                <input
-                  id="search-input"
-                  type="text"
-                  onChange={labelChanged}
-                  className="input"
-                  style={{ flex: 1 }}
-                  value={editedLabel ?? ''}
-                />
-                <button type="button" className={`${cardStyles.iconButton} icon-button`} onClick={cancelEditModeLabel}>
-                  <FontAwesomeIcon icon="times" />
-                </button>
-                <button type="button" className={`${cardStyles.iconButton} icon-button`} onClick={saveLabel}>
-                  <FontAwesomeIcon icon="check" />
-                </button>
-              </div>
-            )
-          }
-          {
-            !editModeLabel && (
-              <>
-                <div className={cardStyles.labelEditContainer}>{label}</div>
-                {
-                  onLabelChanged && (
-                    <button
-                      type="button"
-                      className={["icon-button", cardStyles.iconButton, cardStyles.labelEditButton].join(' ')}
-                      onClick={enableEditModeLabel}
-                    >
-                      <FontAwesomeIcon icon="edit" />
-                    </button>
-                  )
-                }
-              </>
-            )
-          }
+          <div className={[cardStyles.labelEditContainer, !car && cardStyles.carLabelEmpty].join(' ')}>{car ? car.label : 'Select a car'}</div>
+          { car && (
+            <div className={cardStyles.carButtons}>
+              <button
+                type="button"
+                className={["icon-button", cardStyles.iconButton, cardStyles.labelEditButton].join(' ')}
+                onClick={switchView}
+              >
+                <FontAwesomeIcon icon="exchange-alt" />
+              </button>
+              { editButton }
+            </div>
+          )}
         </div>
       </div>
     </div>

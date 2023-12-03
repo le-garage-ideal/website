@@ -32,10 +32,6 @@
     justify-content: space-between;
 }
 
-.carLabelEdit {
-    padding-right: 10px;
-}
-
 .image {
     object-fit: contain;
     width: 100%;
@@ -74,35 +70,25 @@ $cardWith: 30vw;
     align-items: center;
 }
 
+.carLabelEmpty {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .carButtons {
     display: flex;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
 }
 
 .iconButton {
     z-index: 1;
     padding: 3px 5px 5px 5px;
     background-color: $dark-opaque;
-    opacity: 0; // changed to 1 on hover
     width: 1.5em;
     height: 1.5em;
 }
 
-.emptyContainer .iconButton {
-    opacity: 1;
-}
-
-.labelEditButton {
-    display: flex;
-    align-items: center;
-}
-
-.commonContainer:hover .iconButton, .carLabel:hover .labelEditButton {
-    opacity: 1;
+.commonContainer:hover .iconButton {
     background-color: $dark-transparent;
     cursor: pointer;
 }
@@ -167,10 +153,18 @@ $cardWith: 30vw;
         width: 100%;
         margin-left: 10px;
         margin-right: 10px;
+        margin-top: 7vw;
     }
 
     .iconButton {
-        height: 15vw;
-        width: 15vw;
+        height: 9vw;
+        width: 9vw;
+        opacity: 1;
+    }
+
+    .commonContainer .iconButton {
+        opacity: 1;
+        background-color: $dark-transparent;
+        cursor: pointer;
     }
 }

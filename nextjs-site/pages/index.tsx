@@ -84,7 +84,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
                 .find((car) => car.id === carIdNumber) as Car;
 
               if (foundCar) {
-                foundCar.label = carLabel ? carLabel : fullname(foundCar);
+                foundCar.label = fullname(foundCar);
                 carsInit[idx] = foundCar;
               }
             }
@@ -106,19 +106,6 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
     push({ pathname: 'brands', query: { edit: index, ...query }});
   };
 
-  // Click on save button of a car's card label
-  const editCardLabel = (index: number, newLabel: string) => {
-    const newCar = cars?.[index];
-    if (newCar && uri) {
-      newCar.label = newLabel;
-      const newUri = addCarsToParams(cars, uri);
-      setCars(cars);
-      setSaveState({ saveOk: !shouldSave(cars), saveMessage: undefined });
-      setUri(newUri);
-      history.pushState({ foo: 'bar' }, '', newUri.path());
-    }
-  };
-
   const transform = (car: Car | undefined, index: number) => {
     return (
       <Card
@@ -126,9 +113,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
         marginCard={index === 2}
         car={car}
         index={index}
-        label={car?.label ?? car ? fullname(car) : ''}
         OnCardEdit={editCar}
-        onLabelChanged={car ? (newLabel: string) => editCardLabel(index - 1, newLabel) : (s: string) => {}}
       />
     );
   };

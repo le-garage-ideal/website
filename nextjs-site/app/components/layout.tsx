@@ -1,6 +1,6 @@
 'use client';
 
-import React, { PropsWithChildren, useContext, useState } from 'react';
+import React, { PropsWithChildren, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation} from 'next-i18next';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -62,8 +62,8 @@ export const FullLayout = ({
   const { t: i18n } = useTranslation();
   const [showMenu, setShowMenu] = useState(false);
   const [shareModalState, setShareModalState] = useState('');
-  const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState(null);
-  const [shareCopyErrorMessage, setShareCopyErrorMessage] = useState(null);
+  const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState<string | null>(null);
+  const [shareCopyErrorMessage, setShareCopyErrorMessage] = useState<string | null>(null);
   const menuButtonClass = [layoutStyles.menuButton, 'icon-button'];
   if (showMenu) {
     menuButtonClass.push(layoutStyles.menuExpanded);
@@ -71,15 +71,19 @@ export const FullLayout = ({
 
   const {location} = useLocation();
 
+  const shareCopyRef = useRef<HTMLInputElement>();
   const onShareCopyClick = () => {
     if (location) {
-      copyToClipboard(location).then(() => {
+      try {
+        shareCopyRef.current?.select();
+        shareCopyRef.current?.setSelectionRange(0, 99999);
+        document.execCommand('copy');
         setShareCopySuccessMessage(i18n('components.layout.link_clipboard_ok'));
-        setTimeout(() => setShareCopySuccessMessage(null), 5000);
-      }, () => {
+        setTimeout(() => setShareCopySuccessMessage(null), 1000);
+      } catch (e) {
         setShareCopyErrorMessage(i18n('components.layout.link_clipboard_ko'));
-        setTimeout(() => setShareCopyErrorMessage(null), 5000);
-      });
+        setTimeout(() => setShareCopyErrorMessage(null), 1000);
+      }
     }
   };
 
@@ -183,10 +187,7 @@ export const FullLayout = ({
                 />
               </div>
             </div>
-            <div style={{
-              display: 'flex', flexWrap: 'wrap', marginTop: '20px', height: '80px',
-            }}
-            >
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '20px', height: '80px'}}>
               <button
                 type="button"
                 className="button"

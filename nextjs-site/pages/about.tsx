@@ -32,10 +32,6 @@ const About = () => {
         <div className={aboutStyles.sentence}>{ i18n('pages.about.first_chapter')}</div>
         <div className={aboutStyles.sentence}>{ i18n('pages.about.second_chapter')}</div>
         <div className={aboutStyles.sentence}>{ i18n('pages.about.third_chapter')}</div>
-        <div className={aboutStyles.sentence}>
-          { i18n('pages.about.fourth_chapter') }&nbsp;
-          <a href="mailto:contact@perfect-garage.org">contact@perfect-garage.org</a>
-        </div>
       </section>
     </FullLayout>
   );

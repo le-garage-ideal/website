@@ -38,7 +38,9 @@ const Brands = ({ brands }: BrandsProps) => {
           name={brand.name}
           image={brand.image?.url}
           onClick={() => onBrandSelect(brand.id)}
-        />
+        >
+          {brand.name}
+        </ListItem>
       </li>
     ));
 

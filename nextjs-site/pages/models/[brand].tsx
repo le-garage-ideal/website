@@ -48,7 +48,9 @@ const Models = ({ brand, cars }: ModelsProps) => {
           uri.setPath(`/cars/${car.model.id}`);
           push(extractRelativePathWithParams(uri));
         }}
-      />
+      >
+        {car.model.name}
+      </ListItem>
     </li>
   ));
 

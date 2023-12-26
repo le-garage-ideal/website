@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import listItemStyles from './list-item.module.scss';
 
@@ -12,8 +12,8 @@ type ListItemProps = {
   big?: boolean;
 };
 const ListItem = ({
-  id, name, image, onClick, selected, big,
-}: ListItemProps) => {
+  id, name, image, onClick, selected, big, children
+}: PropsWithChildren<ListItemProps>) => {
   const classNames = [listItemStyles.logoLink];
   if (selected) {
     classNames.push(listItemStyles.selected);
@@ -46,7 +46,7 @@ const ListItem = ({
         )
       }
       </div>
-      <div>{name}</div>
+      <div>{children}</div>
     </button>
   );
 };

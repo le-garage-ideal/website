@@ -29,11 +29,12 @@ const Cars = ({ model, cars }: CarsProps) => {
   const [filteredCars, setFilteredCars] = useState(completeCarList);
 
   const carComponents = filteredCars.map(car => {
+    const name = car.variant + (car.startYear ? ` - ${car.startYear}` : '');
     return (
       <li key={car.id}>
         <ListItem
           id={car.id}
-          name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
+          name={name}
           image={car.imageFile?.formats?.thumbnail?.url ?? car.imageFile?.url}
           big
           onClick={() => {
@@ -41,7 +42,9 @@ const Cars = ({ model, cars }: CarsProps) => {
             uri.setPath('/');
             push(extractRelativePathWithParams(uri));
           }}
-        />
+        >
+          {name}
+        </ListItem>
       </li>
     );
   });

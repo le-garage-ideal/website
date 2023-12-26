@@ -12,7 +12,7 @@ import carsStyles from './cars.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { Car } from '../types/car';
 import { useRouter } from 'next/router';
-import { fetchStrapi, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
+import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 type CarsProps = {
@@ -26,8 +26,7 @@ const Cars = ({ cars }: CarsProps) => {
   const { t: i18n } = useTranslation();
 
   const completeCarList = cars.data.sort(sortCars);
-  const [filteredCars, setFilteredCars] = useState(completeCarList);
-  filteredCars.splice(0, filteredCars.length - 20);
+  const [filteredCars, setFilteredCars] = useState(completeCarList.slice(0, 20));
 
   const [selectedCar, setSelectedCar] = useState<number>();
 
@@ -40,53 +39,55 @@ const Cars = ({ cars }: CarsProps) => {
   const carComponents = filteredCars.map(car => {
     const isSelected = selectedCar === car.id;
     const radioClassNames = ['radio', carsStyles.radioLabel].join(' ');
+    const name = `${car.model.brand.name} ${car.variant} ${(car.startYear ? ' - ' + car.startYear : '')}`;
     return (
       <li key={`carItem${car.id}`}>
         <ListItem
           id={car.id}
-          name={car.variant + (car.startYear ? ` - ${car.startYear}` : '')}
+          name={name}
           image={car.imageFile?.formats?.thumbnail?.url ?? car.imageFile?.url}
           big
           selected={false}
           onClick={() => setSelectedCar(car.id)}
-        />
-        {
-          !isSelected
-          && (
-            <button
-              type="button"
-              className={`${carsStyles.iconButton} icon-button`}
-              onClick={() => setSelectedCar(car.id)}
-              title={i18n('pages.cars.add_to_garage_tooltip')}
-            >
-              <FontAwesomeIcon icon="plus" />
-            </button>
-          )
-        }
-        {
-          isSelected
-          && (
-            <div className={carsStyles.carSelectionBox}>
-              <div className="control">
-                <label className={radioClassNames}>
-                  <input type="radio" name="#1" onChange={() => validateCar(1, car.id)} />
-                  &nbsp;
-                  #1
-                </label>
-                <label className={radioClassNames}>
-                  <input type="radio" name="#2" onChange={() => validateCar(2, car.id)} />
-                  &nbsp;
-                  #2
-                </label>
-                <label className={radioClassNames}>
-                  <input type="radio" name="#3" onChange={() => validateCar(3, car.id)} />
-                  &nbsp;
-                  #3
-                </label>
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              { !isSelected && (
+                <button
+                  type="button"
+                  className={`${carsStyles.iconButton} icon-button`}
+                  onClick={() => setSelectedCar(car.id)}
+                  title={i18n('pages.cars.add_to_garage_tooltip')}
+                >
+                  <FontAwesomeIcon icon="plus" />
+                </button>
+              )}
+            <div style={{ marginLeft: '4px', marginTop: '6px'}}>{name}</div>
+          </div>
+          {
+            isSelected
+            && (
+              <div className={carsStyles.carSelectionBox}>
+                <div className="control">
+                  <label className={radioClassNames}>
+                    <input type="radio" name="#1" onChange={() => validateCar(1, car.id)} />
+                    &nbsp;
+                    #1
+                  </label>
+                  <label className={radioClassNames}>
+                    <input type="radio" name="#2" onChange={() => validateCar(2, car.id)} />
+                    &nbsp;
+                    #2
+                  </label>
+                  <label className={radioClassNames}>
+                    <input type="radio" name="#3" onChange={() => validateCar(3, car.id)} />
+                    &nbsp;
+                    #3
+                  </label>
+                </div>
               </div>
-            </div>
-          )
-        }
+            )
+          }
+        </ListItem>
       </li>
     );
   });
@@ -118,7 +119,7 @@ const Cars = ({ cars }: CarsProps) => {
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}`);
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),

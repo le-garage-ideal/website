@@ -1,23 +1,18 @@
 import React from 'react';
 
 type SEOProps = {
-  uri: string | undefined;
   title: string;
   description: string;
 };
 export const SEO = ({
-  uri,
   title,
   description,
 }: SEOProps) => {
-
   return (
     <>
       <title>{title}</title>
       <meta charSet="UTF-8" />
       <meta name="description" content={description} />
-
-      {uri && <meta property="og:url" content={uri} />}
 
       <meta property="og:type" content="website" />
 

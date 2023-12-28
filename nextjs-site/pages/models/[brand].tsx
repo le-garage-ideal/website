@@ -15,6 +15,7 @@ import { fetchStrapi, LIMIT_BRANDS_PARAMS, LIMIT_MODELS_PER_BRAND_PARAMS, POPULA
 import { Brand } from '../../types/brand';
 import { Model } from '../../types/model';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 
 type ModelsProps = {
   brand: StrapiResponseType<Brand>;
@@ -69,11 +70,12 @@ const Models = ({ brand, cars }: ModelsProps) => {
 
   return (
     <FullLayout uri={location}>
-      <SEO
-        uri={location}
-        title={title}
-        description={description}
-      />
+      <Head>
+        <SEO
+          title={title}
+          description={description}
+        />
+      </Head>
       <FilteredList title={title} filter={search}>
         {modelComponents}
       </FilteredList>

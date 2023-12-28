@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { Brand } from '../types/brand';
 import { fetchStrapi, LIMIT_BRANDS_PARAMS, StrapiResponseType } from '../functions/api';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 
 type BrandsProps = {
   brands: StrapiResponseType<Array<Brand>>;
@@ -56,11 +57,12 @@ const Brands = ({ brands }: BrandsProps) => {
   const title = i18n('pages.brands.meta.title');
   return (
     <FullLayout uri={uri.toString()}>
-      <SEO
-        uri={location}
-        title={title}
-        description={i18n('pages.brands.meta.description')}
-      />
+      <Head>
+        <SEO
+          title={title}
+          description={i18n('pages.brands.meta.description')}
+        />
+      </Head>
       <FilteredList
         title={i18n('pages.brands.list_title')}
         filter={search}

@@ -27,7 +27,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import layoutStyles from './layout.module.scss';
 import Menu from './utils/menu';
 import { Toast } from './utils/toast';
-import { copyToClipboard } from '../../functions/clipboard';
 
 import { useLocation } from '../hooks/useLocation';
 

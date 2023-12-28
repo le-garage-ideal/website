@@ -4,17 +4,19 @@ import { SEO } from '../app/components/seo/seo';
 import aboutStyles from './about.module.scss';
 import { useLocation } from '../app/hooks/useLocation';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 const About = () => {
   const {location} = useLocation();
   const { t: i18n } = useTranslation();
   const title = i18n('pages.about.meta.title');
   return (
     <FullLayout uri={location}>
-      <SEO
-        uri={location}
-        title={title}
-        description={i18n('pages.about.meta.description')}
-      />
+      <Head>
+        <SEO
+          title={title}
+          description={i18n('pages.about.meta.description')}
+        />
+      </Head>
       <section
         className="paragraph"
         style={{

@@ -132,14 +132,16 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
     }
   };
 
-  const title = cars?.map(car => (car ? fullname(car) : null))
-    ?.filter(s => !!s)
-    ?.join('\n') ?? '';
-  
+  const carsLabels = cars?.map(car => (car ? fullname(car) : null))?.filter(s => !!s) ?? [];
+  const description = carsLabels.length > 0 ? carsLabels.join('\n') : i18n('pages.index.meta.description');
+
   return (
     <>
       <Head>
-        <SEO title="Home" uri={''} description={''} />
+        <SEO
+          title={i18n('components.title.title')}
+          description={description}
+        />
       </Head>
       <main className={indexStyles.main}>
         <CarsContext.Provider value={contextValue}>
@@ -150,11 +152,6 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
             saveMessage={saveMessage}
             showButtons
           >
-            <SEO
-              title={title}
-              uri={uri?.toString()}
-              description={i18n('pages.index.meta.description')}
-            />
             <Title />
             <article className={indexStyles.carsContainer}>
               {carElements}

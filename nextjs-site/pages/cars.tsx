@@ -14,6 +14,7 @@ import { Car } from '../types/car';
 import { useRouter } from 'next/router';
 import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Head from 'next/head';
 
 type CarsProps = {
   cars: StrapiResponseType<Array<Car>>;
@@ -103,11 +104,12 @@ const Cars = ({ cars }: CarsProps) => {
   const title = i18n('pages.cars.meta.title');
   return (
     <FullLayout uri={uri.toString()}>
-      <SEO
-        uri={location}
-        title={title}
-        description={i18n('pages.cars.meta.description')}
-      />
+      <Head>
+        <SEO
+          title={title}
+          description={i18n('pages.cars.meta.description')}
+        />
+      </Head>
       <FilteredList
         title={`${cars.meta.pagination.total} ${i18n('pages.cars.list_title')}`}
         filter={search}

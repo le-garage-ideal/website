@@ -14,6 +14,7 @@ import { Car } from '../../types/car';
 import { useLocation } from '../../app/hooks/useLocation';
 import { fetchStrapi, LIMIT_CARS_PER_MODEL_PARAMS, LIMIT_MODELS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
 import { Model } from '../../types/model';
+import Head from 'next/head';
 
 type CarsProps = {
   model: StrapiResponseType<Model>;
@@ -66,11 +67,13 @@ const Cars = ({ model, cars }: CarsProps) => {
 
   return (
     <FullLayout uri={location}>
-      <SEO
-        uri={location}
-        title={title}
-        description={description}
-      />
+      <Head>
+        <SEO
+          title={title}
+          description={description}
+        />
+      </Head>
+
       <FilteredList title={title} filter={search}>
         {carComponents}
       </FilteredList>

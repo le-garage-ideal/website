@@ -1,28 +1,33 @@
+"use client";
+
 import React, { useState } from 'react';
 import Uri from 'jsuri';
-import { useTranslation} from 'next-i18next';
-
-import { sortModels } from '../../functions/sort';
-import FilteredList from '../../app/components/utils/filtered-list';
-import ListItem from '../../app/components/utils/list-item';
-import { FullLayout } from '../../app/components/layout';
-import { SEO } from '../../app/components/seo/seo';
-import { extractRelativePathWithParams } from '../../functions/url';
-import { Car } from '../../types/car';
-import { useLocation } from '../../app/hooks/useLocation';
 import { useRouter } from 'next/router';
-import { fetchStrapi, LIMIT_BRANDS_PARAMS, LIMIT_MODELS_PER_BRAND_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
-import { Brand } from '../../types/brand';
-import { Model } from '../../types/model';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 
-type ModelsProps = {
+import { sortModels } from '../../../../functions/sort';
+import FilteredList from '../../../components/filtered-list/filtered-list';
+import ListItem from '../../../components/filtered-list/list-item';
+import { extractRelativePathWithParams } from '../../../../functions/url';
+import { Car } from '../../../../types/car';
+import { useLocation } from '../../../hooks/useLocation';
+import {
+  fetchStrapi,
+  LIMIT_BRANDS_PARAMS,
+  LIMIT_MODELS_PER_BRAND_PARAMS,
+  POPULATE_CARS_PARAMS,
+  StrapiResponseType,
+} from '../../../../functions/api';
+import { Brand } from '../../../../types/brand';
+import { Model } from '../../../../types/model';
+import { I18nParamsType } from '../../../../types/i18n';
+import { useTranslation } from '../../../i18n';
+
+type ModelsProps = I18nParamsType & {
   brand: StrapiResponseType<Brand>;
   cars: StrapiResponseType<Array<Car>>;
 };
-const Models = ({ brand, cars }: ModelsProps) => {
-  const { t: i18n } = useTranslation();
+const Models = async ({ brand, cars, params: { lng } }: ModelsProps) => {
+  const { t: i18n } = await useTranslation(lng, 'common');
   const { push } = useRouter();
   const {location} = useLocation();
 
@@ -69,17 +74,9 @@ const Models = ({ brand, cars }: ModelsProps) => {
     .replace('{brand}', brand.data.name);
 
   return (
-    <FullLayout uri={location}>
-      <Head>
-        <SEO
-          title={title}
-          description={description}
-        />
-      </Head>
-      <FilteredList title={title} filter={search}>
-        {modelComponents}
-      </FilteredList>
-    </FullLayout>
+    <FilteredList title={title} filter={search}>
+      {modelComponents}
+    </FilteredList>
   );
 };
 
@@ -105,7 +102,6 @@ export async function getStaticProps({ locale, params }: { locale: string, param
   }
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
       brand,
       cars,
     },

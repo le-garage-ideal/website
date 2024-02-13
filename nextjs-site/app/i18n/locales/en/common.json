@@ -60,7 +60,9 @@
       "saved_button_tooltip_ko": "Save your garage, you'll find it in the menu",
       "footer": ". No cookie and no personal data are used by this website.",
       "share_link": "Share the link for to this garage",
-      "share_with": "Share with {{network}}",
+      "share_with_facebook": "Share with Facebook",
+      "share_with_twitter": "Share with Twitter",
+      "share_with_reddit": "Share with Reddit",
       "share_title": "My Perfect Garage"
     }
   },

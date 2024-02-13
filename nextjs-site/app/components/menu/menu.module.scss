@@ -1,5 +1,23 @@
 @import '../../../styles/theme.scss';
 
+
+.menuButton {
+    background-color: $dark-opaque;
+    &:hover {
+        background-color: $dark-transparent;
+    }
+}
+
+.menuButtonIcon {
+    height: 20px; // fix size unless when loading svg take the full page (?)
+}
+
+.menuExpanded {
+    padding: 5px 10px;
+    width: 100%;
+    text-align: left;
+}
+
 .menuContainer {
     background-color: $dark-opaque;
     padding: 10px;

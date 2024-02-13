@@ -1,21 +1,22 @@
 import React, { useContext } from 'react';
 import Uri from 'jsuri';
-import { useTranslation} from 'next-i18next';
 import specStyles from './spec.module.scss';
+import { I18nParamsType } from '../../../types/i18n';
+import { useTranslation } from '../../i18n';
 const POWER_MAX = 1200; // max 1200hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 20; // max 1kg/hp else overflow
 
-type SpecProps = {
+type SpecProps = I18nParamsType & {
   power?: number;
   weight?: number;
   officialWeight?: number;
   imageUrl?: string;
 };
-const Spec = ({
-  power, weight, officialWeight, imageUrl
+const Spec = async ({
+  power, weight, officialWeight, imageUrl, params: { lng },
 }: SpecProps) => {
-  const { t: i18n } = useTranslation();
+  const { t: i18n } = await useTranslation(lng, 'common');
 
   const theWeight = weight || officialWeight;
 

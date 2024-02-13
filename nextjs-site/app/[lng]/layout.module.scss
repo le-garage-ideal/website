@@ -50,53 +50,6 @@ $footerHeight: 60px;
     }
 }
 
-.menuButton {
-    background-color: $dark-opaque;
-    &:hover {
-        background-color: $dark-transparent;
-    }
-}
-
-.menuButtonIcon {
-    height: 20px; // fix size unless when loading svg take the full page (?)
-}
-
-.menuExpanded {
-    padding: 5px 10px;
-    width: 100%;
-    text-align: left;
-}
-
-.shareButtonsBar {
-    display: flex;
-    align-items: flex-start;
-    height: auto;
-}
-
-.saveButton, .customShareButton {
-    padding: 0px 10px!important;
-    margin: 0px 0px 0px 10px;
-    width: 40px;
-}
-
-.customShareButton {
-    background-color: darkblue;
-}
-
-.saveButton:not([disabled]) {
-    position: relative;
-    background-color: green;
-}
-
-.saveButtonIndicator {
-    position: absolute;
-    z-index: 8;
-    top: -37px;
-    right: 0px;
-    font-size: 3em;
-    color: orange;
-}
-
 .appBody {
     display: flex;
     flex-direction: column;

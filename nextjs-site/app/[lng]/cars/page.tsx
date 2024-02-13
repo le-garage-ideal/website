@@ -1,30 +1,30 @@
+"use client";
+
 import React, { useState } from 'react';
-import { useTranslation} from 'next-i18next';
 import Uri from 'jsuri';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import FilteredList from '../app/components/utils/filtered-list';
-import ListItem from '../app/components/utils/list-item';
-import { FullLayout } from '../app/components/layout';
-import { SEO } from '../app/components/seo/seo';
-import { sortCars } from '../functions/sort';
-import { extractRelativePathWithParams } from '../functions/url';
-import carsStyles from './cars.module.scss';
-import { useLocation } from '../app/hooks/useLocation';
-import { Car } from '../types/car';
 import { useRouter } from 'next/router';
-import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
+
+import FilteredList from '../../components/filtered-list/filtered-list';
+import ListItem from '../../components/filtered-list/list-item';
+import { sortCars } from '../../../functions/sort';
+import { extractRelativePathWithParams } from '../../../functions/url';
+import carsStyles from './cars.module.scss';
+import { useLocation } from '../../hooks/useLocation';
+import { Car } from '../../../types/car';
+import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../../functions/api';
+import { I18nParamsType } from '../../../types/i18n';
+import { useTranslation } from '../../i18n';
 
 type CarsProps = {
   cars: StrapiResponseType<Array<Car>>;
   count: number;
+  i18n: any;
 };
-const Cars = ({ cars }: CarsProps) => {
+const Cars = ({ cars, i18n }: CarsProps) => {
   const {location} = useLocation();
   const uri = new Uri(location);
   const { push } = useRouter();
-  const { t: i18n } = useTranslation();
 
   const completeCarList = cars.data.sort(sortCars);
   const [filteredCars, setFilteredCars] = useState(completeCarList.slice(0, 20));
@@ -103,30 +103,19 @@ const Cars = ({ cars }: CarsProps) => {
 
   const title = i18n('pages.cars.meta.title');
   return (
-    <FullLayout uri={uri.toString()}>
-      <Head>
-        <SEO
-          title={title}
-          description={i18n('pages.cars.meta.description')}
-        />
-      </Head>
-      <FilteredList
-        title={`${cars.meta.pagination.total} ${i18n('pages.cars.list_title')}`}
-        filter={search}
-      >
-        {carComponents}
-      </FilteredList>
-    </FullLayout>
+    <FilteredList
+      title={`${cars.meta.pagination.total} ${i18n('pages.cars.list_title')}`}
+      filter={search}
+    >
+      {carComponents}
+    </FilteredList>
   );
 };
 
 export async function getStaticProps({ locale }: { locale: string }) {
   const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-      cars,
-    },
+    props: { cars },
   }
 }
 

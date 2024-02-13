@@ -1,29 +1,34 @@
+"use client";
+
 import { useState } from 'react';
 import Uri from 'jsuri';
-import { useTranslation} from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
-import FilteredList from '../../app/components/utils/filtered-list';
-import ListItem from '../../app/components/utils/list-item';
-import { FullLayout } from '../../app/components/layout';
-import { SEO } from '../../app/components/seo/seo';
-import { sortCars } from '../../functions/sort';
-import { extractRelativePathWithParams } from '../../functions/url';
 import { useRouter } from 'next/router';
-import { Car } from '../../types/car';
-import { useLocation } from '../../app/hooks/useLocation';
-import { fetchStrapi, LIMIT_CARS_PER_MODEL_PARAMS, LIMIT_MODELS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../functions/api';
-import { Model } from '../../types/model';
-import Head from 'next/head';
 
-type CarsProps = {
+import FilteredList from '../../../components/filtered-list/filtered-list';
+import ListItem from '../../../components/filtered-list/list-item';
+import { sortCars } from '../../../../functions/sort';
+import { extractRelativePathWithParams } from '../../../../functions/url';
+import { Car } from '../../../../types/car';
+import { useLocation } from '../../../hooks/useLocation';
+import {
+  fetchStrapi,
+  LIMIT_CARS_PER_MODEL_PARAMS,
+  LIMIT_MODELS_PARAMS,
+  POPULATE_CARS_PARAMS,
+  StrapiResponseType
+} from '../../../../functions/api';
+import { Model } from '../../../../types/model';
+import { I18nParamsType } from '../../../../types/i18n';
+import { useTranslation } from '../../../i18n';
+
+type CarsProps = I18nParamsType & {
   model: StrapiResponseType<Model>;
   cars: StrapiResponseType<Array<Car>>;
 };
-const Cars = ({ model, cars }: CarsProps) => {
+const Cars = async ({ model, cars, params: { lng } }: CarsProps) => {
   const { push } = useRouter();
   const {location} = useLocation();
-  const { t: i18n } = useTranslation();
+  const { t: i18n } = await useTranslation(lng, 'common');
 
   const uri = new Uri(location);
   const completeCarList: Array<Car> = cars.data.sort(sortCars);
@@ -66,18 +71,9 @@ const Cars = ({ model, cars }: CarsProps) => {
     .replace('{model}', model.data.name);
 
   return (
-    <FullLayout uri={location}>
-      <Head>
-        <SEO
-          title={title}
-          description={description}
-        />
-      </Head>
-
-      <FilteredList title={title} filter={search}>
-        {carComponents}
-      </FilteredList>
-    </FullLayout>
+    <FilteredList title={title} filter={search}>
+      {carComponents}
+    </FilteredList>
   );
 };
 
@@ -105,7 +101,6 @@ export async function getStaticProps({ locale, params }: { locale: string, param
     props: {
       model,
       cars,
-      ...(await serverSideTranslations(locale, ["common"])),
     },
   }
 }

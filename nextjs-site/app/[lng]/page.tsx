@@ -1,39 +1,59 @@
-import Head from 'next/head';
+"use client";
+
 import Uri from 'jsuri';
-import { useEffect, useState, useMemo, useCallback } from 'react';
-import { useTranslation} from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { fullname, CarsContext } from '../functions/cars';
-import { save, shouldSave } from '../functions/storage';
+import { fullname, CarsContext } from '../../functions/cars';
+import { save, shouldSave } from '../../functions/storage';
 import {
   processEditParams,
   getCarParams,
   addCarsToParams,
   extractRelativePathWithParams
-} from '../functions/url';
-import indexStyles from './index.module.scss';
-import { Card } from '../app/components/car/card';
-import { Title } from '../app/components/title/title';
-import { FullLayout } from '../app/components/layout';
-import { SEO } from '../app/components/seo/seo';
-import { Car } from '../types/car';
-import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../functions/api';
-import { useIsClient } from '../app/hooks/useIsClient';
-import { useLocation } from '../app/hooks/useLocation';
+} from '../../functions/url';
+import indexStyles from './page.module.scss';
+import { Card } from '../components/car/card';
+import { Title } from '../components/title/title';
+import { Car } from '../../types/car';
+import {
+  fetchStrapi,
+  LIMIT_CARS_PARAMS,
+  POPULATE_CARS_PARAMS,
+  StrapiResponseType
+} from '../../functions/api';
+import { useIsClient } from '../hooks/useIsClient';
+import { useLocation } from '../hooks/useLocation';
+import { TopButtons } from '../components/topButtons/topButtons';
+import { I18nParamsType } from '../../types/i18n';
+import { useTranslation } from '../i18n';
 
-type IndexPageProps = {
+type IndexPageProps = I18nParamsType & {
   allCars: StrapiResponseType<Array<Car>>;
   locale: string;
 };
-const IndexPage = ({ allCars }: IndexPageProps) => {
+const IndexPage = async ({ allCars, params: { lng } }: IndexPageProps) => {
   const [cars, setCars] = useState<Array<Car | undefined>>();
-  const { t: i18n } = useTranslation();
+  const { t: i18n } = await useTranslation(lng, 'common');
   const [uri, setUri] = useState<Uri | undefined>();
   const {location} = useLocation();
 
   const { push, query } = useRouter();
+
+  const i18nArray = {
+    'components.layout.saved_button_tooltip_ko': i18n('components.layout.saved_button_tooltip_ko'),
+    'components.layout.saved_button_tooltip_ok': i18n('components.layout.saved_button_tooltip_ok'),
+    'components.layout.link_clipboard_ko': i18n('components.layout.link_clipboard_ko'),
+    'components.layout.link_clipboard_ok': i18n('components.layout.link_clipboard_ok'),
+    'components.layout.share_with_facebook': i18n('components.layout.share_with_facebook'),
+    'components.layout.share_with_twitter': i18n('components.layout.share_with_twitter'),
+    'components.layout.share_with_reddit': i18n('components.layout.share_with_reddit'),
+    'components.layout.share_title': i18n('components.layout.share_title'),
+    'components.layout.link_share_it': i18n('components.layout.link_share_it'),
+    'components.layout.share_link': i18n('components.layout.share_link'),
+    'components.title.subtitle': i18n('components.title.subtitle'),
+    'components.title.title': i18n('components.title.title'),
+  };
 
   const [saveState, setSaveState] = useState<{saveMessage: string | undefined; saveOk: boolean;}>({
     saveMessage: undefined,
@@ -137,26 +157,19 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
 
   return (
     <>
-      <Head>
-        <SEO
-          title={i18n('components.title.title')}
-          description={description}
-        />
-      </Head>
+      <TopButtons
+        save={onSave}
+        saveDisabled={saveOk}
+        saveMessage={saveMessage}
+        showButtons
+        i18n={i18nArray}
+      />
       <main className={indexStyles.main}>
         <CarsContext.Provider value={contextValue}>
-          <FullLayout
-            save={onSave}
-            uri={uri?.toString()}
-            saveDisabled={saveOk}
-            saveMessage={saveMessage}
-            showButtons
-          >
-            <Title />
-            <article className={indexStyles.carsContainer}>
-              {carElements}
-            </article>
-          </FullLayout>
+          <Title i18n={i18nArray} />
+          <article className={indexStyles.carsContainer}>
+            {carElements}
+          </article>
         </CarsContext.Provider>
       </main>
     </>
@@ -166,10 +179,7 @@ const IndexPage = ({ allCars }: IndexPageProps) => {
 export async function getStaticProps({ locale }: { locale: string }) {
   const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-      allCars,
-    },
+    props: { allCars },
   }
 }
 

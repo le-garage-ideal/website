@@ -13,16 +13,17 @@ import carsStyles from './cars.module.scss';
 import { useLocation } from '../../hooks/useLocation';
 import { Car } from '../../../types/car';
 import { fetchStrapi, LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType } from '../../../functions/api';
-import { I18nParamsType } from '../../../types/i18n';
 import { useTranslation } from '../../i18n';
 
 type CarsProps = {
-  cars: StrapiResponseType<Array<Car>>;
-  count: number;
-  i18n: any;
+  params: {
+    cars: StrapiResponseType<Array<Car>>;
+    lng: string;
+  }
 };
-const Cars = ({ cars, i18n }: CarsProps) => {
+export default async function Cars({ params: { cars, lng } }: CarsProps) {
   const {location} = useLocation();
+  const { t: i18n } = await useTranslation(lng, 'common');
   const uri = new Uri(location);
   const { push } = useRouter();
 
@@ -110,13 +111,10 @@ const Cars = ({ cars, i18n }: CarsProps) => {
       {carComponents}
     </FilteredList>
   );
-};
-
-export async function getStaticProps({ locale }: { locale: string }) {
-  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
-  return {
-    props: { cars },
-  }
 }
 
-export default Cars;
+export async function generateStaticParams({ locale }: { locale: string }) {
+  const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
+  return cars;
+}
+

@@ -12,11 +12,6 @@ const initI18next = async (lng: string, ns: string) => {
   return i18nInstance
 }
 
-type UseTranslationType = {
-  lng: string;
-  ns: string;
-  options?: { keyPrefix?: string }
-}
 export async function useTranslation(lng: string, ns: string, options: { keyPrefix?: string }  = {}) {
   const i18nextInstance = await initI18next(lng, ns)
   return {

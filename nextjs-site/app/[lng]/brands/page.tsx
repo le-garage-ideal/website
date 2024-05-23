@@ -10,13 +10,15 @@ import { extractRelativePathWithParams } from '../../../functions/url';
 import { useLocation } from '../../hooks/useLocation';
 import { Brand } from '../../../types/brand';
 import { fetchStrapi, LIMIT_BRANDS_PARAMS, StrapiResponseType } from '../../../functions/api';
-import { I18nParamsType } from '../../../types/i18n';
 import { useTranslation } from '../../i18n';
 
-type BrandsProps = I18nParamsType & {
-  brands: StrapiResponseType<Array<Brand>>;
+type BrandsProps = {
+  params: {
+    brands: StrapiResponseType<Array<Brand>>;
+    lng: string;
+  }
 };
-const Brands = async ({ brands, params: { lng } }: BrandsProps) => {
+export default async function Brands({ params: { brands, lng } }: BrandsProps) {
   const { t: i18n } = await useTranslation(lng, 'common');
   const {location} = useLocation();
   const uri = new Uri(location);
@@ -61,13 +63,10 @@ const Brands = async ({ brands, params: { lng } }: BrandsProps) => {
       {brandComponents}
     </FilteredList>
   );
-};
-
-export async function getStaticProps({ locale }: { locale: string }) {
-  const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*&${LIMIT_BRANDS_PARAMS}`);
-  return {
-    props: { brands },
-  }
 }
 
-export default Brands;
+export async function generateStaticParams({ locale }: { locale: string }) {
+  const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*&${LIMIT_BRANDS_PARAMS}`);
+  return brands;
+}
+

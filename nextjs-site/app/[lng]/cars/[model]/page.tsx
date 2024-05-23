@@ -21,11 +21,14 @@ import { Model } from '../../../../types/model';
 import { I18nParamsType } from '../../../../types/i18n';
 import { useTranslation } from '../../../i18n';
 
-type CarsProps = I18nParamsType & {
-  model: StrapiResponseType<Model>;
-  cars: StrapiResponseType<Array<Car>>;
+type CarsProps = {
+  params: {
+    model: StrapiResponseType<Model>;
+    cars: StrapiResponseType<Array<Car>>;
+    lng: string;
+  }
 };
-const Cars = async ({ model, cars, params: { lng } }: CarsProps) => {
+export default async function Cars({ params: { model, cars, lng } }: CarsProps) {
   const { push } = useRouter();
   const {location} = useLocation();
   const { t: i18n } = await useTranslation(lng, 'common');
@@ -88,7 +91,7 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ locale, params }: { locale: string, params: any }) {
+export async function generateStaticParams({ params }: { params: any }) {
   const model = await fetchStrapi<Model>(`models/${params.model}?populate=*`);
   if (!model) {
     throw new Error(`No model for [model] param ${params.model}`);
@@ -97,12 +100,6 @@ export async function getStaticProps({ locale, params }: { locale: string, param
   if (!model) {
     throw new Error(`No car for [model] param ${params.model}`);
   }
-  return {
-    props: {
-      model,
-      cars,
-    },
-  }
+  return { model, cars };
 }
 
-export default Cars;

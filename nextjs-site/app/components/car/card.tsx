@@ -1,8 +1,6 @@
-'use client';
 import React, { PropsWithChildren, useState, MouseEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 
 import cardStyles from './card.module.scss';
 import { Car } from '../../../types/car';
@@ -67,9 +65,7 @@ export const Card = ({
     } else {
       divContent = (
         <Spec
-          power={car.power}
-          weight={car.weight}
-          officialWeight={car.officialWeight}
+          car={car}
           imageUrl={car.selectedFavcarsUrl}
         />
       );

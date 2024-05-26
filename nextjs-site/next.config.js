@@ -4,10 +4,6 @@ const IMAGE_DOMAIN = Array.from(process.env.NEXT_PUBLIC_STRAPI_BASE_IMG_URL.matc
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  experimental: {
-    appDir: true,
-  },
   compiler: {
     removeConsole: false,
   },

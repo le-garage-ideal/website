@@ -38,7 +38,8 @@
       "hp": "hp",
       "observed_weight": "Observed weight",
       "official_weight": "Official weight",
-      "ratio": "Power-to-weight ratio"
+      "ratio": "Power-to-weight ratio",
+      "price": "Price"
     },
     "title": {
       "title": "Perfect Garage",

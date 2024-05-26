@@ -1,4 +1,3 @@
-import React, { useContext } from 'react';
 import Uri from 'jsuri';
 import specStyles from './spec.module.scss';
 import { I18nParamsType } from '../../../types/i18n';
@@ -6,17 +5,16 @@ import { useTranslation } from '../../i18n';
 const POWER_MAX = 1200; // max 1200hp, else overflow
 const WEIGHT_MAX = 2500; // max 2500kg, else overflow
 const RATIO_MAX = 20; // max 1kg/hp else overflow
+const PRICE_MAX = 500000; // max 500k€ else overflow
 
-type SpecProps = I18nParamsType & {
-  power?: number;
-  weight?: number;
-  officialWeight?: number;
+type SpecProps = {
+  car: Car;
   imageUrl?: string;
 };
-const Spec = async ({
-  power, weight, officialWeight, imageUrl, params: { lng },
-}: SpecProps) => {
+export default async function Spec({ car, imageUrl }: SpecProps) {
   const { t: i18n } = await useTranslation(lng, 'common');
+  const { power, weight, officialWeight } = car;
+  console.log('2');
 
   const theWeight = weight || officialWeight;
 
@@ -42,6 +40,17 @@ const Spec = async ({
   const imageOrigin = imageUri?.host;
 
   const powerUnit = i18n('components.spec.hp');
+
+  // Price
+  console.log('3');
+
+  const price = await fetchPrice(car ? `${car?.model.brand} ${car.variant}${` year ${car.startYear}` ?? ""}` : undefined);
+  console.log('4', price);
+  const barPriceStyle = price ? {
+    width: `${(price * 100) / PRICE_MAX}%`,
+  } : undefined;
+  console.log('5');
+
 
   return (
       <section className={specStyles.specContainer}>
@@ -69,6 +78,17 @@ const Spec = async ({
           </span>
         </div>
         <div className={[specStyles.bar, specStyles.barRatio].join(' ')} style={barRatioStyle} />
+        { price && (
+          <>
+            <div className={specStyles.barTitle}>
+            <legend>{i18n('components.spec.price')}</legend>
+            <span>
+              <span>{price}</span>
+              €
+            </span>
+            </div><div className={[specStyles.bar, specStyles.barPrice].join(' ')} style={barPriceStyle} />
+          </>
+        )}
         <legend>
           Source :&nbsp;
           <a href="http://weightcars-fr.com">weightcars-fr.com</a>
@@ -83,4 +103,27 @@ const Spec = async ({
   );
 };
 
-export default Spec;
+async function fetchPrice(model: string | undefined): Promise<number | undefined> {
+  if (model) {
+    const storedPrice = localStorage.getItem(model);
+    if (storedPrice) {
+      console.log('price from storage');
+      return parseFloat(storedPrice);
+    } else {
+      console.log('fetching price');
+      const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model }),
+      });
+      const data = await response.json();
+      localStorage.setItem(model, data.price);
+      return data.price;  
+    }
+  } else {
+    return undefined
+  }
+}
+

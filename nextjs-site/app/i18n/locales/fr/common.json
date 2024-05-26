@@ -38,7 +38,8 @@
       "hp": "ch",
       "observed_weight": "Poids constaté",
       "official_weight": "Poids officiel",
-      "ratio": "Rapport poids/puissance"
+      "ratio": "Rapport poids/puissance",
+      "price": "Côte"
     },
     "title": {
       "title": "Le Garage Idéal",

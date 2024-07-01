@@ -1,3 +1,5 @@
+import { Car } from "../types/car";
+
 type MetaType = {
   pagination: {
       page: number,
@@ -62,6 +64,36 @@ export const formatStrapiObjects = <T> (strapiObject: any): T => {
   }
   return res;
 };
+
+
+export async function fetchPrice(car: Car | undefined): Promise<{ price: number; barPriceStyle: any }> {
+  const PRICE_MAX = 500000; // max 500k€ else overflow
+  let price;
+  if (car) {
+    const model = `${car?.model.brand} ${car.variant}${` year ${car.startYear}` ?? ""}`;
+    const storedPrice = localStorage.getItem(model);
+    if (storedPrice) {
+      console.log('price from storage');
+      price = parseFloat(storedPrice);
+    } else {
+      console.log('fetching price');
+      const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model }),
+      });
+      const data = await response.json();
+      localStorage.setItem(model, data.price);
+      price = data.price;  
+    }
+  }
+  const barPriceStyle = price ? {
+    width: `${(price * 100) / PRICE_MAX}%`,
+  } : undefined;
+  return { price, barPriceStyle };
+}
 
 export const POPULATE_CARS_PARAMS = 'populate=deep';
 export const LIMIT_BRANDS_PARAMS = 'pagination[limit]=200';

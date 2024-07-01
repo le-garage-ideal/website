@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Uri from 'jsuri';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import FilteredList from '../../../components/filtered-list/filtered-list';
 import ListItem from '../../../components/filtered-list/list-item';

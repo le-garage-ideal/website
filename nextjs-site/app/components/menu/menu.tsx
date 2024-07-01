@@ -1,25 +1,23 @@
 'use client';
 
-import { Dispatch, SetStateAction, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import qs from 'qs';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { buildGarageName, getSavedGarages } from '../../../functions/storage';
-import { CarsContext, eachCar } from '../../../functions/cars';
+import { eachCar } from '../../../functions/cars';
 import { labelKey } from '../../../functions/url';
-import { Car as CarsType } from '../../../types/car';
 
 import menuStyles from './menu.module.scss';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
-  const setCars = useContext(CarsContext)[1] as unknown as Dispatch<SetStateAction<CarsType>>;
-
   const [showMenu, setShowMenu] = useState(false);
 
-  // const { push, query } = useRouter();
-  const push = (s: any) => {};
+  const { replace } = useRouter();
   const query = {};
 
   const [ savedGarages, setSavedGarages ] = useState<any[]>([]);
@@ -41,8 +39,7 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
         }
       });
       const onClick = () => {
-        setCars(garage);
-        push(`?${qs.stringify({...garageParams})}`);
+        replace(`?${qs.stringify({...garageParams})}`);
       }
       garageElements.push((
         <li key={garageName}>
@@ -72,7 +69,7 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
   return showMenu ? (
     <>
       <button type="button" className={menuButtonClass.join(' ')} onClick={() => setShowMenu(!showMenu)}>
-        <FontAwesomeIcon icon="bars" className={menuStyles.menuButtonIcon} />
+        <FontAwesomeIcon icon={faBars} className={menuStyles.menuButtonIcon} />
       </button>
       <motion.aside
         className={`${menuStyles.menuContainer} menu`}

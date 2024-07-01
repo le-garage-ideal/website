@@ -2,8 +2,20 @@
 
 import React, { useState } from 'react';
 import Uri from 'jsuri';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faEdit,
+  faExchangeAlt,
+  faImage,
+  faBars,
+  faPlus,
+  faSave,
+  faShareSquare,
+  faCheck,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
 
 import FilteredList from '../../components/filtered-list/filtered-list';
 import ListItem from '../../components/filtered-list/list-item';
@@ -60,7 +72,7 @@ export default async function Cars({ params: { cars, lng } }: CarsProps) {
                   onClick={() => setSelectedCar(car.id)}
                   title={i18n('pages.cars.add_to_garage_tooltip')}
                 >
-                  <FontAwesomeIcon icon="plus" />
+                  <FontAwesomeIcon icon={faPlus} />
                 </button>
               )}
             <div style={{ marginLeft: '4px', marginTop: '6px'}}>{name}</div>

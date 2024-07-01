@@ -3,8 +3,7 @@ import { Car } from '../../types/car';
 import {
   fetchStrapi,
   LIMIT_CARS_PARAMS,
-  POPULATE_CARS_PARAMS,
-  StrapiResponseType
+  POPULATE_CARS_PARAMS
 } from '../../functions/api';
 import { useTranslation } from '../i18n';
 import { Index } from './Index';
@@ -12,9 +11,10 @@ import { Index } from './Index';
 type IndexPageProps = {
   params: {
     lng: string;
-  }
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
-export default async function IndexPage({ params: { lng } }: IndexPageProps) {
+export default async function IndexPage({ params: { lng }, searchParams }: IndexPageProps) {
   const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   const { t: i18n } = await useTranslation(lng, 'common');
 
@@ -35,7 +35,7 @@ export default async function IndexPage({ params: { lng } }: IndexPageProps) {
     'pages.index.meta.description': i18n('pages.index.meta.description'),
   };
 
-  return <Index i18nArray={i18nArray} allCars={allCars} />
+  return allCars ? <Index i18nArray={i18nArray} allCars={allCars} lng={lng} searchParams={searchParams} /> : <></>;
 }
 
 

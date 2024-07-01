@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Uri from 'jsuri';
 
 import FilteredList from '../../components/filtered-list/filtered-list';

@@ -1,7 +1,8 @@
 "use client";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -10,28 +11,42 @@ import {
   RedditShareButton,
   RedditIcon,
 } from 'react-share';
+import { faSave, faShareSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { Toast } from '../toast/toast';
+import { Car } from '../../../types/car';
+import { addCarsToParams } from '../../../functions/url';
+import { save } from '../../../functions/storage';
 import { useLocation } from '../../hooks/useLocation';
 import topButtonsStyles from './topButtons.module.scss';
+import Uri from 'jsuri';
 
 const BUTTON_HEIGHT = '40px';
 
 type TopButtonsProps = {
-  save?: () => void;
-  saveDisabled?: boolean;
-  saveMessage?: string;
-  showButtons?: boolean;
+  cars?: Array<Car | undefined>;
   i18n: { [s: string]: string };
 };
-export const TopButtons = ({
-  save,
-  saveDisabled = false,
-  saveMessage,
-  showButtons = false,
-  i18n,
-}: TopButtonsProps) => {
-  const {location} = useLocation();
+export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
+  const [saveState, setSaveState] = useState<{saveMessage: string | undefined; saveOk: boolean;}>({
+    saveMessage: undefined,
+    saveOk: true,
+  });
+  const { saveOk, saveMessage } = saveState;
+
+  const { replace } = useRouter();
+
+  // Click on garage save button
+  const onSave = () => {
+    if (cars && !saveOk) {
+      const garageName = save(cars);
+      const newUri = addCarsToParams(cars, new Uri(location));
+      const savedMessage = i18n['pages.index.garage_saved'];
+      setSaveState({ saveOk: true, saveMessage: `${savedMessage} "${garageName}"` });
+      replace(newUri.toString());
+      setTimeout(() => setSaveState({ saveOk: true, saveMessage: undefined }), 2000); // message will be displayed during 2s
+    }
+  };
 
   const [shareModalState, setShareModalState] = useState('');
   const [shareCopySuccessMessage, setShareCopySuccessMessage] = useState<string | null>(null);
@@ -53,7 +68,7 @@ export const TopButtons = ({
     }
   };
 
-  const savedButtonTooltip = saveDisabled
+  const savedButtonTooltip = saveOk
     ? i18n['components.layout.saved_button_tooltip_ok']
     : i18n['components.layout.saved_button_tooltip_ko'];
 
@@ -61,63 +76,61 @@ export const TopButtons = ({
   const shareWithLabelTwitter = i18n['components.layout.share_with_twitter'];
   const shareWithLabelReddit = i18n['components.layout.share_with_reddit'];
 
+  const { location } = useLocation();
 
   return (
     <>
-      {showButtons
-        && (
-        <div className={topButtonsStyles.shareButtonsBar}>
-          <button
-            type="button"
-            title={savedButtonTooltip}
-            className={['icon-button', topButtonsStyles.saveButton].join(' ')}
-            onClick={() => { if (save) save(); }}
-            style={{ height: BUTTON_HEIGHT }}
+      <div className={topButtonsStyles.shareButtonsBar}>
+        <button
+          type="button"
+          title={savedButtonTooltip}
+          className={['icon-button', topButtonsStyles.saveButton].join(' ')}
+          onClick={onSave}
+          style={{ height: BUTTON_HEIGHT }}
+        >
+          {!saveOk && <span className={topButtonsStyles.saveButtonIndicator}>·</span>}
+          <FontAwesomeIcon icon={faSave} />
+        </button>
+        <button
+          type="button"
+          title={i18n['components.layout.share_link']}
+          className={['icon-button', topButtonsStyles.customShareButton].join(' ')}
+          onClick={() => { setShareModalState('is-active'); }}
+          style={{ height: BUTTON_HEIGHT }}
+        >
+          <FontAwesomeIcon icon={faShareSquare} />
+        </button>
+        <div title={shareWithLabelFacebook}>
+          <FacebookShareButton
+            quote={i18n['components.layout.share_title']}
+            url={location ?? ''}
           >
-            {!saveDisabled && <span className={topButtonsStyles.saveButtonIndicator}>·</span>}
-            <FontAwesomeIcon icon="save" />
-          </button>
-          <button
-            type="button"
-            title={i18n['components.layout.share_link']}
-            className={['icon-button', topButtonsStyles.customShareButton].join(' ')}
-            onClick={() => { setShareModalState('is-active'); }}
-            style={{ height: BUTTON_HEIGHT }}
-          >
-            <FontAwesomeIcon icon="share-square" />
-          </button>
-          <div title={shareWithLabelFacebook}>
-            <FacebookShareButton
-              quote={i18n['components.layout.share_title']}
-              url={location ?? ''}
-            >
-              <FacebookIcon size={BUTTON_HEIGHT} />
-            </FacebookShareButton>
-          </div>
-          <div title={shareWithLabelTwitter}>
-            <TwitterShareButton
-              title={i18n['components.layout.share_title']}
-              url={location ?? ''}
-            >
-              <TwitterIcon size={BUTTON_HEIGHT} />
-            </TwitterShareButton>
-          </div>
-          <div title={shareWithLabelReddit}>
-            <RedditShareButton
-              title={i18n['components.layout.share_title']}
-              url={location ?? ''}
-            >
-              <RedditIcon size={BUTTON_HEIGHT} />
-            </RedditShareButton>
-          </div>
-          {saveMessage
-            && (
-              <div style={{ position: 'absolute' }}>
-                <Toast classNames={['is-success']}>{saveMessage}</Toast>
-              </div>
-            )}
+            <FacebookIcon size={BUTTON_HEIGHT} />
+          </FacebookShareButton>
         </div>
-      )}
+        <div title={shareWithLabelTwitter}>
+          <TwitterShareButton
+            title={i18n['components.layout.share_title']}
+            url={location ?? ''}
+          >
+            <TwitterIcon size={BUTTON_HEIGHT} />
+          </TwitterShareButton>
+        </div>
+        <div title={shareWithLabelReddit}>
+          <RedditShareButton
+            title={i18n['components.layout.share_title']}
+            url={location ?? ''}
+          >
+            <RedditIcon size={BUTTON_HEIGHT} />
+          </RedditShareButton>
+        </div>
+        {saveMessage
+          && (
+            <div style={{ position: 'absolute' }}>
+              <Toast classNames={['is-success']}>{saveMessage}</Toast>
+            </div>
+          )}
+      </div>
 
       <div className={['modal', shareModalState].join(' ')}>
         <div className="modal-background" />

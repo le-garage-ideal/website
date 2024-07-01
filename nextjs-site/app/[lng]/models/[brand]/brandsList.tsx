@@ -1,7 +1,7 @@
 'use client';
 
 import Uri from "jsuri";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { extractRelativePathWithParams } from "../../../../functions/url";
 import { Car } from "../../../../types/car";

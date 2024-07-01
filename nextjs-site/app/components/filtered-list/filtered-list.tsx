@@ -3,6 +3,7 @@ import React, { PropsWithChildren, ReactNode, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import filteredListStyles from './filtered-list.module.scss';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 type FilteredListProps = {
   title: string;
@@ -37,7 +38,7 @@ const FilteredList = ({ title, filter, children }: PropsWithChildren<FilteredLis
             className={[filteredListStyles.searchInput, 'input'].join(' ')}
           />
           <span className="icon is-right">
-            <FontAwesomeIcon icon="search" />
+            <FontAwesomeIcon icon={faSearch} />
           </span>
         </p>
       </header>

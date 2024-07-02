@@ -1,7 +1,7 @@
 "use client";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   FacebookShareButton,
@@ -12,6 +12,7 @@ import {
   RedditIcon,
 } from 'react-share';
 import { faSave, faShareSquare } from '@fortawesome/free-solid-svg-icons';
+import Uri from 'jsuri';
 
 import { Toast } from '../toast/toast';
 import { Car } from '../../../types/car';
@@ -19,7 +20,6 @@ import { addCarsToParams } from '../../../functions/url';
 import { save } from '../../../functions/storage';
 import { useLocation } from '../../hooks/useLocation';
 import topButtonsStyles from './topButtons.module.scss';
-import Uri from 'jsuri';
 
 const BUTTON_HEIGHT = '40px';
 
@@ -159,16 +159,18 @@ export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
             >
               Copier
             </button>
+            <button
+              type="button"
+              className="button"
+              aria-label="close"
+              onClick={() => setShareModalState('')}
+            >
+              Fermer
+            </button>
             {shareCopySuccessMessage && <Toast classNames={['is-success']}>{shareCopySuccessMessage}</Toast>}
             {shareCopyErrorMessage && <Toast classNames={['is-error']}>{shareCopyErrorMessage}</Toast>}
           </div>
         </div>
-        <button
-          type="button"
-          className="modal-close is-large"
-          aria-label="close"
-          onClick={() => setShareModalState('')}
-        />
       </div>
     </>
   );

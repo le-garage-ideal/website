@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import qs from 'qs';
 import { motion } from 'framer-motion';
@@ -27,7 +27,7 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
   let garageMenuItems;
   if (savedGarages.length > 0) {
     const savedGarageLabel = i18n['components.menu.saved_garages'];
-    const garageElements = [<div key="menu-label" className="menu-label">{ savedGarageLabel }</div>];
+    const garageElements = [<div key="menu-label" className={menuStyles.menuLabel}>{ savedGarageLabel }</div>];
 
     savedGarages.forEach(garage => {
       const garageName = buildGarageName(garage);
@@ -42,23 +42,33 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
         replace(`?${qs.stringify({...garageParams})}`);
       }
       garageElements.push((
-        <li key={garageName}>
-          <Link href="#" onClick={onClick}>{garageName}</Link>
+        <li key={garageName} className={menuStyles.menuItem}>
+          <Link href="#" onClick={onClick} className={menuStyles.menuLink}>{garageName}</Link>
         </li>
       ));
     });
 
     garageMenuItems = (
       <>
-        <Link href={{ pathname: '/', query: { ...query } }}>{ i18n['components.menu.garages'] }</Link>
-        <ul>
-          <li><Link href={{ pathname: '/', query: { ...query } }}>{ i18n['components.menu.current_garage'] }</Link></li>
+        <Link href={{ pathname: '/', query: { ...query } }} className={menuStyles.menuLink}>
+          { i18n['components.menu.garages'] }
+        </Link>
+        <ul className={menuStyles.menuSublist}>
+          <li className={menuStyles.menuItem}>
+            <Link href={{ pathname: '/', query: { ...query } }} className={menuStyles.menuLink}>
+              { i18n['components.menu.current_garage'] }
+            </Link>
+          </li>
           { garageElements }
         </ul>
       </>
     );
   } else {
-    garageMenuItems = <Link href={{ pathname: '/', query: { ...query } }}>{ i18n['components.menu.the_garage'] }</Link>;
+    garageMenuItems = (
+      <Link href={{ pathname: '/', query: { ...query } }} className={menuStyles.menuLink}>
+        { i18n['components.menu.the_garage'] }
+      </Link>
+    );
   }
 
   const menuButtonClass = [menuStyles.menuButton, 'icon-button'];
@@ -66,30 +76,37 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
     menuButtonClass.push(menuStyles.menuExpanded);
   }
 
-  return showMenu ? (
+
+  return (
     <>
-      <button type="button" className={menuButtonClass.join(' ')} onClick={() => setShowMenu(!showMenu)}>
-        <FontAwesomeIcon icon={faBars} className={menuStyles.menuButtonIcon} />
-      </button>
-      <motion.aside
-        className={`${menuStyles.menuContainer} menu`}
-        initial={{ scale: '0%' }}
-        animate={{ scale: '100%' }}
-        transition={{ ease: 'easeInOut', duration: 0.1 }}
+      <motion.button
+        type="button"
+        className={menuButtonClass.join(' ')}
+        onClick={() => setShowMenu(!showMenu)}
       >
-        <ul className="menu-list">
-          <li>{garageMenuItems}</li>
-          <li>
-            <Link href={{ pathname: '/cars', query: { ...query } }}>
+        <FontAwesomeIcon icon={faBars} className={menuStyles.menuButtonIcon} />
+      </motion.button>
+      <motion.aside
+        animate={showMenu ? "open" : "closed"}
+        className={`${menuStyles.menuContainer} menu`}
+        variants={{
+          open: { opacity: 1, scale: '100%' },
+          closed: { opacity: 0, scale: '0%' },
+        }}
+      >
+        <ul className={menuStyles.menuList}>
+          <li className={menuStyles.menuItem}>{garageMenuItems}</li>
+          <li className={menuStyles.menuItem}>
+            <Link href={{ pathname: '/cars', query: { ...query } }} className={menuStyles.menuLink}>
               { i18n['components.menu.cars'] }
             </Link>
           </li>
-          <li><Link href={{ pathname: '/about', query: { ...query } }}>{ i18n['components.menu.about'] }</Link></li>
+          <li className={menuStyles.menuItem}>
+            <Link href={{ pathname: '/about', query: { ...query } }} className={menuStyles.menuLink}>{ i18n['components.menu.about'] }</Link>
+          </li>
         </ul>
       </motion.aside>
     </>
-  ) : (
-    <></>
   );
 };
 

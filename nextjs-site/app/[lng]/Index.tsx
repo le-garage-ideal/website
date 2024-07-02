@@ -95,12 +95,12 @@ export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProp
   return (
     <>
       <TopButtons i18n={i18nArray} cars={cars} />
-      <main className={indexStyles.main}>
+      <section>
         <Title i18n={i18nArray} />
         <article className={indexStyles.carsContainer}>
           {carElements}
         </article>
-      </main>
+      </section>
     </>
   );
 };

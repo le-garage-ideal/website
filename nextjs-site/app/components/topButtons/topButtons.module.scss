@@ -2,6 +2,8 @@
   display: flex;
   align-items: flex-start;
   height: auto;
+  justify-content: flex-end;
+  margin-top: -50px;
 }
 
 .saveButton, .customShareButton {

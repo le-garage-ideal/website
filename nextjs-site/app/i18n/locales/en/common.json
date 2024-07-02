@@ -64,7 +64,9 @@
       "share_with_facebook": "Share with Facebook",
       "share_with_twitter": "Share with Twitter",
       "share_with_reddit": "Share with Reddit",
-      "share_title": "My Perfect Garage"
+      "share_title": "My Perfect Garage",
+      "share_copy": "Copy link",
+      "share_close": "Close"
     }
   },
   "templates": {

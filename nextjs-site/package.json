@@ -13,7 +13,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "accept-language": "^3.0.18",
-    "bulma": "^0.9.4",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "framer-motion": "^8.1.3",

@@ -1,6 +1,5 @@
 import { PropsWithChildren } from 'react';
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { config } from "@fortawesome/fontawesome-svg-core";
 
 import Menu from '../components/menu/menu';
 import { languages } from '../i18n/settings';
@@ -38,7 +37,7 @@ export default async function RootLayout ({ children, params: { lng } }: PropsWi
             </div>
           </header>
 
-          <main className="appBody">
+          <main className="main">
             {children}
           </main>
           { footer }

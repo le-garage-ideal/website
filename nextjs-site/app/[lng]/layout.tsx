@@ -28,9 +28,9 @@ export default async function RootLayout ({ children, params: { lng } }: PropsWi
   return (
     <html lang="en">
       <body>
-        <div className="overlay" />
-        <div id="background" className="background" />
         <div className="appContainer">
+          <div className="overlay" />
+          <div id="background" className="background" />
           <header className="appHeader">
             <div className="menu">
               <Menu i18n={i18nArray} />

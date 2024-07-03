@@ -3,15 +3,28 @@
 $headerPadding: 10px;
 $footerHeight: 60px;
 
+body {
+    padding: 0;
+    margin: 0;
+    color: #4a4a4a;
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.main {
+    width: 100%;
+}
+
 .overlay,
 .background {
-    width: 100%;
+    min-width: 100vw;
     min-height: 100vh;
-}
-  
-.background, .overlay {
     position: absolute;
     top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
     height: 100%;
 }
 
@@ -63,14 +76,6 @@ $footerHeight: 60px;
     font-family: Gill Sans,sans-serif;
 }
 
-body {
-    padding: 0;
-    margin: 0;
-    color: #4a4a4a;
-    font-size: 1em;
-    font-weight: 400;
-    line-height: 1.5;
-}
 
 @media (orientation: portrait) {
     body {
@@ -84,7 +89,7 @@ body {
     }
     .overlay,
     .background {
-        height: 100%;
+        position: fixed;
     }
 }
 
@@ -200,4 +205,11 @@ body {
     color: #f5f5f5 !important;
 }
 
-
+/* Badge */
+.badge {
+    font-family: Segoe UI Light;
+    text-align: center;
+    border: 3px solid #a1a1a1;
+    background-color: #141414;
+    color: #e1e1e1;
+}

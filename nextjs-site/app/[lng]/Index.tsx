@@ -89,13 +89,10 @@ export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProp
     index += 1;
   }
 
-  const carsLabels = cars?.map(car => (car ? fullname(car) : null))?.filter(s => !!s) ?? [];
-  const description = carsLabels.length > 0 ? carsLabels.join('\n') : i18nArray['pages.index.meta.description'];
-
   return (
     <>
       <TopButtons i18n={i18nArray} cars={cars} />
-      <section>
+      <section className={indexStyles.mainSection}>
         <Title i18n={i18nArray} />
         <article className={indexStyles.carsContainer}>
           {carElements}

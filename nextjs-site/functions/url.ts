@@ -1,5 +1,6 @@
 import Uri from 'jsuri';
 import { eachCar } from './cars';
+import { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 
 export const extractHostname = (fullHost: string) => {
   let imageOrigin = null;
@@ -79,3 +80,8 @@ export const addCarsToParams = (cars: Array<{ id: string | number; label?: strin
   return newUri;
 };
 
+export const getLangFromPath = (headersList: ReadonlyHeaders) => {
+  const pathname = headersList.get("x-invoke-path");
+  const pathnameParts = pathname!.toLowerCase().split("/");
+  return pathnameParts[1];
+};

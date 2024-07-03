@@ -27,17 +27,17 @@ const FilteredList = ({ title, filter, children }: PropsWithChildren<FilteredLis
   };
 
   return (
-    <>
-      <header className={['field', 'is-size-4', filteredListStyles.listHeader].join(' ')}>
-        <h1 className="has-text-light">{title}</h1>
-        <p className="control has-text-dark has-icons-right">
+    <article className={filteredListStyles.listContainer}>
+      <header className={['field', filteredListStyles.listHeader].join(' ')}>
+        <h1 className={['has-text-light', filteredListStyles.listHeaderTitle].join(' ')}>{title}</h1>
+        <p className={filteredListStyles.searchField}>
           <input
             id="search-input"
             type="text"
             onKeyUp={search}
             className={[filteredListStyles.searchInput, 'input'].join(' ')}
           />
-          <span className="icon is-right">
+          <span className={filteredListStyles.searchIcon}>
             <FontAwesomeIcon icon={faSearch} />
           </span>
         </p>
@@ -45,7 +45,7 @@ const FilteredList = ({ title, filter, children }: PropsWithChildren<FilteredLis
       <ul className={filteredListStyles.list}>
         {children}
       </ul>
-    </>
+    </article>
   );
 };
 export default FilteredList;

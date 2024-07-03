@@ -1,4 +1,11 @@
-@import '../../styles/theme.scss';
+@import '../../theme.scss';
+
+.listContainer {
+  max-height: 100vh;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
 .list, .listHeader {
   background-color: $dark-transparent;
@@ -10,6 +17,12 @@
   justify-content: space-between;
   margin-bottom: 0px!important;
   padding: 30px 120px 20px 120px;
+  font-size: 1.5rem;
+  overflow-y: auto;
+}
+
+.listHeaderTitle {
+  font-size: 100%;
 }
 
 .list {
@@ -18,11 +31,19 @@
   list-style-type: none;
   max-width: 100%;
   width: 100%;
-  overflow: auto;
-  padding: 20px;
+  overflow-y: auto;
+  padding: 0 20px;
   li {
     margin-right: 15px;
   }
+}
+
+.searchField {
+  box-sizing: border-box;
+  clear: both;
+  font-size: 1rem;
+  position: relative;
+  text-align: inherit;
 }
 
 .searchInput {
@@ -30,7 +51,22 @@
   z-index: 2; 
   position: relative;
   //////
-  width: auto; 
+  width: auto;
+  padding-right: 2.5em;
+}
+
+.searchIcon {
+  color: #dbdbdb;
+  height: 2.5em;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 2.5em;
+  z-index: 4;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  right: 0;
 }
 
 @media (orientation: portrait) {

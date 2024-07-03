@@ -15,7 +15,7 @@ export function middleware(req: any) {
   if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))
   if (!lng) lng = fallbackLng
 
-  // Redirect if lng in path is not supported
+  // Redirect if lng is not in path
   if (
     !languages.some(loc => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
     !req.nextUrl.pathname.startsWith('/_next')
@@ -23,6 +23,7 @@ export function middleware(req: any) {
     return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url))
   }
 
+  // Get lng from referer and set cookie
   if (req.headers.has('referer')) {
     const refererUrl = new URL(req.headers.get('referer'))
     const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`))
@@ -31,5 +32,13 @@ export function middleware(req: any) {
     return response
   }
 
-  return NextResponse.next()
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-lng', lng);
+
+  return NextResponse.next({
+    request: {
+      // Pass language to the page
+      headers: requestHeaders,
+    }
+  })
 }

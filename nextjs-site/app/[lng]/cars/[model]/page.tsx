@@ -18,7 +18,6 @@ import {
   StrapiResponseType
 } from '../../../../functions/api';
 import { Model } from '../../../../types/model';
-import { I18nParamsType } from '../../../../types/i18n';
 import { useTranslation } from '../../../i18n';
 
 type CarsProps = {

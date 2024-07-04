@@ -9,8 +9,9 @@ import {
 import { Brand } from '../../../../types/brand';
 import { useTranslation } from '../../../i18n';
 import { ModelList } from './modelList';
+import { I18nParamsType } from '../../../../types/i18n';
 
-export default async function Models({ params }: { params: { lng: string; brand: string }}) {
+export default async function Models({ params }: { params: { brand: string }} & I18nParamsType) {
   const { t: i18n } = await useTranslation(params.lng ?? 'en', 'common');
 
   const brand = await fetchStrapi<Brand>(`brands/${params.brand}?populate=*`);
@@ -35,5 +36,5 @@ export default async function Models({ params }: { params: { lng: string; brand:
   const title = i18n('templates.models.title')
     .replace('{brand}', brand.data.name);
 
-  return <ModelList listName={listName} title={title} />;
+  return <ModelList listName={listName} title={title} lng={params.lng} />;
 };

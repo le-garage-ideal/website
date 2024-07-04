@@ -9,7 +9,7 @@ import { useLocation } from "../../hooks/useLocation";
 import { useRouter } from "next/navigation";
 import FilteredList from "../../components/filtered-list/filtered-list";
 
-export const BrandList = ({ brands, title }: { brands: Array<Brand>; title: string }) => {
+export const BrandList = ({ brands, title, lng }: { brands: Array<Brand>; title: string, lng: string }) => {
   const [filteredBrands, setFilteredBrands] = useState(brands);
 
   const {location} = useLocation();
@@ -17,7 +17,7 @@ export const BrandList = ({ brands, title }: { brands: Array<Brand>; title: stri
   const { push } = useRouter();
 
   const onBrandSelect = (brandId: number) => {
-    uri.setPath(`/models/${brandId}`);
+    uri.setPath(`/${lng}/models/${brandId}`);
     push(extractRelativePathWithParams(uri));
   };
 

@@ -9,7 +9,7 @@ import FilteredList from "../../../components/filtered-list/filtered-list";
 import ListItem from "../../../components/filtered-list/list-item";
 import { useLocation } from "../../../hooks/useLocation";
 
-export const ModelList = ({ listName, title }: { listName: Array<Car>, title: string }) => {
+export const ModelList = ({ listName, title, lng }: { listName: Array<Car>, title: string, lng: string }) => {
   const { push } = useRouter();
   const {location} = useLocation();
 
@@ -36,7 +36,7 @@ export const ModelList = ({ listName, title }: { listName: Array<Car>, title: st
             onClick={() => {
               console.log(car.model.id);
               
-              uri.setPath(`/cars/${car.model.id}`);
+              uri.setPath(`/${lng}/cars/${car.model.id}`);
               push(extractRelativePathWithParams(uri));
             }}
           >

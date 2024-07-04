@@ -44,11 +44,11 @@ export const Card = ({
     setImageView(!imageView);
   };
 
-  const { replace,  } = useRouter();
+  const { replace } = useRouter();
   const searchParams = useSearchParams();
   const onEdit = (e: MouseEvent) => {
     e.preventDefault();
-    replace(`/brands?${ qs.stringify({ edit: index, ...searchParams }) }`)
+    replace(`/${lng}/brands?${ qs.stringify({ edit: index, ...searchParams }) }`)
   };
 
   let divContent = null;

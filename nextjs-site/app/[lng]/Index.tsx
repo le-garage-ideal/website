@@ -1,5 +1,4 @@
 import Uri from 'jsuri';
-import { headers } from "next/headers";
 import { redirect, RedirectType } from 'next/navigation';
 import { StrapiResponseType, fetchPrice } from '../../functions/api';
 import { fullname } from '../../functions/cars';
@@ -10,22 +9,24 @@ import { Title } from '../components/title/title';
 import { TopButtons } from '../components/topButtons/topButtons';
 
 import indexStyles from './page.module.scss';
+import qs from 'qs';
 
 type IndexProps = {
   i18nArray: { [s: string]: string };
   allCars: StrapiResponseType<Array<Car>>;
   lng: string;
-  searchParams: any;
+  searchParams: URLSearchParams;
 }
 export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProps) => {
   // Retrieve URL params and set uri state, push new params to browser location
   let cars: Array<Car | undefined> = [];
   let uri;
-
-
-  const pathname = headers().get("x-invoke-path") || "";
-  const relativePathWithParams = `${pathname}${searchParams.toString()}`;
+  
+  const queryString = qs.stringify(searchParams);
+  const pathname = lng;
+  const relativePathWithParams = `${pathname}${queryString}`;
   const initUri = new Uri(relativePathWithParams);
+
   // if edit=X parameter, save car to carX parameter
   const paramsChanged = processEditParams(initUri);
   if (paramsChanged) {
@@ -36,7 +37,6 @@ export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProp
     redirect(`${initUri.path}?${query}`, RedirectType.replace);
   }
   uri = initUri;
-
 
   // Retrieve cars data and set cars state
   const carsInit: Array<Car | undefined> = [];

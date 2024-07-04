@@ -7,14 +7,9 @@ import {
 } from '../../functions/api';
 import { useTranslation } from '../i18n';
 import { Index } from './Index';
+import { I18nParamsType } from '../../types/i18n';
 
-type IndexPageProps = {
-  params: {
-    lng: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-export default async function IndexPage({ params: { lng }, searchParams }: IndexPageProps) {
+export default async function IndexPage({ params: { lng }, searchParams }: { searchParams: URLSearchParams } & I18nParamsType) {
   const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   const { t: i18n } = await useTranslation(lng, 'common');
 

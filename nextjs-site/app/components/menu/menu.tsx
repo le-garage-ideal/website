@@ -79,20 +79,22 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
 
   return (
     <>
-      <motion.button
+      <button
         type="button"
         className={menuButtonClass.join(' ')}
         onClick={() => setShowMenu(!showMenu)}
       >
         <FontAwesomeIcon icon={faBars} className={menuStyles.menuButtonIcon} />
-      </motion.button>
+      </button>
       <motion.aside
         animate={showMenu ? "open" : "closed"}
         className={`${menuStyles.menuContainer} menu`}
         variants={{
-          open: { opacity: 1, scale: '100%' },
-          closed: { opacity: 0, scale: '0%' },
+          open: { opacity: 1, scale: '1' },
+          closed: { opacity: 0, scale: '0' },
         }}
+        initial={{ opacity: 0, scale: 0 }}
+        transition={{ duration: 0.2 }}
       >
         <ul className={menuStyles.menuList}>
           <li className={menuStyles.menuItem}>{garageMenuItems}</li>
@@ -106,6 +108,7 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
           </li>
         </ul>
       </motion.aside>
+      { showMenu && <div className="backdrop" onClick={() => setShowMenu(false)}></div> }
     </>
   );
 };

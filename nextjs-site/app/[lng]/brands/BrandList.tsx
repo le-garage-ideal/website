@@ -44,10 +44,7 @@ export const BrandList = ({ brands, title }: { brands: Array<Brand>; title: stri
     }
   };
   return (
-    <FilteredList
-      title={title}
-      filter={search}
-    >
+    <FilteredList title={title} filter={search}>
       { brandComponents }
     </FilteredList>
   );

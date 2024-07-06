@@ -1,5 +1,6 @@
 import {describe, expect, it} from '@jest/globals';
 import { formatStrapiObjects } from './api';
+import { Car } from '../types/car';
 
 describe('formatStrapiObjects', () => {
   it('removes attributes and data level from Strapi Car', () => {
@@ -17,7 +18,7 @@ describe('formatStrapiObjects', () => {
           },
       }
     };
-    const result = formatStrapiObjects(strapiCar);
+    const result = formatStrapiObjects<Car>(strapiCar);
     expect(result.id).toBe(strapiCar.id);
     expect(result.variant).toBe(strapiCar.attributes.variant);
     expect(result.model.id).toBe(strapiCar.attributes.model.data.id);
@@ -28,7 +29,7 @@ describe('formatStrapiObjects', () => {
       "id": 1,
       "variant": "507 ROADSTER",
     };
-    const result = formatStrapiObjects(simpleObject);
+    const result = formatStrapiObjects<{id: string; variant: string}>(simpleObject);
     expect(result.id).toBe(1);
     expect(result.variant).toBe("507 ROADSTER");
   });

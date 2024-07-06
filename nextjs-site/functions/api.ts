@@ -71,7 +71,8 @@ export async function fetchPrice(car: Car | undefined): Promise<{ price: number;
   let price;
   if (car) {
     const model = `${car?.model.brand} ${car.variant}${` year ${car.startYear}` ?? ""}`;
-    const storedPrice = localStorage.getItem(model);
+    //const storedPrice = localStorage.getItem(model);
+    let storedPrice = null;
     if (storedPrice) {
       console.log('price from storage');
       price = parseFloat(storedPrice);
@@ -85,7 +86,7 @@ export async function fetchPrice(car: Car | undefined): Promise<{ price: number;
         body: JSON.stringify({ model }),
       });
       const data = await response.json();
-      localStorage.setItem(model, data.price);
+      //localStorage.setItem(model, data.price);
       price = data.price;  
     }
   }

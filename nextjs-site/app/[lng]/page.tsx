@@ -10,7 +10,6 @@ import { Index } from './Index';
 import { I18nParamsType } from '../../types/i18n';
 
 export default async function IndexPage({ params: { lng }, searchParams }: { searchParams: URLSearchParams } & I18nParamsType) {
-  const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   const { t: i18n } = await useTranslation(lng, 'common');
 
   const i18nArray = {
@@ -30,7 +29,7 @@ export default async function IndexPage({ params: { lng }, searchParams }: { sea
     'pages.index.meta.description': i18n('pages.index.meta.description'),
   };
 
-  return allCars ? <Index i18nArray={i18nArray} allCars={allCars} lng={lng} searchParams={searchParams} /> : <></>;
+  return <Index i18nArray={i18nArray} lng={lng} searchParams={searchParams} />;
 }
 
 

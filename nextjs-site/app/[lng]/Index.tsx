@@ -1,6 +1,6 @@
 import Uri from 'jsuri';
 import { redirect, RedirectType } from 'next/navigation';
-import { StrapiResponseType, fetchPrice } from '../../functions/api';
+import { LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType, fetchPrice, fetchStrapi } from '../../functions/api';
 import { fullname } from '../../functions/cars';
 import { processEditParams, getCarParams } from '../../functions/url';
 import { Car } from '../../types/car';
@@ -13,18 +13,17 @@ import qs from 'qs';
 
 type IndexProps = {
   i18nArray: { [s: string]: string };
-  allCars: StrapiResponseType<Array<Car>>;
   lng: string;
   searchParams: URLSearchParams;
 }
-export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProps) => {
+export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
   // Retrieve URL params and set uri state, push new params to browser location
   let cars: Array<Car | undefined> = [];
   let uri;
   
   const queryString = qs.stringify(searchParams);
   const pathname = lng;
-  const relativePathWithParams = `${pathname}${queryString}`;
+  const relativePathWithParams = `${pathname}?${queryString}`;
   const initUri = new Uri(relativePathWithParams);
 
   // if edit=X parameter, save car to carX parameter
@@ -34,7 +33,7 @@ export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProp
     if (query.charAt(0) === '?') {
       query = query.slice(1);
     }
-    redirect(`${initUri.path}?${query}`, RedirectType.replace);
+    redirect(`/${pathname}?${query}`, RedirectType.replace);
   }
   uri = initUri;
 
@@ -42,14 +41,16 @@ export const Index = async ({ i18nArray, allCars, lng, searchParams }: IndexProp
   const carsInit: Array<Car | undefined> = [];
   const carParams = getCarParams(uri);
   if (carParams.length > 0) {
+    const filters = carParams.filter(Boolean).map((param, i) => `filters[id][$in][${i}]=${param?.carId}`).join('&');
+    const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}&${filters}`);
+
     // add missing params + save state
     // Priority to URL if user copy paste shared garage
-    const carParams = getCarParams(uri);
     carParams.forEach((param, idx) => {
       carsInit[idx] = undefined;
 
       if (param?.carId) {
-        const { carId, carLabel } = param;
+        const { carId } = param;
         const carIdNumber = parseInt(carId);
         if (!isNaN(carIdNumber)) {
           const foundCar = allCars.data

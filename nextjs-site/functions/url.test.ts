@@ -1,9 +1,9 @@
 import Uri from 'jsuri';
 import {describe, expect, it} from '@jest/globals';
-import { addCarsToParams, extractRelativePathWithParams, getCarParams } from './url';
+import { addCarsToParams, extractRelativePathWithParams, getCarParams, processEditParams } from './url';
 
-describe('getCarParams', () => {
-  it('returns query params from URL', () => {
+describe('URL functions tests', () => {
+  it('getCarParams returns query params from URL', () => {
     const uri = new Uri('http://test.com?car1=123456&car1-label=daily&car3=56789&car3-label=good%20car');
     const result = getCarParams(uri);
     expect(result).toHaveLength(3);
@@ -13,18 +13,14 @@ describe('getCarParams', () => {
     expect(result[2]?.carId).toBe('56789');
     expect(result[2]?.carLabel).toBe('good car');
   });
-});
 
-describe('getRelativePath', () => {
-  it('builds absolute path and retrieve relative path', () => {
+  it('getRelativePath builds absolute path and retrieve relative path', () => {
     const relative = '/car/1?param=2';
     const uri = new Uri(`http://www.test.com:8082${relative}`);
     expect(extractRelativePathWithParams(uri)).toBe(relative);
   });
-});
 
-describe('addCarsToParams', () => {
-  it('adds query params to URL from car data', () => {
+  it('addCarsToParams adds query params to URL from car data', () => {
     const uri = new Uri('http://test.com');
     const car = {
       id: 88888,
@@ -35,5 +31,11 @@ describe('addCarsToParams', () => {
     expect(params?.[0]?.carId).toBe(car.id);
     expect(params?.[0]?.carLabel).toBe(car.label);
   });
-});
 
+  it('processEditParams adds query params to URL from car data', () => {
+    const uri = new Uri('fr?edit=1&&car=3513');
+    const result = processEditParams(uri);
+    expect(result).toBeTruthy();
+    expect(uri.toString()).toBe('fr/?car1=3513');
+  });
+});

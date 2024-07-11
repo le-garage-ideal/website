@@ -33,9 +33,7 @@ export const ModelList = ({ listName, title, lng }: { listName: Array<Car>, titl
             name={car.model.name}
             image={car.imageFile?.formats?.thumbnail?.url ?? car.imageFile?.url}
             big
-            onClick={() => {
-              console.log(car.model.id);
-              
+            onClick={() => {              
               uri.setPath(`/${lng}/cars/${car.model.id}`);
               push(extractRelativePathWithParams(uri));
             }}

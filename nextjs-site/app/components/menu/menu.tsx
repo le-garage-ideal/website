@@ -24,7 +24,6 @@ const Menu = ({ i18nArray, lng }: { i18nArray: { [s: string]: string }; lng: str
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const searchParamsObject = Object.fromEntries(searchParams);
-  console.log('🚀 ~ Menu ~ searchParamsObject:', searchParamsObject);
 
   const [ savedGarages, setSavedGarages ] = useState<any[]>([]);
   useEffect(() => {

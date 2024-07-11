@@ -1,19 +1,13 @@
 import { I18nParamsType } from '../../../types/i18n';
 import { useTranslation } from '../../i18n';
-import { Chapters } from './chapters';
+import aboutStyles from './about.module.scss';
 
 export default async function About({ params: { lng } }: I18nParamsType) {
   const { t: i18n } = await useTranslation(lng, 'common');
 
-  const i18nArray = {
-    'pages.about.first_chapter': i18n('This is the first chapter'),
-    'pages.about.second_chapter': i18n('This is the second chapter'),
-    'pages.about.third_chapter': i18n('This is the third chapter'),
-  };
-
   return (
     <section
-      className="paragraph"
+      className={aboutStyles.paragraph}
       style={{
         minWidth: '300px',
         width: '70vw',
@@ -26,7 +20,9 @@ export default async function About({ params: { lng } }: I18nParamsType) {
         padding: '30px',
       }}
     >
-      <Chapters i18n={i18nArray} />
+      <div className={aboutStyles.sentence}>{ i18n('pages.about.first_chapter')}</div>
+      <div className={aboutStyles.sentence}>{ i18n('pages.about.second_chapter')}</div>
+      <div className={aboutStyles.sentence}>{ i18n('pages.about.third_chapter')}</div>
     </section>
   );
 }

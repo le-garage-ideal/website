@@ -38,6 +38,11 @@
   color: $text-extra-bright;
 }
 
+.link {
+  text-decoration: underline;
+  pointer-events: initial;
+}
+
 .bar {
   width: 0%; /* default value; will be computed later */
   height: 3px;

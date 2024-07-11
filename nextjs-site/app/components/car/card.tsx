@@ -18,9 +18,10 @@ type CardProps = {
   price: number;
   barPriceStyle: any;
   lng: string;
+  i18nArray: { [s: string]: string };
 };
 export const Card = ({
-  car, index, marginCard, price, barPriceStyle, lng,
+  car, index, marginCard, price, barPriceStyle, lng, i18nArray,
 }: PropsWithChildren<CardProps>) => {
   const classCard = [cardStyles.card];
   if (marginCard) {
@@ -75,7 +76,7 @@ export const Card = ({
           imageUrl={car.selectedFavcarsUrl}
           price={price}
           barPriceStyle={barPriceStyle}
-          lng={lng}
+          i18nArray={i18nArray}
         />
       );
       containerClassnames.push(cardStyles.specContainer)

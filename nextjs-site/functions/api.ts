@@ -77,17 +77,21 @@ export async function fetchPrice(car: Car | undefined): Promise<{ price: number;
       console.log('price from storage');
       price = parseFloat(storedPrice);
     } else {
-      console.log('fetching price');
-      const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ model }),
-      });
-      const data = await response.json();
-      //localStorage.setItem(model, data.price);
-      price = data.price;  
+      try {
+        console.log('fetching price');
+        const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ model }),
+        });
+        const data = await response.json();
+        //localStorage.setItem(model, data.price);
+        price = data.price;
+      } catch (err) {
+        console.error('Error fetching price', err);
+      }
     }
   }
   const barPriceStyle = price ? {

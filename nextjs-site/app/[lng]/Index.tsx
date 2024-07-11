@@ -84,6 +84,7 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
         price={price}
         barPriceStyle={barPriceStyle}
         lng={lng}
+        i18nArray={i18nArray}
       />
     );
     carElements.push(element);

@@ -1,5 +1,6 @@
+'use client';
 import Image from 'next/image';
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import listItemStyles from './list-item.module.scss';
 

@@ -1,24 +1,30 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import { buildGarageName, getSavedGarages } from '../../../functions/storage';
 import { eachCar } from '../../../functions/cars';
 import { labelKey } from '../../../functions/url';
 
 import menuStyles from './menu.module.scss';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
+const Menu = ({ i18nArray, lng }: { i18nArray: { [s: string]: string }; lng: string }) => {
   const [showMenu, setShowMenu] = useState(false);
 
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  }
+
   const { replace } = useRouter();
-  const query = {};
+  const searchParams = useSearchParams();
+  const searchParamsObject = Object.fromEntries(searchParams);
+  console.log('🚀 ~ Menu ~ searchParamsObject:', searchParamsObject);
 
   const [ savedGarages, setSavedGarages ] = useState<any[]>([]);
   useEffect(() => {
@@ -26,7 +32,7 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
   }, []);
   let garageMenuItems;
   if (savedGarages.length > 0) {
-    const savedGarageLabel = i18n['components.menu.saved_garages'];
+    const savedGarageLabel = i18nArray['components.menu.saved_garages'];
     const garageElements = [<div key="menu-label" className={menuStyles.menuLabel}>{ savedGarageLabel }</div>];
 
     savedGarages.forEach(garage => {
@@ -39,24 +45,25 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
         }
       });
       const onClick = () => {
-        replace(`?${qs.stringify({...garageParams})}`);
+        toggleMenu();
+        replace(`/${lng}?${qs.stringify({...garageParams})}`);
       }
       garageElements.push((
         <li key={garageName} className={menuStyles.menuItem}>
-          <Link href="#" onClick={onClick} className={menuStyles.menuLink}>{garageName}</Link>
+          <Link onClick={onClick} href="#" className={menuStyles.menuLink}>{garageName}</Link>
         </li>
       ));
     });
 
     garageMenuItems = (
       <>
-        <Link href={{ pathname: '/', query: { ...query } }} className={menuStyles.menuLink}>
-          { i18n['components.menu.garages'] }
+        <Link onClick={toggleMenu} href={{ pathname: `/${lng}`, query: { ...searchParamsObject } }} className={menuStyles.menuLink}>
+          { i18nArray['components.menu.garages'] }
         </Link>
         <ul className={menuStyles.menuSublist}>
           <li className={menuStyles.menuItem}>
-            <Link href={{ pathname: '/', query: { ...query } }} className={menuStyles.menuLink}>
-              { i18n['components.menu.current_garage'] }
+            <Link onClick={toggleMenu} href={{ pathname: `/${lng}`, query: { ...searchParamsObject } }} className={menuStyles.menuLink}>
+              { i18nArray['components.menu.current_garage'] }
             </Link>
           </li>
           { garageElements }
@@ -65,8 +72,8 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
     );
   } else {
     garageMenuItems = (
-      <Link href={{ pathname: '/', query: { ...query } }} className={menuStyles.menuLink}>
-        { i18n['components.menu.the_garage'] }
+      <Link onClick={toggleMenu} href={{ pathname: `/${lng}`, query: { ...searchParamsObject } }} className={menuStyles.menuLink}>
+        { i18nArray['components.menu.the_garage'] }
       </Link>
     );
   }
@@ -76,13 +83,12 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
     menuButtonClass.push(menuStyles.menuExpanded);
   }
 
-
   return (
     <>
       <button
         type="button"
         className={menuButtonClass.join(' ')}
-        onClick={() => setShowMenu(!showMenu)}
+        onClick={toggleMenu}
       >
         <FontAwesomeIcon icon={faBars} className={menuStyles.menuButtonIcon} />
       </button>
@@ -99,16 +105,16 @@ const Menu = ({ i18n }: { i18n: { [s: string]: string } }) => {
         <ul className={menuStyles.menuList}>
           <li className={menuStyles.menuItem}>{garageMenuItems}</li>
           <li className={menuStyles.menuItem}>
-            <Link href={{ pathname: '/cars', query: { ...query } }} className={menuStyles.menuLink}>
-              { i18n['components.menu.cars'] }
+            <Link onClick={toggleMenu} href={{ pathname: `/${lng}/cars`, query: { ...searchParamsObject } }} className={menuStyles.menuLink}>
+              { i18nArray['components.menu.cars'] }
             </Link>
           </li>
           <li className={menuStyles.menuItem}>
-            <Link href={{ pathname: '/about', query: { ...query } }} className={menuStyles.menuLink}>{ i18n['components.menu.about'] }</Link>
+            <Link onClick={toggleMenu} href={{ pathname: `/${lng}/about`, query: { ...searchParamsObject } }} className={menuStyles.menuLink}>{ i18nArray['components.menu.about'] }</Link>
           </li>
         </ul>
       </motion.aside>
-      { showMenu && <div className="backdrop" onClick={() => setShowMenu(false)}></div> }
+      { showMenu && <div className="backdrop" onClick={toggleMenu}></div> }
     </>
   );
 };

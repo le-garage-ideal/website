@@ -1,4 +1,4 @@
-@import '../theme.scss';
+@import '../../theme.scss';
 
 .carContent {
     align-self: center;
@@ -10,6 +10,14 @@
     margin: 0 30px 0 30px;
 }
 
+.carTitle {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 4px;
+    margin-top: 6px;
+}
+
 .iconButton, .carSelectionBox {
     color: $text-bright;
     margin-bottom: 5px;
@@ -19,7 +27,7 @@
     padding: 0 5px 0 5px;
     justify-content: center;
     display: flex;
-    flex-direction: column;
+    gap: 10px;
     align-items: center;
     box-sizing: border-box;
 }

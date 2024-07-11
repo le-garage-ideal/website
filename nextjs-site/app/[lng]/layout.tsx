@@ -33,7 +33,7 @@ export default async function RootLayout ({ children, params: { lng } }: PropsWi
           <div id="background" className="background" />
           <header className="appHeader">
             <div className="menu">
-              <Menu i18n={i18nArray} />
+              <Menu lng={lng} i18nArray={i18nArray} />
             </div>
           </header>
 

@@ -59,6 +59,8 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
           if (foundCar) {
             foundCar.label = fullname(foundCar);
             carsInit[idx] = foundCar;
+          } else {
+            console.log('Car not found', carIdNumber)
           }
         }
       }

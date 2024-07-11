@@ -1,6 +1,15 @@
+@import '../../theme.scss';
+
 .toastContainer {
   z-index: 3;
   font-size: small;
+  background-color: $dark-opaque;
+  color: $text-bright;
+  border-radius: 5px;
+  padding: 10px;
+  border-width: 1px;
+  border-color: $text-bright;
+  border-style: solid;
 }
 
 

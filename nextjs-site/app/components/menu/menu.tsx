@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, MouseEventHandler } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 import { motion } from 'framer-motion';
@@ -43,13 +43,14 @@ const Menu = ({ i18nArray, lng }: { i18nArray: { [s: string]: string }; lng: str
           garageParams[labelKey(carKey)] = garage[idx].label;
         }
       });
-      const onClick = () => {
+      const onClick = ((e) => {
+        e.preventDefault();
         toggleMenu();
         replace(`/${lng}?${qs.stringify({...garageParams})}`);
-      }
+      }) as MouseEventHandler;
       garageElements.push((
         <li key={garageName} className={menuStyles.menuItem}>
-          <Link onClick={onClick} href="#" className={menuStyles.menuLink}>{garageName}</Link>
+          <Link onClick={onClick} href="" className={menuStyles.menuLink}>{garageName}</Link>
         </li>
       ));
     });

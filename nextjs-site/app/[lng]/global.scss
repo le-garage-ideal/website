@@ -23,6 +23,8 @@ body {
 .main {
     width: 100%;
     margin-top: -60px;
+    display: flex;
+    flex-direction: column;
 }
 
 .overlay,
@@ -55,11 +57,11 @@ body {
     padding: $headerPadding;
     width: 100%;
     height: $headerHeight;
-    z-index: 1;
     box-sizing: border-box;
 }
 
 .menu {
+    z-index: 1;
     button {
         padding: 5px 10px;
     }

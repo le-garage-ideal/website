@@ -1,7 +1,7 @@
 "use client";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   FacebookShareButton,
@@ -17,7 +17,7 @@ import Uri from 'jsuri';
 import { Toast } from '../toast/toast';
 import { Car } from '../../../types/car';
 import { addCarsToParams } from '../../../functions/url';
-import { save } from '../../../functions/storage';
+import { buildGarageName, save } from '../../../functions/storage';
 import { useLocation } from '../../hooks/useLocation';
 import topButtonsStyles from './topButtons.module.scss';
 
@@ -35,6 +35,14 @@ export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
   const { saveOk, saveMessage } = saveState;
 
   const { replace } = useRouter();
+
+  useEffect(() => {
+    if (localStorage && cars) {
+      const currentGarageName = buildGarageName(cars);
+      const garageExist = !!localStorage.getItem(currentGarageName);
+      setSaveState({ saveOk: garageExist, saveMessage: undefined });
+    }
+  }, [cars]);
 
   // Click on garage save button
   const onSave = () => {
@@ -88,7 +96,7 @@ export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
           onClick={onSave}
           style={{ height: BUTTON_HEIGHT }}
         >
-          {!saveOk && <span className={topButtonsStyles.saveButtonIndicator}>·</span>}
+          {!saveOk && <span className={topButtonsStyles.saveButtonIndicator}>•</span>}
           <FontAwesomeIcon icon={faSave} />
         </button>
         <button
@@ -127,7 +135,7 @@ export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
         {saveMessage
           && (
             <div style={{ position: 'absolute' }}>
-              <Toast classNames={['is-success']}>{saveMessage}</Toast>
+              <Toast classNames={[]}>{saveMessage}</Toast>
             </div>
           )}
       </div>

@@ -47,9 +47,11 @@ export const Card = ({
 
   const { replace } = useRouter();
   const searchParams = useSearchParams();
+  const searchParamsObject = Object.fromEntries(searchParams);
+
   const onEdit = (e: MouseEvent) => {
     e.preventDefault();
-    replace(`/${lng}/brands?${ qs.stringify({ edit: index, ...searchParams }) }`)
+    replace(`/${lng}/brands?${ qs.stringify({ edit: index, ...searchParamsObject }) }`)
   };
 
   let divContent = null;

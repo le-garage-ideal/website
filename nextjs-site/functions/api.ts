@@ -67,36 +67,40 @@ export const formatStrapiObjects = <T> (strapiObject: any): T => {
 
 
 export async function fetchPrice(car: Car | undefined): Promise<{ price: number; barPriceStyle: any }> {
-  const PRICE_MAX = 500000; // max 500k€ else overflow
+  const PRICE_MAX = 200000; // max 200k€ else overflow
   let price;
   if (car) {
     const model = `${car?.model.brand} ${car.variant}${` year ${car.startYear}` ?? ""}`;
-    //const storedPrice = localStorage.getItem(model);
-    let storedPrice = null;
-    if (storedPrice) {
-      console.log('price from storage');
-      price = parseFloat(storedPrice);
-    } else {
-      try {
-        console.log('fetching price');
-        const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ model }),
-        });
-        const data = await response.json();
-        //localStorage.setItem(model, data.price);
-        price = data.price;
-      } catch (err) {
-        console.error('Error fetching price', err);
-      }
+
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model }),
+      });
+      const data = await response.json();
+
+      price = data.price;
+    } catch (err) {
+      console.error('Error fetching price', err);
     }
   }
-  const barPriceStyle = price ? {
-    width: `${(price * 100) / PRICE_MAX}%`,
-  } : undefined;
+
+  let barPriceStyle = undefined;
+  if (price) {
+    if (price > PRICE_MAX) {
+      barPriceStyle = {
+        width: '100%'
+      };
+    } else {
+      barPriceStyle = {
+        width: `${(price * 100) / PRICE_MAX}%`,
+      };
+    }
+  }
+
   return { price, barPriceStyle };
 }
 

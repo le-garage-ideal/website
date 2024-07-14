@@ -79,6 +79,7 @@ export const Card = ({
           price={price}
           barPriceStyle={barPriceStyle}
           i18nArray={i18nArray}
+          lng={lng}
         />
       );
       containerClassnames.push(cardStyles.specContainer)

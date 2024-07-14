@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "npx tsc",
-    "start": "npmx tsc & node dist/app.js",
+    "start": "npx tsc & node dist/app.js",
     "dev": "ts-node-dev app.ts"
   },
   "dependencies": {

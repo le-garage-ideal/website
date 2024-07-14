@@ -41,6 +41,7 @@
 .link {
   text-decoration: underline;
   pointer-events: initial;
+  color: $text-medium;
 }
 
 .bar {
@@ -62,7 +63,7 @@
 }
 
 .barPrice {
-  background-color: blue;
+  background-color: lightgreen;
 }
 
 .barTitle {

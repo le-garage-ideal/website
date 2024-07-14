@@ -12,8 +12,9 @@ type SpecProps = {
   barPriceStyle: any;
   imageUrl?: string;
   i18nArray: { [s:string]: string };
+  lng: string;
 };
-export default function Spec({ car, price, barPriceStyle, imageUrl, i18nArray }: SpecProps) {
+export default function Spec({ car, price, barPriceStyle, imageUrl, i18nArray, lng }: SpecProps) {
   const { power, weight, officialWeight } = car;
 
   const theWeight = weight || officialWeight;
@@ -72,15 +73,20 @@ export default function Spec({ car, price, barPriceStyle, imageUrl, i18nArray }:
             <div className={specStyles.barTitle}>
             <legend>{i18nArray['components.spec.price']}</legend>
             <span>
-              <span>{price}</span>
-              €
+              <span>{new Intl.NumberFormat(lng, { style: 'currency', currency: lng === 'fr' ? 'EUR' : 'USD', minimumFractionDigits: 0 }).format(price)}</span>
             </span>
             </div><div className={[specStyles.bar, specStyles.barPrice].join(' ')} style={barPriceStyle} />
           </>
         )}
         <legend>
           Source :&nbsp;
-          <a className={specStyles.link} href="http://weightcars-fr.com">weightcars-fr.com</a>
+          <a className={specStyles.link} href="http://weightcars-fr.com">Weightcars-fr.com</a>
+          { price && (
+            <>
+              &nbsp;-&nbsp;
+              <a className={specStyles.link} href="https://openai.com">Open AI</a>
+            </>
+          )}
         </legend>
         {typeof imageOrigin === 'string' && (
           <legend>

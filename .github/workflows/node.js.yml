@@ -19,26 +19,26 @@ jobs:
         node-version: [20.x]
   
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build Next
-      working-directory: nextjs-site
-      run: | 
-        mv .env.sample .env
-        npm install
-        npm run build
+    # - name: Build Next
+    #   working-directory: nextjs-site
+    #   run: | 
+    #     mv .env.sample .env
+    #     npm install
+    #     npm run build
 
-    - name: Build LLM-API
+    - name: Compile LLM-API
       working-directory: llm-api
       run: | 
         npm install
         npm run build
 
-    - name: Build LLM-API
+    - name: Compile LLM-API
       working-directory: strapi-cms
       run: | 
         npm install

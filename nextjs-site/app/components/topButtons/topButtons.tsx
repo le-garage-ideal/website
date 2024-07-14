@@ -110,7 +110,6 @@ export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
         </button>
         <div title={shareWithLabelFacebook}>
           <FacebookShareButton
-            quote={i18n['components.layout.share_title']}
             url={location ?? ''}
           >
             <FacebookIcon size={BUTTON_HEIGHT} />

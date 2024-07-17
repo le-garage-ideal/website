@@ -14,6 +14,7 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  productionBrowserSourceMaps: true,
 }
 
 module.exports = nextConfig

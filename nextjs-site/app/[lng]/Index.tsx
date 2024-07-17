@@ -42,7 +42,7 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
   const carParams = getCarParams(uri);
   if (carParams.length > 0) {
     const filters = carParams.filter(Boolean).map((param, i) => `filters[id][$in][${i}]=${param?.carId}`).join('&');
-    const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}&${filters}`);
+    const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}${filters ? `&${filters}` : ''}`) as StrapiResponseType<Array<Car>>;
 
     // add missing params + save state
     // Priority to URL if user copy paste shared garage

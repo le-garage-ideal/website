@@ -1,4 +1,4 @@
-@import '../../../styles/theme.scss';
+@import '../../theme.scss';
 
 .imageLink {
   display: flex;
@@ -38,6 +38,12 @@
   color: $text-extra-bright;
 }
 
+.link {
+  text-decoration: underline;
+  pointer-events: initial;
+  color: $text-medium;
+}
+
 .bar {
   width: 0%; /* default value; will be computed later */
   height: 3px;
@@ -57,7 +63,7 @@
 }
 
 .barPrice {
-  background-color: blue;
+  background-color: lightgreen;
 }
 
 .barTitle {

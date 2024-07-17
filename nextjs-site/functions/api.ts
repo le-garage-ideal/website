@@ -1,3 +1,5 @@
+import { Car } from "../types/car";
+
 type MetaType = {
   pagination: {
       page: number,
@@ -7,18 +9,18 @@ type MetaType = {
   },
 };
 export type StrapiResponseType<T> = { data: T, meta: MetaType };
-export const fetchStrapi = <T> (path: string, body?: any): Promise<void | StrapiResponseType<T>> => {
+export const fetchStrapi = async <T> (path: string, body?: any): Promise<StrapiResponseType<T>> => {
   const url = `${process.env.STRAPI_BASE_API_URL}/${path}`;
-  return fetch(
-    url,
-    {
-      method: 'GET',
-      headers: {Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
-      body,
-    },
-  })
-  .then((res) => res.json())
-  .then(({ data, meta }) => {
+  try {
+    const res = await fetch(
+      url,
+      {
+        method: 'GET',
+        headers: {Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+        body,
+      },
+    });
+    const { data, meta } = await res.json()
     if (Array.isArray(data)) {
       return {
         data: data.map(formatStrapiObjects),
@@ -30,14 +32,13 @@ export const fetchStrapi = <T> (path: string, body?: any): Promise<void | Strapi
         meta,
       } as any as StrapiResponseType<T>;
     }
-  })
-  .catch((err) => {
+  } catch (err: any) {
     if (err.isAxiosError) {
-      console.error(`Error ${url} ${process.env.STRAPI_TOKEN}`, err?.response?.data?.error?.message);
+      throw new Error(`Error ${url} ${process.env.STRAPI_TOKEN}`, err?.response?.data?.error?.message);
     } else {
-      console.error(`Error ${url} ${process.env.STRAPI_TOKEN}`, err);
+      throw new Error(`Error ${url} ${process.env.STRAPI_TOKEN}`, err);
     }
-  });
+  }
 }
 
 export const formatStrapiObjects = <T> (strapiObject: any): T => {
@@ -64,9 +65,48 @@ export const formatStrapiObjects = <T> (strapiObject: any): T => {
   return res;
 };
 
+
+export async function fetchPrice(car: Car | undefined): Promise<{ price: number; barPriceStyle: any }> {
+  const PRICE_MAX = 200000; // max 200k€ else overflow
+  let price;
+  if (car) {
+    const model = `${car?.model.brand} ${car.variant}${` year ${car.startYear}` ?? ""}`;
+
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_AI_BASE_API_URL as string, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model }),
+      });
+      const data = await response.json();
+
+      price = data.price;
+    } catch (err) {
+      console.error('Error fetching price', err);
+    }
+  }
+
+  let barPriceStyle = undefined;
+  if (price) {
+    if (price > PRICE_MAX) {
+      barPriceStyle = {
+        width: '100%'
+      };
+    } else {
+      barPriceStyle = {
+        width: `${(price * 100) / PRICE_MAX}%`,
+      };
+    }
+  }
+
+  return { price, barPriceStyle };
+}
+
 export const POPULATE_CARS_PARAMS = 'populate=deep';
 export const LIMIT_BRANDS_PARAMS = 'pagination[limit]=200';
 export const LIMIT_MODELS_PARAMS = 'pagination[limit]=1000';
-export const LIMIT_CARS_PARAMS = 'pagination[limit]=5000';
+export const LIMIT_CARS_PARAMS = 'pagination[limit]=500';
 export const LIMIT_MODELS_PER_BRAND_PARAMS = 'pagination[limit]=200';
 export const LIMIT_CARS_PER_MODEL_PARAMS = 'pagination[limit]=200';

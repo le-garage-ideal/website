@@ -16,31 +16,30 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [20.x]
   
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build Gatsby
-      working-directory: gatsby-site
+    # - name: Build Next
+    #   working-directory: nextjs-site
+    #   run: | 
+    #     mv .env.sample .env
+    #     npm install
+    #     npm run build
+
+    - name: Compile LLM-API
+      working-directory: llm-api
       run: | 
-        echo "module.exports.mongodbPassword = '${{ secrets.MONGODB_PASSWORD }}';" > passwords.js
         npm install
         npm run build
 
-    - name: Simple FTP deploy
-      uses: kevinpainchaud/simple-ftp-deploy-action@v1.2.1
-      with:
-        ftp_host: ${{ secrets.DEPLOY_HOST }}
-        ftp_username: ${{ secrets.DEPLOY_ACCOUNT }}
-        ftp_password: ${{ secrets.DEPLOY_PASSWORD }}
-        local_source_dir: "gatsby-site/public"
-        dist_target_dir: ${{ secrets.DEPLOY_DIR}}
-        delete: "true"
-        only_newer: "true"
-        ignore_time: "true"
-
+    - name: Compile LLM-API
+      working-directory: strapi-cms
+      run: | 
+        npm install
+        npm run build

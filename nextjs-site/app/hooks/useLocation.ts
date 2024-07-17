@@ -1,16 +1,14 @@
-import { useRouter } from "next/router";
+'use client';
 import { useEffect, useState } from "react";
-import { useIsClient } from "./useIsClient";
 
 export const useLocation = () => {
-  const { asPath, locale, query } = useRouter();
-  const isClient = useIsClient();
-  const [location, setLocation] = useState<string>();
+  const [currentUrl, setCurrentUrl] = useState('');
   useEffect(() => {
-    if (isClient) {
-      const newLocation = `${window.location.origin}/${locale}${asPath}`;
-      setLocation(newLocation);
+    // Check if the code is running on the client side
+    if (process) {
+      // Access the current page URL using window.location
+      setCurrentUrl(window.location.href);
     }
-  }, [isClient, asPath, locale, query, location])
-  return {location};
+  }, []);
+  return { location: currentUrl };
 };

@@ -1,4 +1,4 @@
-@import '../../../styles/theme.scss';
+@import '../../theme.scss';
 
 .card {
     display: flex;
@@ -62,6 +62,9 @@ $cardWith: 30vw;
     display: flex;
     justify-content: center;
     position: relative;
+    // Spec is wrapped into a <a> element
+    text-decoration: none;
+    pointer-events: none;
 }
 
 .emptyContainer {

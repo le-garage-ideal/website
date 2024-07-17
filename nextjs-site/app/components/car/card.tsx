@@ -1,20 +1,27 @@
+'use client';
 import React, { PropsWithChildren, useState, MouseEvent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import cardStyles from './card.module.scss';
 import { Car } from '../../../types/car';
 import Spec from './spec';
 import { fullname } from '../../../functions/cars';
+import qs from 'qs';
 
 type CardProps = {
   marginCard?: boolean;
   car?: Car;
   index: number;
-  OnCardEdit?: (index: number) => void;
+  price: number;
+  barPriceStyle: any;
+  lng: string;
+  i18nArray: { [s: string]: string };
 };
 export const Card = ({
-  car, index, marginCard, OnCardEdit,
+  car, index, marginCard, price, barPriceStyle, lng, i18nArray,
 }: PropsWithChildren<CardProps>) => {
   const classCard = [cardStyles.card];
   if (marginCard) {
@@ -38,11 +45,13 @@ export const Card = ({
     setImageView(!imageView);
   };
 
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
+  const searchParamsObject = Object.fromEntries(searchParams);
+
   const onEdit = (e: MouseEvent) => {
     e.preventDefault();
-    if (OnCardEdit) {
-      OnCardEdit(index);
-    }
+    replace(`/${lng}/brands?${ qs.stringify({ edit: index, ...searchParamsObject }) }`)
   };
 
   let divContent = null;
@@ -67,6 +76,10 @@ export const Card = ({
         <Spec
           car={car}
           imageUrl={car.selectedFavcarsUrl}
+          price={price}
+          barPriceStyle={barPriceStyle}
+          i18nArray={i18nArray}
+          lng={lng}
         />
       );
       containerClassnames.push(cardStyles.specContainer)
@@ -84,7 +97,7 @@ export const Card = ({
       className={["icon-button", cardStyles.iconButton, cardStyles.editButton].join(' ')}
       onClick={onEdit}
     >
-      <FontAwesomeIcon icon="edit" />
+      <FontAwesomeIcon icon={faEdit} />
     </button>
   );
 
@@ -113,7 +126,7 @@ export const Card = ({
                 className={["icon-button", cardStyles.iconButton, cardStyles.labelEditButton].join(' ')}
                 onClick={switchView}
               >
-                <FontAwesomeIcon icon="exchange-alt" />
+                <FontAwesomeIcon icon={faExchangeAlt} />
               </button>
               { editButton }
             </div>

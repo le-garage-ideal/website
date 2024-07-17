@@ -1,0 +1,67 @@
+@import '../../theme.scss';
+
+.menuButton {
+    background-color: $dark-opaque;
+}
+
+.menuButton:hover {
+    background-color: $dark-transparent;
+}
+
+.menuButtonIcon {
+    height: 20px; // fix size unless when loading svg take the full page (?)
+}
+
+.menuExpanded {
+    padding: 5px 10px;
+    width: 100%;
+    text-align: left;
+}
+
+.menuContainer {
+    background-color: $dark-opaque;
+    padding: 10px;
+    position: absolute;
+    z-index: 3;
+    font-size: 1rem;
+}
+
+.menuList {
+    line-height: 1.25;
+    padding: 0;
+}
+
+.menuItem {
+    line-height: 1.25;
+    margin: 1em;
+}
+
+.menuLink {
+    text-decoration: none;
+    padding: .5em .75em;
+    color: $text-bright!important;
+    &:hover {
+        color: $text-dark!important;
+    }
+}
+
+.menuSublist {
+    line-height: 1.25;
+    border-left: 1px solid #dbdbdb;
+    margin: .75em;
+    padding-left: .75em;
+}
+
+.menuLabel {
+  color: #7a7a7a;
+  font-size: .75em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.menuLabel:not(:first-child) {
+    margin-top: 1em;
+}
+

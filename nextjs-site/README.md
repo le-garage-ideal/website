@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run strapi-cms project.
+First, run the `strapi-cms` and the `llm-api` projects.
 Then create a .env file from .env.sample, and configure all required variables to access Strapi.
 Then run the development server:
 

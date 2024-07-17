@@ -1,11 +1,11 @@
-@import '../../../styles/theme.scss';
+@import '../../theme.scss';
 
 .titleContainer {
     width: auto;
     align-self: center;
     margin-top: 10px;
     margin-bottom: 20px;
-    padding: 30px 0px;
+    padding: 20px 0px;
     width: 30vw;
     max-width: 1000px;
     border-radius: 10px;
@@ -29,6 +29,7 @@
 .subTitle {
     color: $text-bright;
     padding: 0px 10px;
+    margin: 0px;
 }
 
 
@@ -39,7 +40,7 @@
     .titleContainer {
         width: 95%;
         max-width: 95%;
-        margin: 60px 10px 0px 10px;
+        margin: 60px 0px 0px 0px;
         padding: 5px;
     }
 }

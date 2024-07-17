@@ -1,0 +1,11 @@
+@import '../../theme.scss';
+
+.paragraph {
+    color: $text-bright;
+    background-color: $dark-opaque;
+    padding: 15px;
+}
+
+.sentence {
+    margin-bottom: 30px;
+}

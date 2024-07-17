@@ -10,11 +10,11 @@ export const router = express.Router();
 dotenv.config();
 
 interface PriceResponse{
-  price: string;
+  price: number;
 }
 const formatInstructions = "Respond with a valid JSON object, containing one field: 'price' which is the price of the car in euros";
 const parser = new JsonOutputParser<PriceResponse>();
-const model = new ChatOpenAI({ model: "gpt-3.5-turbo" });
+const model = new ChatOpenAI({ model: "gpt-4o" });
 
 const prompt = ChatPromptTemplate.fromTemplate("Anwser the user query.\n{format_instructions}\nGive the average price for the following car: {car_model}");
 
@@ -26,6 +26,7 @@ router.post('/', async function(req: Request, res: Response) {
   const chain = partialPrompt.pipe(model).pipe(parser);
   const promptArgs = { car_model: req.body.model };
   const modelResponse = await chain.invoke(promptArgs);
+
   res.json(modelResponse);
 });
 

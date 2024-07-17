@@ -1,0 +1,33 @@
+.shareButtonsBar {
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+  justify-content: flex-end;
+  padding-right: 10px;
+  padding-top: 10px;
+}
+
+.saveButton, .customShareButton {
+  padding: 0px 10px!important;
+  margin: 0px 0px 0px 10px;
+  width: 40px;
+}
+
+.customShareButton {
+  background-color: darkblue;
+}
+
+.saveButton:not([disabled]) {
+  position: relative;
+  background-color: green;
+}
+
+.saveButtonIndicator {
+  position: absolute;
+  z-index: 8;
+  top: -7px;
+  right: 2px;
+  font-size: 1em;
+  color: orange;
+}
+

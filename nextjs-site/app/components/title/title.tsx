@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
+'use client';
 import { motion } from 'framer-motion';
 import titleStyles from './title.module.scss';
-import { useTranslation} from 'next-i18next';
 
-export const Title = () => {
-  const { t: i18n } = useTranslation();
+export const Title = ({ i18n }: { i18n: { [s: string]: string } }) => {
   const titleAnimation = {
     backgroundImage: [
       'linear-gradient(to right, #EEE, #666, #444)',
@@ -27,10 +25,10 @@ export const Title = () => {
           animate={titleAnimation}
           transition={titleTransition}
         >
-          { i18n('components.title.title') }
+          { i18n['components.title.title'] }
         </motion.div>
       </h1>
-      <h4 className={titleStyles.subTitle}>{ i18n('components.title.subtitle') }</h4>
+      <h4 className={titleStyles.subTitle}>{ i18n['components.title.subtitle'] }</h4>
     </div>
   );
 };

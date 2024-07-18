@@ -1,10 +1,4 @@
 
-import { Car } from '../../types/car';
-import {
-  fetchStrapi,
-  LIMIT_CARS_PARAMS,
-  POPULATE_CARS_PARAMS
-} from '../../functions/api';
 import { useTranslation } from '../i18n';
 import { Index } from './Index';
 import { I18nParamsType } from '../../types/i18n';

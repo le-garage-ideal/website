@@ -37,7 +37,7 @@ export const TopButtons = ({ cars, i18n }: TopButtonsProps) => {
   const { replace } = useRouter();
 
   useEffect(() => {
-    if (localStorage && cars) {
+    if (localStorage && cars?.length) {
       const currentGarageName = buildGarageName(cars);
       const garageExist = !!localStorage.getItem(currentGarageName);
       setSaveState({ saveOk: garageExist, saveMessage: undefined });

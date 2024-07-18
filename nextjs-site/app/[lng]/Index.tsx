@@ -1,8 +1,7 @@
 import Uri from 'jsuri';
-import { redirect, RedirectType } from 'next/navigation';
 import { LIMIT_CARS_PARAMS, POPULATE_CARS_PARAMS, StrapiResponseType, fetchPrice, fetchStrapi } from '../../functions/api';
 import { fullname } from '../../functions/cars';
-import { processEditParams, getCarParams } from '../../functions/url';
+import { getCarParams } from '../../functions/url';
 import { Car } from '../../types/car';
 import { Card } from '../components/car/card';
 import { Title } from '../components/title/title';
@@ -19,23 +18,11 @@ type IndexProps = {
 export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
   // Retrieve URL params and set uri state, push new params to browser location
   let cars: Array<Car | undefined> = [];
-  let uri;
   
   const queryString = qs.stringify(searchParams);
   const pathname = lng;
   const relativePathWithParams = `${pathname}?${queryString}`;
-  const initUri = new Uri(relativePathWithParams);
-
-  // if edit=X parameter, save car to carX parameter
-  const paramsChanged = processEditParams(initUri);
-  if (paramsChanged) {
-    let query = initUri.query();
-    if (query.charAt(0) === '?') {
-      query = query.slice(1);
-    }
-    redirect(`/${pathname}?${query}`, RedirectType.replace);
-  }
-  uri = initUri;
+  const uri = new Uri(relativePathWithParams);
 
   // Retrieve cars data and set cars state
   const carsInit: Array<Car | undefined> = [];
@@ -59,8 +46,9 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
           if (foundCar) {
             foundCar.label = fullname(foundCar);
             carsInit[idx] = foundCar;
+            console.log('Car found', foundCar.variant)
           } else {
-            console.log('Car not found', carIdNumber)
+            console.error('Car not found', carIdNumber)
           }
         }
       }

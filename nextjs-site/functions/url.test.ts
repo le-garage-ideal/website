@@ -31,11 +31,4 @@ describe('URL functions tests', () => {
     expect(params?.[0]?.carId).toBe(car.id);
     expect(params?.[0]?.carLabel).toBe(car.label);
   });
-
-  it('processEditParams adds query params to URL from car data', () => {
-    const uri = new Uri('fr?edit=1&&car=3513');
-    const result = processEditParams(uri);
-    expect(result).toBeTruthy();
-    expect(uri.toString()).toBe('fr/?car1=3513');
-  });
 });

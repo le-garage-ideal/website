@@ -29,8 +29,8 @@ export const CarList = ({ cars, i18nArray, numberOfCars, lng }: CarListProps) =>
   const [selectedCar, setSelectedCar] = useState<number>();
 
   const validateCar = (index: number, id: number | string) => {
-    uri.addQueryParam('car', id);
-    uri.addQueryParam('edit', `${index}`);
+    uri.addQueryParam(`car${index}`, id);
+    uri.deleteQueryParam('edit');
     uri.setPath(lng);
     const path = extractRelativePathWithParams(uri);
     push(path);

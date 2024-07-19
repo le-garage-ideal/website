@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Uri from "jsuri";
 import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { extractRelativePathWithParams } from "../../../functions/url";
 import { Car } from "../../../types/car";

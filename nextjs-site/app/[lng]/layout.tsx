@@ -21,7 +21,7 @@ export default async function RootLayout ({ children, params: { lng } }: PropsWi
   
   const footer = (
     <footer className="appFooter">
-      <span suppressHydrationWarning>{i18n('components.layout.footer')}</span>
+      <span suppressHydrationWarning>${process.env?.version ?? ''} {i18n('components.layout.footer')}</span>
     </footer>
   );
 

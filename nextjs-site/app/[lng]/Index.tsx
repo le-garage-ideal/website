@@ -27,6 +27,7 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
   // Retrieve cars data and set cars state
   const carsInit: Array<Car | undefined> = [];
   const carParams = getCarParams(uri);
+  console.log('carParams.length', carParams.length);    
   if (carParams.length > 0) {
     const filters = carParams.filter(Boolean).map((param, i) => `filters[id][$in][${i}]=${param?.carId}`).join('&');
     const allCars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}${filters ? `&${filters}` : ''}`) as StrapiResponseType<Array<Car>>;
@@ -34,16 +35,21 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
     // add missing params + save state
     // Priority to URL if user copy paste shared garage
     carParams.forEach((param, idx) => {
+      console.log('param idx', param, idx);    
       carsInit[idx] = undefined;
 
       if (param?.carId) {
+        console.log('param?.carId', param?.carId);    
         const { carId } = param;
         const carIdNumber = parseInt(carId);
         if (!isNaN(carIdNumber)) {
+          console.log('!isNaN(carIdNumber)', !isNaN(carIdNumber));    
           const foundCar = allCars.data
             .find((car) => car.id === carIdNumber) as Car;
 
           if (foundCar) {
+            console.log('foundCar idx', foundCar, idx);
+            
             foundCar.label = fullname(foundCar);
             carsInit[idx] = foundCar;
             console.log('Car found', foundCar.variant)

@@ -18,8 +18,10 @@ type IndexProps = {
 export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
   // Retrieve URL params and set uri state, push new params to browser location
   let cars: Array<Car | undefined> = [];
+
+  const searchParamValue = await searchParams;
   
-  const queryString = qs.stringify(searchParams);
+  const queryString = qs.stringify(searchParamValue);
   const pathname = lng;
   const relativePathWithParams = `${pathname}?${queryString}`;
   const uri = new Uri(relativePathWithParams);
@@ -31,7 +33,7 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
   if (carParams.length > 0) {
     const filters = carParams.filter(Boolean).map((param, i) => `filters[id][$in][${i}]=${param?.carId}`).join('&');
     let allCars: StrapiResponseType<Array<Car>>;
-    const url = `${process.env.STRAPI_BASE_API_URL}/cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}${filters ? `&${filters}` : ''}`;
+    const url = `cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}${filters ? `&${filters}` : ''}`;
     try {
       allCars = await fetchStrapi<Array<Car>>(url) as StrapiResponseType<Array<Car>>;
     } catch (error) {

@@ -3,7 +3,8 @@ import { useTranslation } from '../i18n';
 import { Index } from './Index';
 import { I18nParamsType } from '../../types/i18n';
 
-export default async function IndexPage({ params: { lng }, searchParams }: { searchParams: URLSearchParams } & I18nParamsType) {
+export default async function IndexPage({ params, searchParams }: { searchParams: URLSearchParams } & I18nParamsType) {
+  const { lng } = await params;
   const { t: i18n } = await useTranslation(lng, 'common');
 
   const i18nArray = [

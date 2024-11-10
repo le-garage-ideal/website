@@ -5,7 +5,8 @@ import { BrandList } from './BrandList';
 import { I18nParamsType } from '../../../types/i18n';
 
 export default async function Brands({ params }: I18nParamsType) {
-  const { t: i18n } = await useTranslation(params.lng ?? 'en', 'common');
+  const { lng } = await params;
+  const { t: i18n } = await useTranslation(lng ?? 'en', 'common');
   const brands = await fetchStrapi<Array<Brand>>(`brands?populate=*&${LIMIT_BRANDS_PARAMS}`);
-  return <BrandList brands={brands.data} title={i18n('pages.brands.list_title') } lng={params.lng} />;
+  return <BrandList brands={brands.data} title={i18n('pages.brands.list_title') } lng={lng} />;
 }

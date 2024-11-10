@@ -13,7 +13,8 @@ type CarsProps = {
     lng: string;
   }
 };
-export default async function Cars({ params: { lng } }: CarsProps) {
+export default async function Cars({ params }: CarsProps) {
+  const { lng } = await params;
   const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&${LIMIT_CARS_PARAMS}`);
   const completeCarList = cars.data.sort(sortCars);
 

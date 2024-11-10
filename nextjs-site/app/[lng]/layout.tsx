@@ -8,7 +8,8 @@ import { I18nParamsType } from '../../types/i18n';
 import './global.scss';
 
 
-export default async function RootLayout ({ children, params: { lng } }: PropsWithChildren<I18nParamsType>) {
+export default async function RootLayout ({ children, params }: PropsWithChildren<I18nParamsType>) {
+  const { lng } = await params;
   const { t: i18n } = await useTranslation(lng, 'common');
   const i18nArray = {
     'components.menu.saved_garages': i18n('components.menu.saved_garages'),

@@ -2,7 +2,8 @@ import { I18nParamsType } from '../../../types/i18n';
 import { useTranslation } from '../../i18n';
 import aboutStyles from './about.module.scss';
 
-export default async function About({ params: { lng } }: I18nParamsType) {
+export default async function About({ params }: I18nParamsType) {
+  const { lng } = await params;
   const { t: i18n } = await useTranslation(lng, 'common');
 
   return (

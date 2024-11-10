@@ -12,15 +12,16 @@ import { ModelList } from './modelList';
 import { I18nParamsType } from '../../../../types/i18n';
 
 export default async function Models({ params }: { params: { brand: string }} & I18nParamsType) {
-  const { t: i18n } = await useTranslation(params.lng ?? 'en', 'common');
+  const { lng, brand: brandId } = await params;
+  const { t: i18n } = await useTranslation(lng ?? 'en', 'common');
 
-  const brand = await fetchStrapi<Brand>(`brands/${params.brand}?populate=*`);
+  const brand = await fetchStrapi<Brand>(`brands/${brandId}?populate=*`);
   if (!brand) {
-    throw new Error(`No brand for [brand] param ${params.brand}`);
+    throw new Error(`No brand for [brand] param ${brandId}`);
   }
   const cars = await fetchStrapi<Array<Car>>(`cars?${POPULATE_CARS_PARAMS}&filters[model][brand][id][$eq]=${brand.data.id}&${LIMIT_MODELS_PER_BRAND_PARAMS}`);
   if (!cars?.data.length) {
-    throw new Error(`No cars for [brand] param ${params.brand}`);
+    throw new Error(`No cars for [brand] param ${brandId}`);
   }
 
   const listName: Array<Car> = cars
@@ -36,5 +37,5 @@ export default async function Models({ params }: { params: { brand: string }} & 
   const title = i18n('templates.models.title')
     .replace('{brand}', brand.data.name);
 
-  return <ModelList listName={listName} title={title} lng={params.lng} />;
+  return <ModelList listName={listName} title={title} lng={lng} />;
 };

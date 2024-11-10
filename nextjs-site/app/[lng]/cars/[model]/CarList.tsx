@@ -27,7 +27,8 @@ export const CarList = ({ cars, title, lng }: { cars: Array<Car>; title: string,
           image={car.imageFile?.formats?.thumbnail?.url ?? car.imageFile?.url}
           big
           onClick={() => {
-            uri.addQueryParam('car', car.id);
+            const carIndex = uri.getQueryParamValue('edit');
+            uri.addQueryParam(`car${carIndex}`, car.id);
             uri.setPath(lng);
             const path = extractRelativePathWithParams(uri);
             push(path);

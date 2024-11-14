@@ -3,8 +3,9 @@ import { useTranslation } from '../i18n';
 import { Index } from './Index';
 import { I18nParamsType } from '../../types/i18n';
 
-export default async function IndexPage({ params, searchParams }: { searchParams: URLSearchParams } & I18nParamsType) {
+export default async function IndexPage({ params, searchParams }: { searchParams: Promise<URLSearchParams> } & I18nParamsType) {
   const { lng } = await params;
+  const urlSearchParams = await searchParams;
   const { t: i18n } = await useTranslation(lng, 'common');
 
   const i18nArray = [
@@ -33,7 +34,7 @@ export default async function IndexPage({ params, searchParams }: { searchParams
     return obj;
   }, {} as { [s: string]: string });
 
-  return <Index i18nArray={i18nArray} lng={lng} searchParams={searchParams} />;
+  return <Index i18nArray={i18nArray} lng={lng} searchParams={urlSearchParams} />;
 }
 
 

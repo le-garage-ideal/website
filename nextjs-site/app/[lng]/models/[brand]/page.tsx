@@ -9,9 +9,8 @@ import {
 import { Brand } from '../../../../types/brand';
 import { useTranslation } from '../../../i18n';
 import { ModelList } from './modelList';
-import { I18nParamsType } from '../../../../types/i18n';
 
-export default async function Models({ params }: { params: { brand: string }} & I18nParamsType) {
+export default async function Models({ params }: { params: Promise<{ brand: string; lng: string }> }) {
   const { lng, brand: brandId } = await params;
   const { t: i18n } = await useTranslation(lng ?? 'en', 'common');
 

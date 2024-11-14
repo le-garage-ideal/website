@@ -9,6 +9,7 @@ import { TopButtons } from '../components/topButtons/topButtons';
 
 import indexStyles from './page.module.scss';
 import qs from 'qs';
+import { Suspense } from 'react';
 
 type IndexProps = {
   i18nArray: { [s: string]: string };
@@ -102,7 +103,7 @@ export const Index = async ({ i18nArray, lng, searchParams }: IndexProps) => {
       <section className={indexStyles.mainSection}>
         <Title i18n={i18nArray} />
         <article className={indexStyles.carsContainer}>
-          {carElements}
+          <Suspense>{carElements}</Suspense>
         </article>
       </section>
     </>

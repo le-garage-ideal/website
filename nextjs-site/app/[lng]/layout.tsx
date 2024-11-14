@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import Menu from '../components/menu/menu';
@@ -34,7 +34,7 @@ export default async function RootLayout ({ children, params }: PropsWithChildre
           <div id="background" className="background" />
           <header className="appHeader">
             <div className="menu">
-              <Menu lng={lng} i18nArray={i18nArray} />
+              <Suspense><Menu lng={lng} i18nArray={i18nArray} /></Suspense>
             </div>
           </header>
 

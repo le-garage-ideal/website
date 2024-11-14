@@ -9,9 +9,7 @@ import { useTranslation } from '../../i18n';
 import { CarList } from './CarList';
 
 type CarsProps = {
-  params: {
-    lng: string;
-  }
+  params: Promise<{ lng: string; }>;
 };
 export default async function Cars({ params }: CarsProps) {
   const { lng } = await params;

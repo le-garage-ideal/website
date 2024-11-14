@@ -6,14 +6,11 @@ import {
 import { Model } from '../../../../types/model';
 import { useTranslation } from '../../../i18n';
 import { CarList } from './CarList';
-import { I18nParamsType } from '../../../../types/i18n';
 
 type CarsProps = {
-  params: {
-    model: string;
-  }
+  params: Promise<{ model: string; lng: string; }>;
 };
-export default async function Cars({ params }: CarsProps & I18nParamsType) {
+export default async function Cars({ params }: CarsProps) {
   const { lng, model: modelId } = await params;
   const model = await fetchStrapi<Model>(`models/${modelId}?populate=*`);
   if (!model) {

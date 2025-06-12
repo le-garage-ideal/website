@@ -78,6 +78,10 @@
     h1 {
       text-align: right;
     }
+    flex-shrink: 0; // all cars list header hidden in mobile portrait mode
   }
 
+  .searchField {
+    align-self: flex-end;
+  }
 }
